@@ -1,0 +1,37 @@
+name: catan_master
+description: CatanMaster data manager
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  intl:
+  flutter_bloc:
+  bloc:
+  equatable:
+  json_annotation:
+  freezed_annotation: ^0.12.0
+  polygon_clipper: ^1.0.2
+  hive: ^1.4.4
+  hive_flutter: ^0.3.1
+  dartz:
+  flutter_form_builder: ^3.14.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  build_runner:
+  json_serializable:
+#  freezed: 0.12.1
+  hive_generator: ^0.7.2+1
+
+flutter:
+  uses-material-design: true
+  fonts:
+   - family:  Catan
+     fonts:
+      - asset: fonts/Catan.ttf

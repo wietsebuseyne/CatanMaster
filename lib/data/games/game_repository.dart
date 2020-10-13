@@ -1,0 +1,111 @@
+import 'package:catan_master/core/failures.dart';
+import 'package:catan_master/data/games/game_dtos.dart';
+import 'package:catan_master/data/games/game_local_datasource.dart';
+import 'package:catan_master/domain/games/game.dart';
+import 'package:catan_master/domain/games/game_repository.dart';
+import 'package:catan_master/domain/players/player.dart';
+import 'package:catan_master/domain/players/player_repository.dart';
+import 'package:dartz/dartz.dart';
+import 'package:meta/meta.dart';
+
+class CachedGameRepository extends GameRepository {
+
+  final GameLocalDatasource localDatasource;
+  final PlayerRepository playerRepository;
+
+  CachedGameRepository({@required this.localDatasource, @required this.playerRepository});
+
+  @override
+  Future<Either<Failure, void>> addGame(Game game) async {
+    try {
+      //TODO check player references here
+      await localDatasource.createGame(GameDto.fromDomain(game));
+      return Right(null);
+    } on Exception catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Game>>> getGamesForPlayer(String player) async {
+    return (await getGames()).fold(
+            (failure) => Left(failure),
+            (games) => Right(games.where((g) => g.players.map((p) => p.name).contains(player)).toList())
+    );
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteGame(Game game) async {
+    // TODO: implement deleteGame
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, void>> editGame(int oldTime, Game updatedGame) async {
+    // TODO: implement editGame
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, List<Game>>> getGames() async {
+    return (await playerRepository.getPlayers()).fold(
+            (l) async => Left(l),
+            (r) async => await _getGamesInternal(r)
+    );
+  }
+
+  Future<Either<Failure, List<Game>>> _getGamesInternal(List<Player> players) async {
+    try {
+      Map<String, Player> playerMap = Map.fromIterable(players, key: (p) => p.name, value: (p) => p);
+
+      var gamesDtos = await localDatasource.getGames();
+      GameMapper mapper = GameMapper(playerMap);
+      return Right(gamesDtos.map(mapper.map)
+          .toList()
+          .fold(<Game>[], (List<Game> list, failureOrGame) {
+            return failureOrGame.fold(
+                    (l) {
+                      //TODO save this error to another repository
+                      // This repository can then alert the user of these mapping errors
+                      // and provide solutions (for example: add Player with name ...)
+                      print("Error while mapping from data layer: $l");
+                      return list;
+                    },
+                    (r) => list..add(r)
+            );
+          }));
+    } on Exception catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+/*
+  @override
+  Future<Either<Failure, void>> addPlayer(Player player) async {
+    try {
+      return Right(localDatasource.createOrUpdatePlayer(PlayerDto.fromDomain(player)));
+    } on Exception catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deletePlayer(Player player) async {
+    try {
+      await localDatasource.deletePlayer(PlayerDto.fromDomain(player));
+      return Right(null);
+    } on Exception catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Player>>> getPlayers() async {
+    try {
+      return Right((await localDatasource.getPlayers()).map((p) => p.toDomain()).toList());
+    } on Exception catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }*/
+
+}
