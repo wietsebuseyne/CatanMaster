@@ -16,19 +16,23 @@ class PlayerDtoAdapter extends TypeAdapter<PlayerDto> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return PlayerDto()
-      ..name = fields[0] as String
-      ..color = fields[1] as int;
+    return PlayerDto(
+      username: fields[2] as String,
+      name: fields[0] as String,
+      color: fields[1] as int,
+    );
   }
 
   @override
   void write(BinaryWriter writer, PlayerDto obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
-      ..write(obj.color);
+      ..write(obj.color)
+      ..writeByte(2)
+      ..write(obj.username);
   }
 
   @override
@@ -41,3 +45,21 @@ class PlayerDtoAdapter extends TypeAdapter<PlayerDto> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+PlayerDto _$PlayerDtoFromJson(Map<String, dynamic> json) {
+  return PlayerDto(
+    username: json['username'] as String,
+    name: json['name'] as String,
+    color: json['color'] as int,
+  );
+}
+
+Map<String, dynamic> _$PlayerDtoToJson(PlayerDto instance) => <String, dynamic>{
+      'name': instance.name,
+      'color': instance.color,
+      'username': instance.username,
+    };

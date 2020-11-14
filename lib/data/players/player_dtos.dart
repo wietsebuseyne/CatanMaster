@@ -1,6 +1,6 @@
-import 'package:catan_master/domain/games/game.dart';
 import 'package:catan_master/domain/players/player.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 
 part 'player_dtos.g.dart';
@@ -25,6 +25,7 @@ abstract class PlayerDto with _$PlayerDto {
 //  }
 }*/
 
+@JsonSerializable(explicitToJson: true)
 @HiveType(typeId: 0)
 class PlayerDto extends HiveObject {
 
@@ -32,13 +33,17 @@ class PlayerDto extends HiveObject {
   String name;
   @HiveField(1)
   int color;
+  @HiveField(2)
+  String username;
 
-  PlayerDto();
+  PlayerDto({this.username, this.name, this.color});
 
   PlayerDto.fromDomain(Player player) : this.name = player.name, this.color = player.color.value;
 
-  Player toDomain() => Player(name: name, color: Color(color));
+  Player toDomain() => Player(username: username, name: name, color: Color(color).withAlpha(255));
 
-  PlayerWithGames toDomainWithGames(List<Game> games) => PlayerWithGames(name: name, color: Color(color), games: games);
+  factory PlayerDto.fromJson(Map<String, dynamic> json) => _$PlayerDtoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PlayerDtoToJson(this);
 
 }

@@ -4,9 +4,11 @@ import 'package:catan_master/domain/games/game.dart';
 import 'package:catan_master/domain/players/player.dart';
 import 'package:dartz/dartz.dart';
 import 'package:hive/hive.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'game_dtos.g.dart';
 
+@JsonSerializable(explicitToJson: true)
 @HiveType(typeId: 1)
 class GameDto extends HiveObject {
 
@@ -20,13 +22,17 @@ class GameDto extends HiveObject {
   @HiveField(3)
   List<String> expansions;
 
-  GameDto();
+  GameDto({this.time, this.players, this.winner, this.expansions});
 
   GameDto.fromDomain(Game game) :
         this.time = game.date.millisecondsSinceEpoch,
-        this.players = List.unmodifiable(game.players.map((g) => g.name)),
-        this.winner = game.winner.name,
+        this.players = List.unmodifiable(game.players.map((g) => g.username)),
+        this.winner = game.winner.username,
         this.expansions = List.unmodifiable(game.expansions.map(EnumUtils.convertToString));
+
+  factory GameDto.fromJson(Map<String, dynamic> json) => _$GameDtoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$GameDtoToJson(this);
 
 }
 
@@ -38,13 +44,13 @@ class GameMapper {
 
   Either<MapFailure, Game> map(GameDto gameDto) {
     if (!gameDto.players.contains(gameDto.winner)) {
-      return Left(MapFailure("Winner should be one of the players"));
+      return Left(MapFailure("Game of ${gameDto.time}: Winner [${gameDto.winner}] should be one of the players [${gameDto.players.join(", ")}]"));
     }
     if (gameDto.time == null) {
       return Left(MapFailure("Time should not be null"));
     }
     if (gameDto.players.any((p) => !playerMap.containsKey(p))) {
-      return Left(MapFailure("Not all players are in the player map!"));
+      return Left(MapFailure("Not all players [${gameDto.players.join(", ")}] are in the player map!"));
     }
     var expansions;
     try {

@@ -1,6 +1,6 @@
 import 'package:catan_master/core/failures.dart';
+import 'package:catan_master/data/games/game_datasource.dart';
 import 'package:catan_master/data/games/game_dtos.dart';
-import 'package:catan_master/data/games/game_local_datasource.dart';
 import 'package:catan_master/domain/games/game.dart';
 import 'package:catan_master/domain/games/game_repository.dart';
 import 'package:catan_master/domain/players/player.dart';
@@ -10,7 +10,7 @@ import 'package:meta/meta.dart';
 
 class CachedGameRepository extends GameRepository {
 
-  final GameLocalDatasource localDatasource;
+  final GameDatasource localDatasource;
   final PlayerRepository playerRepository;
 
   CachedGameRepository({@required this.localDatasource, @required this.playerRepository});
@@ -30,7 +30,7 @@ class CachedGameRepository extends GameRepository {
   Future<Either<Failure, List<Game>>> getGamesForPlayer(String player) async {
     return (await getGames()).fold(
             (failure) => Left(failure),
-            (games) => Right(games.where((g) => g.players.map((p) => p.name).contains(player)).toList())
+            (games) => Right(games.where((g) => g.players.map((p) => p.username).contains(player)).toList())
     );
   }
 
@@ -56,7 +56,7 @@ class CachedGameRepository extends GameRepository {
 
   Future<Either<Failure, List<Game>>> _getGamesInternal(List<Player> players) async {
     try {
-      Map<String, Player> playerMap = Map.fromIterable(players, key: (p) => p.name, value: (p) => p);
+      Map<String, Player> playerMap = Map.fromIterable(players, key: (p) => p.username, value: (p) => p);
 
       var gamesDtos = await localDatasource.getGames();
       GameMapper mapper = GameMapper(playerMap);

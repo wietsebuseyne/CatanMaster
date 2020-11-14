@@ -16,11 +16,12 @@ class GameDtoAdapter extends TypeAdapter<GameDto> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return GameDto()
-      ..time = fields[0] as int
-      ..players = (fields[1] as List)?.cast<String>()
-      ..winner = fields[2] as String
-      ..expansions = (fields[3] as List)?.cast<String>();
+    return GameDto(
+      time: fields[0] as int,
+      players: (fields[1] as List)?.cast<String>(),
+      winner: fields[2] as String,
+      expansions: (fields[3] as List)?.cast<String>(),
+    );
   }
 
   @override
@@ -47,3 +48,23 @@ class GameDtoAdapter extends TypeAdapter<GameDto> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+GameDto _$GameDtoFromJson(Map<String, dynamic> json) {
+  return GameDto(
+    time: json['time'] as int,
+    players: (json['players'] as List)?.map((e) => e as String)?.toList(),
+    winner: json['winner'] as String,
+    expansions: (json['expansions'] as List)?.map((e) => e as String)?.toList(),
+  );
+}
+
+Map<String, dynamic> _$GameDtoToJson(GameDto instance) => <String, dynamic>{
+      'time': instance.time,
+      'players': instance.players,
+      'winner': instance.winner,
+      'expansions': instance.expansions,
+    };

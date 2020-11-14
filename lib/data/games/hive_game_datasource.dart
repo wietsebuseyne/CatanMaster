@@ -1,26 +1,13 @@
 import 'package:catan_master/core/exceptions.dart';
+import 'package:catan_master/data/games/game_datasource.dart';
 import 'package:catan_master/data/games/game_dtos.dart';
 import 'package:hive/hive.dart';
 
-abstract class GameLocalDatasource {
-
-  Future<List<GameDto>> getGames();
-
-  Future<void> createGame(GameDto game);
-
-  Future<void> updateGame(int oldGameTime, GameDto game);
-
-  Future<void> deleteAll();
-
-  Future<void> deleteGame(int time);
-
-}
-
-class HiveGameLocalDatasource extends GameLocalDatasource {
+class HiveGameDatasource extends GameDatasource {
 
   final Box<GameDto> _box;
 
-  HiveGameLocalDatasource(this._box);
+  HiveGameDatasource(this._box);
 
   @override
   Future<List<GameDto>> getGames() async {
@@ -42,12 +29,6 @@ class HiveGameLocalDatasource extends GameLocalDatasource {
     }
     await _box.delete(oldGameTime);
     await _box.put(game.time, game);
-    return null;
-  }
-
-  @override
-  Future<void> deleteAll() async {
-    await _box.clear();
     return null;
   }
 

@@ -7,6 +7,8 @@ class Failure {
 
   const Failure(this.message);
 
+  @override
+  String toString() => message;
 }
 
 class MapFailure extends Failure {

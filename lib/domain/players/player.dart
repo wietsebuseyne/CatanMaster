@@ -1,17 +1,19 @@
 import 'dart:ui';
 
+import 'package:catan_master/core/core.dart';
 import 'package:catan_master/domain/games/game.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:catan_master/core/core.dart';
 
 @immutable
 class Player extends Equatable {
 
+  final String username;
   final String name;
   final Color color;
 
-  Player({@required this.name, @required this.color}) :
+  Player({@required this.username, @required this.name, @required this.color}) :
+        assert(username != null && username.isNotEmpty),
         assert(name != null),
         assert(name.isNotEmpty),
         assert(color != null),
@@ -19,7 +21,7 @@ class Player extends Equatable {
   ;
 
   @override
-  List<Object> get props => [name, color];
+  List<Object> get props => [username, name, color];
 }
 
 @immutable
@@ -27,28 +29,34 @@ class PlayerStatistics extends Equatable {
 
   final Player player;
   final List<Game> games;
+  final Player mostLovedCoPlayer;
+  final CatanExpansion mostPlayedExpansion;
+  final CatanExpansion mostSuccessfulExpansion;
+  final int rank;
 
-  PlayerStatistics(this.player, this.games); //TODO asserts, unmod
+  PlayerStatistics._({
+    @required this.player,
+    @required this.games,
+    @required this.mostLovedCoPlayer,
+    @required this.mostPlayedExpansion,
+    @required this.mostSuccessfulExpansion,
+    @required this.rank,
+  });
+
+  factory PlayerStatistics.fromGames(Player player, List<Game> games) {
+    return PlayerStatistics._(
+        player: player,
+        games: games.where((g) => g.players.contains(player)).toList(),
+        mostLovedCoPlayer: null,
+        mostPlayedExpansion: null,
+        mostSuccessfulExpansion: null,
+        rank: null
+    );
+  }
 
   Game get lastGame => games.firstOrNull;
 
-  List<bool> getWinOrLose() => games.map((g) => g.winner == player).toList();
-
-  CatanExpansion get mostPlayedExpansion {
-    return null;
-  }
-
-  CatanExpansion get mostSuccesfullExpansion {
-    return null;
-  }
-
-  Player get mostLovedCoPlayer {
-    return null;
-  }
-
-  int get rank {
-    return null;
-  }
+  List<bool> get winOrLose => games.map((g) => g.winner == player).toList();
 
   @override
   List<Object> get props => [player, games];
@@ -73,17 +81,5 @@ enum AchievementType {
   catan_addict,       // Most games
   newbie,             // Played less than five game - one cannot qualify for achievements
   loser,              // Worst win/lose rate
-
-}
-
-
-@immutable
-class PlayerWithGames extends Player {
-
-  final List<Game> games;
-
-  PlayerWithGames({@required String name, @required Color color, @required List<Game> games}) :
-      this.games = List.unmodifiable(games),
-      super(name: name, color: color);
 
 }

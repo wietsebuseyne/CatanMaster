@@ -12,6 +12,14 @@
 ///       - asset: fonts/Catan.ttf
 ///
 /// 
+/// * Entypo, Copyright (C) 2012 by Daniel Bruce
+///         Author:    Daniel Bruce
+///         License:   SIL (http://scripts.sil.org/OFL)
+///         Homepage:  http://www.entypo.com
+/// * RPG Awesome, Copyright (c) 2014, Daniela Howe
+///         Author:    Daniela Howe & Ivan Montiel
+///         License:   SIL (http://scripts.sil.org/OFL)
+///         Homepage:  http://nagoshiashumari.github.io/Rpg-Awesome/
 /// * Font Awesome 5, Copyright (C) 2016 by Dave Gandy
 ///         Author:    Dave Gandy
 ///         License:   SIL (https://github.com/FortAwesome/Font-Awesome/blob/master/LICENSE.txt)

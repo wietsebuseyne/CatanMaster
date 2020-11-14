@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
+
 import 'package:bloc/bloc.dart';
 import 'package:catan_master/core/message.dart';
 import 'package:catan_master/domain/players/player.dart';
@@ -8,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 part 'players_event.dart';
-
 part 'players_state.dart';
 
 class PlayersBloc extends Bloc<PlayersEvent, PlayersState> {
@@ -29,7 +29,7 @@ class PlayersBloc extends Bloc<PlayersEvent, PlayersState> {
     if (event is AddPlayer) {
       final s = state;
       if (s is PlayersLoaded) {
-        var newPlayer = Player(name: event.name, color: event.color);
+        var newPlayer = Player(username: event.name, name: event.name, color: event.color);
         yield (await _repository.addPlayer(newPlayer)).fold(
                 (l) => s.copyWith(message: Message.error("Error while adding player: ${l.message}")),
                 (r) => s.copyWith(newPlayer: newPlayer, message: Message.success("Player successfully added"))

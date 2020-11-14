@@ -20,12 +20,18 @@ dependencies:
   hive_flutter: ^0.3.1
   dartz:
   flutter_form_builder: ^3.14.0
+  provider:
+  #Firebase
+  firebase_core: ^0.5.2
+  firebase_auth: ^0.18.3
+  firebase_database: ^4.3.0
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner:
-  json_serializable:
+  json_serializable: ^3.4.1
 #  freezed: 0.12.1
   hive_generator: ^0.7.2+1
 

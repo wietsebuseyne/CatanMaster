@@ -1,23 +1,25 @@
 import 'package:catan_master/core/failures.dart';
+import 'package:catan_master/data/players/player_datasource.dart';
 import 'package:catan_master/data/players/player_dtos.dart';
-import 'package:catan_master/data/players/player_local_datasource.dart';
 import 'package:catan_master/domain/players/player.dart';
 import 'package:catan_master/domain/players/player_repository.dart';
 import 'package:dartz/dartz.dart';
-import 'package:meta/meta.dart';
 
 class CachedPlayerRepository extends PlayerRepository {
 
-  final PlayerLocalDatasource localDatasource;
+  final PlayerDatasource localDatasource;
 
-  CachedPlayerRepository(@required this.localDatasource);
+  CachedPlayerRepository(this.localDatasource);
 
   @override
   Future<Either<Failure, List<Player>>> getPlayers() async {
     try {
-      return Right((await localDatasource.getPlayers()).map((p) => p.toDomain()).toList());
+      var dtos = await localDatasource.getPlayers();
+      return Right(dtos.map((p) => p.toDomain()).toList());
     } on Exception catch (e) {
       return Left(Failure(e.toString()));
+    } on Error catch (error) {
+      return Left(Failure(error.toString()));
     }
   }
 

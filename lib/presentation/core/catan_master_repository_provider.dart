@@ -1,23 +1,26 @@
+import 'package:catan_master/data/games/firebase_game_datasource.dart';
 import 'package:catan_master/data/games/game_dtos.dart';
-import 'package:catan_master/data/games/game_local_datasource.dart';
 import 'package:catan_master/data/games/game_repository.dart';
+import 'package:catan_master/data/games/hive_game_datasource.dart';
+import 'package:catan_master/data/players/firebase_player_datasource.dart';
+import 'package:catan_master/data/players/hive_player_datasource.dart';
 import 'package:catan_master/data/players/player_dtos.dart';
-import 'package:catan_master/data/players/player_local_datasource.dart';
 import 'package:catan_master/data/players/player_repository.dart';
 import 'package:catan_master/domain/games/game_repository.dart';
 import 'package:catan_master/domain/players/player_repository.dart';
 import 'package:catan_master/presentation/core/catan_master_bloc_provider.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 import 'package:meta/meta.dart';
+import 'package:provider/provider.dart';
 
-class CatanMasterRepositoryProvider extends StatelessWidget {
+class CatanMasterLocalRepositoryProvider extends StatelessWidget {
 
   final Widget child;
 
-  CatanMasterRepositoryProvider({Key key, @required this.child}) : super(key: key);
+  CatanMasterLocalRepositoryProvider({Key key, @required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,23 +30,51 @@ class CatanMasterRepositoryProvider extends StatelessWidget {
           if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
           var playerBox = snapshot.data[0];
           var gameBox = snapshot.data[1];
-          return MultiRepositoryProvider(
+          return MultiProvider(
               providers: [
-                RepositoryProvider<PlayerRepository>(
+                Provider<PlayerRepository>(
                   create: (BuildContext context) => CachedPlayerRepository(
-                    HivePlayerLocalDatasource(playerBox)
+                      HivePlayerDatasource(playerBox)
                   ),
                 ),
-                RepositoryProvider<GameRepository>(
-                  create: (BuildContext context) => CachedGameRepository(
-                      localDatasource: HiveGameLocalDatasource(gameBox),
-                      playerRepository: CachedPlayerRepository(HivePlayerLocalDatasource(playerBox)) //TODO reuse the above repository with ProxyProvider here
-                  ),
+                ProxyProvider<PlayerRepository, GameRepository>(
+                  update: (context, playerRepo, gameRepo) => CachedGameRepository(
+                      localDatasource: HiveGameDatasource(gameBox),
+                      playerRepository: playerRepo
+                  )
                 ),
               ],
               child: CatanMasterBlocProvider(child: child)
           );
         }
+    );
+  }
+}
+
+class CatanMasterFirebaseRepositoryProvider extends StatelessWidget {
+
+  final Widget child;
+  final FirebaseDatabase database;
+
+  CatanMasterFirebaseRepositoryProvider({Key key, @required this.database, @required this.child}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        Provider<PlayerRepository>(
+          create: (BuildContext context) => CachedPlayerRepository(
+              FirebasePlayerDatasource(database)
+          ),
+        ),
+        ProxyProvider<PlayerRepository, GameRepository>(
+            update: (context, playerRepo, gameRepo) => CachedGameRepository(
+                localDatasource: FirebaseGameDatasource(database),
+                playerRepository: playerRepo
+            )
+        ),
+      ],
+      child: CatanMasterBlocProvider(child: child)
     );
   }
 }
