@@ -1,4 +1,5 @@
 import 'package:catan_master/application/players/players_bloc.dart';
+import 'package:catan_master/presentation/feedback/user_feedback.dart';
 import 'package:catan_master/presentation/players/pages/add_player_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,7 @@ class AddPlayerScreen extends StatelessWidget {
               )
             ],
           ),
-          body: AddPlayerPage(_formKey)
+          body: UserFeedback(child: AddPlayerPage(_formKey))
       ),
     );
   }

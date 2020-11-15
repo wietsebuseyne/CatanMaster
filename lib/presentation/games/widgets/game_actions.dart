@@ -1,13 +1,17 @@
+import 'package:catan_master/domain/games/game.dart';
 import 'package:catan_master/presentation/core/widgets/hexagon.dart';
+import 'package:catan_master/presentation/games/widgets/game_hexagon.dart';
+import 'package:catan_master/presentation/games/widgets/game_list_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class GameActions extends StatelessWidget {
 
-  final Widget title;
+  final Game game;
   final Function onEdit;
   final Function onDelete;
 
-  GameActions({@required this.title, @required this.onEdit, @required this.onDelete});
+  GameActions({@required this.game, @required this.onEdit, @required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -15,11 +19,7 @@ class GameActions extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(top: 8.0),
-          child: ListTile(
-            leading: Hexagon(size: 24, color: Colors.grey),
-            title: title,
-            visualDensity: VisualDensity.comfortable,
-          ),
+          child: GameListTile(game),
         ),
         Divider(thickness: 1),
         ListTile(

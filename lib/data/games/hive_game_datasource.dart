@@ -24,17 +24,17 @@ class HiveGameDatasource extends GameDatasource {
 
   @override
   Future<void> updateGame(int oldGameTime, GameDto game) async {
-    if (!_box.containsKey(oldGameTime)) {
+    if (!_box.containsKey(oldGameTime.toString())) {
       throw CacheException("No game with time $oldGameTime exists");
     }
     await _box.delete(oldGameTime);
-    await _box.put(game.time, game);
+    await _box.put(game.time.toString(), game);
     return null;
   }
 
   @override
   Future<void> deleteGame(int time) async {
-    await _box.delete(time);
+    await _box.delete(time.toString());
     return null;
   }
 

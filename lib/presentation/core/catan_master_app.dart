@@ -3,8 +3,9 @@ import 'package:catan_master/application/main/main_bloc.dart';
 import 'package:catan_master/domain/feedback/feedback_message.dart';
 import 'package:catan_master/presentation/core/catan_icons.dart';
 import 'package:catan_master/presentation/feedback/show_feedback.dart';
+import 'package:catan_master/presentation/feedback/user_feedback.dart';
 import 'package:catan_master/presentation/games/pages/games_page.dart';
-import 'package:catan_master/presentation/games/screens/add_game_screen.dart';
+import 'package:catan_master/presentation/games/screens/add_edit_game_screen.dart';
 import 'package:catan_master/presentation/players/pages/players_page.dart';
 import 'package:catan_master/presentation/players/screens/add_player_screen.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,18 @@ class CatanMasterApp extends StatelessWidget {
               );
             } else if (settings.name == '/games/add') {
               return MaterialPageRoute(
-                  builder: (context) => AddGameScreen(),
+                  builder: (context) => AddEditGameScreen.add(),
+                  fullscreenDialog: true
+              );
+            } else if (settings.name == '/games/edit') {
+              return MaterialPageRoute(
+                  builder: (context) {
+                    var game = (settings.arguments as Map)["game"];
+                    if (game == null) {
+                      return Text("Error: no game provided");
+                    }
+                    return AddEditGameScreen.edit(game);
+                  },
                   fullscreenDialog: true
               );
             }
@@ -112,13 +124,7 @@ Widget _createPage(HomePageTab page) {
       p = GamesPage();
   }
 
-  return BlocListener<FeedbackBloc, FeedbackState>(
-    listener: (context, FeedbackState state) {
-      FeedbackMessage feedback = state.last;
-      feedback.show(context);
-    },
-    child: p,
-  );
+  return UserFeedback(child: p);
 }
 
 HomePageTab indexToPage(int index) {

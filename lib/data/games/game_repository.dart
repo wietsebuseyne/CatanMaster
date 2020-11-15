@@ -64,8 +64,12 @@ class CachedGameRepository extends GameRepository {
 
   @override
   Future<Either<Failure, void>> editGame(int oldTime, Game updatedGame) async {
-    // TODO: implement editGame
-    throw UnimplementedError();
+    try {
+      await gameDatasource.updateGame(oldTime, GameDto.fromDomain(updatedGame));
+      return Right(null);
+    } on Exception catch (e) {
+      return Left(Failure(e.toString()));
+    }
   }
 
   @override

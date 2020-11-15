@@ -18,7 +18,7 @@ class FeedbackMessage {
         type = FeedbackType.toast;
 
   FeedbackMessage.snackbar(this.message, {FeedbackAction action, this.severity = Severity.message})
-      : actions = List.unmodifiable([action]),
+      : actions = action == null ? const [] : List.unmodifiable([action]),
         title = null,
         type = FeedbackType.snackbar;
 

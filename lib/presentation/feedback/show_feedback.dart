@@ -15,9 +15,10 @@ extension ShowFeedback on FeedbackMessage {
           content: Text(message),
           action: hasAction
               ? SnackBarAction(
-              textColor: severity == Severity.error ? Colors.red : null,
-              label: action.text,
-              onPressed: action.action)
+                  textColor: severity == Severity.error ? Colors.red : null,
+                  label: action.text,
+                  onPressed: action.action
+              )
               : null,
         ));
         break;

@@ -76,8 +76,11 @@ class GamesList extends StatelessWidget {
         ),
         builder: (BuildContext bc) {
           return GameActions(
-            title: Text(DateFormat("EE dd MMM yyyy, HH:mm").format(game.date)),
-            onEdit: () {},
+            game: game,
+            onEdit: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed("/games/edit", arguments: {"game": game});
+            },
             onDelete: () {
               BlocProvider.of<GamesBloc>(context).add(RemoveGameEvent(game));
               Navigator.of(context).pop();

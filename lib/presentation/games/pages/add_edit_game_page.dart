@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:catan_master/application/players/players_bloc.dart';
 import 'package:catan_master/presentation/core/catan_expansion.dart';
 import 'package:catan_master/domain/games/game.dart';
@@ -8,11 +10,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
 
-class AddGamePage extends StatelessWidget {
+class AddEditGamePage extends StatelessWidget {
 
   final GlobalKey<FormBuilderState> _formKey;
+  final Game game;
 
-  AddGamePage(this._formKey);
+  AddEditGamePage(this._formKey, {this.game});
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +45,10 @@ class AddGamePage extends StatelessWidget {
                 attribute: "time",
                 inputType: InputType.both,
                 format: DateFormat.yMd().add_Hm(),
-                initialValue: DateTime.now(),
+                initialValue: game?.date ?? DateTime.now(),
+                lastDate: DateTime.fromMillisecondsSinceEpoch(
+                    max(DateTime.now().millisecondsSinceEpoch, game?.date?.millisecondsSinceEpoch ?? 0)
+                ),
                 initialTime: null,
                 decoration: InputDecoration(
                     labelText: "Time",
@@ -53,12 +59,18 @@ class AddGamePage extends StatelessWidget {
                 ),
                 validators: [
                   FormBuilderValidators.required(errorText: "Please pick a time"),
+                  (dateTime) {
+                      if (dateTime.millisecondsSinceEpoch > DateTime.now().millisecondsSinceEpoch) {
+                        return "Sadly, no timetravelling allowed. Please pick a valid time";
+                      }
+                      return null;
+                  },
                 ],
               ),
               SizedBox(height: 16.0,),
               FormBuilderCheckboxGroup(
                 attribute: "players",
-                initialValue: [], //TODO same players as last game
+                initialValue: game?.players ?? [], //TODO same players as last game
                 orientation: GroupedCheckboxOrientation.vertical,
                 options: players.map((p) {
                   return FormBuilderFieldOption(
@@ -81,7 +93,7 @@ class AddGamePage extends StatelessWidget {
               SizedBox(height: 16.0,),
               FormBuilderRadioGroup(
                 attribute: "winner",
-                initialValue: [],
+                initialValue: game?.winner ?? [],
                 orientation: GroupedRadioOrientation.vertical,
                 options: players.map((p) {
                   return FormBuilderFieldOption(
@@ -89,8 +101,6 @@ class AddGamePage extends StatelessWidget {
                     value: p,
                   );
                 }).toList(),
-//                options: ((_formKey.currentState?.value ?? {})["players"] ?? <Player>[])
-//                    .map<FormBuilderFieldOption>((p) => FormBuilderFieldOption(child: Text(p.name), value: p,)).toList(),
                 decoration: InputDecoration(
                   labelText: "Winner",
                   contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
@@ -109,7 +119,7 @@ class AddGamePage extends StatelessWidget {
               SizedBox(height: 16.0,),
               FormBuilderCheckboxGroup(
                 attribute: "expansions",
-                initialValue: [], //TODO same players as last game
+                initialValue: game?.expansions ?? [], //TODO same players as last game
                 orientation: GroupedCheckboxOrientation.vertical,
                 options: CatanExpansion.values.map((e) {
                   return FormBuilderFieldOption(

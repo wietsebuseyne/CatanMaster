@@ -1,7 +1,7 @@
 import 'package:catan_master/domain/players/player.dart';
 import 'package:catan_master/presentation/core/catan_icons.dart';
 import 'package:catan_master/presentation/core/widgets/hexagon.dart';
-import 'package:catan_master/presentation/players/player_extensions.dart';
+import 'package:catan_master/presentation/players/player_presentation.dart';
 import 'package:flutter/material.dart';
 
 class PlayerListTile extends StatelessWidget {
