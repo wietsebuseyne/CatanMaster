@@ -14,6 +14,6 @@ abstract class GameRepository {
 
   Future<Either<Failure, void>> deleteGame(Game game);
 
-  Future<Either<Failure, void>> undoDelete();
+  Future<Either<Failure, void>> undoDelete({Game game});
 
 }

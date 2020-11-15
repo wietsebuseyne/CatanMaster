@@ -48,12 +48,14 @@ class CachedGameRepository extends GameRepository {
     }
   }
 
-  Future<Either<Failure, Game>> undoDelete() async {
-    if (deletedGames.isEmpty) return Right(null);
+  Future<Either<Failure, Game>> undoDelete({Game game}) async {
+    if (game == null && deletedGames.isEmpty) return Right(null);
     try {
-      final Game game = deletedGames.first;
+      if (game == null) {
+        game = deletedGames.last;
+      }
       await gameDatasource.createGame(GameDto.fromDomain(game));
-      deletedGames.removeFirst();
+      deletedGames.remove(game);
       return Right(game);
     } on Exception catch (e) {
       return Left(Failure(e.toString()));

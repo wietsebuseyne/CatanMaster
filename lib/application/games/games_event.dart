@@ -32,3 +32,14 @@ class RemoveGameEvent extends GamesEvent {
   List<Object> get props => [game];
 
 }
+
+class UndoRemoveGameEvent extends GamesEvent {
+
+  final Game game;
+
+  UndoRemoveGameEvent(this.game) : assert(game != null);
+
+  @override
+  List<Object> get props => [game];
+
+}

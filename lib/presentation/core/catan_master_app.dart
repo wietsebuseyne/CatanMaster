@@ -1,5 +1,8 @@
+import 'package:catan_master/application/feedback/feedback_bloc.dart';
 import 'package:catan_master/application/main/main_bloc.dart';
+import 'package:catan_master/domain/feedback/feedback_message.dart';
 import 'package:catan_master/presentation/core/catan_icons.dart';
+import 'package:catan_master/presentation/feedback/show_feedback.dart';
 import 'package:catan_master/presentation/games/pages/games_page.dart';
 import 'package:catan_master/presentation/games/screens/add_game_screen.dart';
 import 'package:catan_master/presentation/players/pages/players_page.dart';
@@ -49,6 +52,8 @@ class CatanMasterHomeScreen extends StatelessWidget {
 
   CatanMasterHomeScreen({this.tab = HomePageTab.games, this.onAddTapped});
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,17 +99,26 @@ class CatanMasterHomeScreen extends StatelessWidget {
       ),
     );
   }
-
 }
 
 Widget _createPage(HomePageTab page) {
+  Widget p;
   switch (page) {
     case HomePageTab.players:
-      return PlayersPage();
+      p = PlayersPage();
+      break;
     case HomePageTab.games:
     default:
-      return GamesPage();
+      p = GamesPage();
   }
+
+  return BlocListener<FeedbackBloc, FeedbackState>(
+    listener: (context, FeedbackState state) {
+      FeedbackMessage feedback = state.last;
+      feedback.show(context);
+    },
+    child: p,
+  );
 }
 
 HomePageTab indexToPage(int index) {

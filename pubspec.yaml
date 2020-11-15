@@ -9,9 +9,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  #Firebase
+  firebase_core: ^0.5.2
+  firebase_auth: ^0.18.3
+  firebase_database: ^4.3.0
+
   intl:
   flutter_bloc:
   bloc:
+  provider:
   equatable:
   json_annotation:
   freezed_annotation: ^0.12.0
@@ -20,11 +26,7 @@ dependencies:
   hive_flutter: ^0.3.1
   dartz:
   flutter_form_builder: ^3.14.0
-  provider:
-  #Firebase
-  firebase_core: ^0.5.2
-  firebase_auth: ^0.18.3
-  firebase_database: ^4.3.0
+  fluttertoast: ^7.1.1
 
 
 dev_dependencies:
