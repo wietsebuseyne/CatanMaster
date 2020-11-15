@@ -1,6 +1,7 @@
 import 'package:catan_master/domain/players/player.dart';
 import 'package:catan_master/presentation/core/catan_icons.dart';
 import 'package:catan_master/presentation/core/widgets/hexagon.dart';
+import 'package:catan_master/presentation/players/player_extensions.dart';
 import 'package:flutter/material.dart';
 
 class PlayerListTile extends StatelessWidget {
@@ -14,7 +15,7 @@ class PlayerListTile extends StatelessWidget {
     return ListTile(
       leading: Hexagon(
         color: player.color,
-        child: Icon(CatanIcons.medal_solid, size: 16, color: Colors.white),
+        child: Icon(CatanIcons.medal_solid, size: 16, color: player.onColor),
       ),
       title: Text(player.name, style: Theme.of(context).textTheme.headline6,),
     );

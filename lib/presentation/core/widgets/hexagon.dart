@@ -18,6 +18,9 @@ class Hexagon extends StatelessWidget {
       height: size,
       decoration: ShapeDecoration(
         shape: PolygonBorder(sides: 6,),
+        shadows: [BoxShadow(
+          spreadRadius: 1.0,
+        )],
         color: color,
       ),
       child: child,

@@ -54,6 +54,9 @@ class CatanMasterHomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Catan Master"),
+        actions: [
+          IconButton(icon: Icon(Icons.settings), onPressed: () {}),
+        ],
       ),
       body: _createPage(tab),
       bottomNavigationBar: BottomNavigationBar(
@@ -61,12 +64,12 @@ class CatanMasterHomeScreen extends StatelessWidget {
         items: [
           BottomNavigationBarItem(
             icon: new Icon(tab == HomePageTab.games ? CatanIcons.dice_solid : CatanIcons.dice),
-            label: 'Spellekes',
+            label: 'Games',
           ),
           BottomNavigationBarItem(
               icon: Icon(tab == HomePageTab.players ? Icons.people : Icons.people_outline),
-              label: 'Spelers'
-          )
+              label: 'Players'
+          ),
         ],
         onTap: (newIndex) => BlocProvider.of<MainBloc>(context).add(SwitchPageEvent(indexToPage(newIndex))),
       ),

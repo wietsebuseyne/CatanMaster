@@ -1,6 +1,7 @@
 import 'package:catan_master/domain/games/game.dart';
 import 'package:catan_master/domain/players/player.dart';
 import 'package:catan_master/presentation/core/catan_icons.dart';
+import 'package:catan_master/presentation/players/player_extensions.dart';
 import 'package:catan_master/presentation/core/catan_expansion.dart';
 import 'package:catan_master/presentation/core/widgets/hexagon.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +12,9 @@ class GameListTile extends StatelessWidget {
 
   final Game game;
   final DateFormat _dateFormat = DateFormat("EE dd MMM yyyy, HH:mm");
+  final Function onTap;
 
-  GameListTile(this.game, {Key key}) : super(key: key);
+  GameListTile(this.game, {this.onTap, Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,17 +33,17 @@ class GameListTile extends StatelessWidget {
           ),
         ]
       ),
-      onTap: () {},
+      onTap: onTap,
     );
   }
 
   Widget _leadingChild() {
     if (game.expansions.length == 1) {
-      return Icon(game.expansions.first.icon, size: 16, color: Colors.white,);
+      return Icon(game.expansions.first.icon, size: 16, color: game.winner.onColor,);
     } else if (game.expansions.length > 1) {
       return Center(
           child: Text(game.expansions.length.toString(),
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+            style: TextStyle(color: game.winner.onColor, fontWeight: FontWeight.bold, fontSize: 18),
           ));
     }
     return null;
@@ -71,10 +73,12 @@ class GameListTilePlayer extends StatelessWidget {
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         if (winner)
-          Icon(
-            CatanIcons.trophy_solid,
-            color: player.color,
-            size: 8,
+          Container(
+            child: Icon(
+              CatanIcons.trophy_solid,
+              color: player.foregroundColor,
+              size: 12,
+            ),
           )
         else
           Hexagon(
@@ -89,3 +93,4 @@ class GameListTilePlayer extends StatelessWidget {
     );
   }
 }
+

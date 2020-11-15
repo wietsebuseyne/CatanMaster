@@ -1,8 +1,10 @@
 import 'package:catan_master/domain/games/game.dart';
 import 'package:catan_master/presentation/core/catan_icons.dart';
+import 'package:catan_master/presentation/games/widgets/game_actions.dart';
 import 'package:catan_master/presentation/games/widgets/game_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:intl/intl.dart';
 import 'package:polygon_clipper/polygon_border.dart';
 
 class GamesList extends StatelessWidget {
@@ -51,13 +53,33 @@ class GamesList extends StatelessWidget {
           Expanded(
             child:
             ListView.builder(
-                itemBuilder: (BuildContext context, int index) => GameListTile(games[index]),
-                itemCount: games.length
+              itemBuilder: (BuildContext context, int index) => GameListTile(
+                games[index],
+                onTap: () => _showActionsSheet(context, games[index]),
+              ),
+              itemCount: games.length,
+              padding: const EdgeInsets.only(bottom: 48.0),
+
             ),
           )
       ],
     );
   }
+
+  _showActionsSheet(BuildContext context, Game game) {
+    showModalBottomSheet(
+        context: context,
+
+        builder: (BuildContext bc) {
+          return GameActions(
+            title: Text(DateFormat("EE dd MMM yyyy, HH:mm").format(game.date)),
+            onEdit: () {},
+            onDelete: () {},
+          );
+        }
+    );
+  }
+
 }
 
 class ExpansionFilter extends StatelessWidget {
