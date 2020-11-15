@@ -1,10 +1,9 @@
 import 'package:catan_master/domain/games/game.dart';
 import 'package:catan_master/domain/players/player.dart';
 import 'package:catan_master/presentation/core/catan_icons.dart';
+import 'package:catan_master/presentation/core/widgets/hexagon.dart';
 import 'package:catan_master/presentation/games/widgets/game_hexagon.dart';
 import 'package:catan_master/presentation/players/player_presentation.dart';
-import 'package:catan_master/presentation/core/catan_expansion.dart';
-import 'package:catan_master/presentation/core/widgets/hexagon.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
