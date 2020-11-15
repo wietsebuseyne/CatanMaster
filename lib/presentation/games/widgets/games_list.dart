@@ -1,9 +1,11 @@
+import 'package:catan_master/application/games/games_bloc.dart';
 import 'package:catan_master/domain/games/game.dart';
 import 'package:catan_master/presentation/core/catan_icons.dart';
 import 'package:catan_master/presentation/games/widgets/game_actions.dart';
 import 'package:catan_master/presentation/games/widgets/game_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:polygon_clipper/polygon_border.dart';
 
@@ -69,12 +71,17 @@ class GamesList extends StatelessWidget {
   _showActionsSheet(BuildContext context, Game game) {
     showModalBottomSheet(
         context: context,
-
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), topRight: Radius.circular(10.0)),
+        ),
         builder: (BuildContext bc) {
           return GameActions(
             title: Text(DateFormat("EE dd MMM yyyy, HH:mm").format(game.date)),
             onEdit: () {},
-            onDelete: () {},
+            onDelete: () {
+              BlocProvider.of<GamesBloc>(context).add(RemoveGameEvent(game));
+              Navigator.of(context).pop();
+            },
           );
         }
     );

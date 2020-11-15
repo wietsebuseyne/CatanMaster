@@ -38,7 +38,7 @@ class PlayerDto extends HiveObject {
 
   PlayerDto({this.username, this.name, this.color});
 
-  PlayerDto.fromDomain(Player player) : this.name = player.name, this.color = player.color.value;
+  PlayerDto.fromDomain(Player player) : this.username = player.username, this.name = player.name, this.color = player.color.value;
 
   Player toDomain() => Player(username: username, name: name, color: Color(color).withAlpha(255));
 

@@ -39,7 +39,7 @@ class CatanMasterLocalRepositoryProvider extends StatelessWidget {
                 ),
                 ProxyProvider<PlayerRepository, GameRepository>(
                   update: (context, playerRepo, gameRepo) => CachedGameRepository(
-                      localDatasource: HiveGameDatasource(gameBox),
+                      gameDatasource: HiveGameDatasource(gameBox),
                       playerRepository: playerRepo
                   )
                 ),
@@ -69,7 +69,7 @@ class CatanMasterFirebaseRepositoryProvider extends StatelessWidget {
         ),
         ProxyProvider<PlayerRepository, GameRepository>(
             update: (context, playerRepo, gameRepo) => CachedGameRepository(
-                localDatasource: FirebaseGameDatasource(database),
+                gameDatasource: FirebaseGameDatasource(database),
                 playerRepository: playerRepo
             )
         ),

@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:catan_master/core/failures.dart';
 import 'package:catan_master/data/games/game_datasource.dart';
 import 'package:catan_master/data/games/game_dtos.dart';
@@ -10,21 +12,11 @@ import 'package:meta/meta.dart';
 
 class CachedGameRepository extends GameRepository {
 
-  final GameDatasource localDatasource;
+  final GameDatasource gameDatasource;
   final PlayerRepository playerRepository;
+  final ListQueue<Game> deletedGames = ListQueue();
 
-  CachedGameRepository({@required this.localDatasource, @required this.playerRepository});
-
-  @override
-  Future<Either<Failure, void>> addGame(Game game) async {
-    try {
-      //TODO check player references here
-      await localDatasource.createGame(GameDto.fromDomain(game));
-      return Right(null);
-    } on Exception catch (e) {
-      return Left(Failure(e.toString()));
-    }
-  }
+  CachedGameRepository({@required this.gameDatasource, @required this.playerRepository});
 
   @override
   Future<Either<Failure, List<Game>>> getGamesForPlayer(String player) async {
@@ -35,9 +27,37 @@ class CachedGameRepository extends GameRepository {
   }
 
   @override
+  Future<Either<Failure, void>> addGame(Game game) async {
+    try {
+      //TODO check player references here
+      await gameDatasource.createGame(GameDto.fromDomain(game));
+      return Right(null);
+    } on Exception catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
   Future<Either<Failure, void>> deleteGame(Game game) async {
-    // TODO: implement deleteGame
-    throw UnimplementedError();
+    try {
+      await gameDatasource.deleteGame(game.date.millisecondsSinceEpoch);
+      deletedGames.add(game);
+      return Right(null);
+    } on Exception catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  Future<Either<Failure, Game>> undoDelete() async {
+    if (deletedGames.isEmpty) return Right(null);
+    try {
+      final Game game = deletedGames.first;
+      await gameDatasource.createGame(GameDto.fromDomain(game));
+      deletedGames.removeFirst();
+      return Right(game);
+    } on Exception catch (e) {
+      return Left(Failure(e.toString()));
+    }
   }
 
   @override
@@ -58,7 +78,7 @@ class CachedGameRepository extends GameRepository {
     try {
       Map<String, Player> playerMap = Map.fromIterable(players, key: (p) => p.username, value: (p) => p);
 
-      var gamesDtos = await localDatasource.getGames();
+      var gamesDtos = await gameDatasource.getGames();
       GameMapper mapper = GameMapper(playerMap);
       return Right(gamesDtos.map(mapper.map)
           .toList()

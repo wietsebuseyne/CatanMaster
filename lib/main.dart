@@ -35,5 +35,5 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(PlayerDtoAdapter());
   Hive.registerAdapter(GameDtoAdapter());
-  runApp(CatanMasterFirebaseRepositoryProvider(child: CatanMasterApp(), database: database,));
+  runApp(CatanMasterLocalRepositoryProvider(child: CatanMasterApp()));
 }
