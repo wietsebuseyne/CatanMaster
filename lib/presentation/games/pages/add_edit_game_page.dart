@@ -168,6 +168,7 @@ class _AddEditGamePageState extends State<AddEditGamePage> {
                         ),
                         child: Column(
                           children: players.map((p) => CheckboxListTile(
+                              activeColor: p.color,
                               value: scores[p] != null,
                               controlAffinity: ListTileControlAffinity.leading,
                               contentPadding: const EdgeInsets.only(),
@@ -182,6 +183,7 @@ class _AddEditGamePageState extends State<AddEditGamePage> {
                                       if (scores[p] != null) Chip(label: Text(scores[p].toString()),),
                                       Slider(
                                           label: scores[p]?.toString(),
+                                          activeColor: p.color,
                                           min: 0,
                                           max: 20,
                                           divisions: 20,
@@ -243,7 +245,7 @@ class _AddEditGamePageState extends State<AddEditGamePage> {
                   }).toList(),
                   decoration: InputDecoration(
                       labelText: "Players",
-                      contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(5.0))
                       ),
