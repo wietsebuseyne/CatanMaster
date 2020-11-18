@@ -21,14 +21,17 @@ class GameDto extends HiveObject {
   String winner;
   @HiveField(3)
   List<String> expansions;
+  @HiveField(4)
+  Map<String, int> scores;
 
-  GameDto({this.time, this.players, this.winner, this.expansions});
+  GameDto({this.time, this.players, this.winner, this.expansions, this.scores});
 
   GameDto.fromDomain(Game game) :
         this.time = game.date.millisecondsSinceEpoch,
         this.players = List.unmodifiable(game.players.map((g) => g.username)),
         this.winner = game.winner.username,
-        this.expansions = List.unmodifiable(game.expansions.map(EnumUtils.convertToString));
+        this.expansions = List.unmodifiable(game.expansions.map(EnumUtils.convertToString)),
+        this.scores = game.scores.map((player, score) => MapEntry(player.username, score));
 
   factory GameDto.fromJson(Map<String, dynamic> json) => _$GameDtoFromJson(json);
 
@@ -64,7 +67,15 @@ class GameMapper {
       return Left(MapFailure(e.message));
     }
 
-    return Right(Game(
+    if (gameDto.scores.isNotEmpty) {
+      return Right(Game.withScores(
+          scores: Map.fromIterable(gameDto.players, key: (p) => playerMap[p], value: (p) => gameDto.scores[p]),
+          date: DateTime.fromMillisecondsSinceEpoch(gameDto.time),
+          expansions: expansions
+      ));
+    }
+
+    return Right(Game.noScores(
       players: gameDto.players.map((p) => playerMap[p]).toList(),
       date: DateTime.fromMillisecondsSinceEpoch(gameDto.time),
       winner: playerMap[gameDto.winner],

@@ -21,13 +21,14 @@ class GameDtoAdapter extends TypeAdapter<GameDto> {
       players: (fields[1] as List)?.cast<String>(),
       winner: fields[2] as String,
       expansions: (fields[3] as List)?.cast<String>(),
+      scores: (fields[4] as Map)?.cast<String, int>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, GameDto obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.time)
       ..writeByte(1)
@@ -35,7 +36,9 @@ class GameDtoAdapter extends TypeAdapter<GameDto> {
       ..writeByte(2)
       ..write(obj.winner)
       ..writeByte(3)
-      ..write(obj.expansions);
+      ..write(obj.expansions)
+      ..writeByte(4)
+      ..write(obj.scores);
   }
 
   @override
@@ -59,6 +62,9 @@ GameDto _$GameDtoFromJson(Map<String, dynamic> json) {
     players: (json['players'] as List)?.map((e) => e as String)?.toList(),
     winner: json['winner'] as String,
     expansions: (json['expansions'] as List)?.map((e) => e as String)?.toList(),
+    scores: (json['scores'] as Map<String, dynamic>)?.map(
+      (k, e) => MapEntry(k, e as int),
+    ),
   );
 }
 
@@ -67,4 +73,5 @@ Map<String, dynamic> _$GameDtoToJson(GameDto instance) => <String, dynamic>{
       'players': instance.players,
       'winner': instance.winner,
       'expansions': instance.expansions,
+      'scores': instance.scores,
     };

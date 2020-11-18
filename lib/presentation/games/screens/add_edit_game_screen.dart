@@ -32,20 +32,27 @@ class AddEditGameScreen extends StatelessWidget {
               FlatButton(
                 onPressed: () {
                   if (_formKey.currentState.saveAndValidate()) {
-                    if (game == null) {
-                      BlocProvider.of<GamesBloc>(context).add(AddGameEvent(
-                        time: _formKey.currentState.value["time"],
-                        players: List<Player>.from(_formKey.currentState.value["players"]),
-                        winner: _formKey.currentState.value["winner"],
-                        expansions: List<CatanExpansion>.from(_formKey.currentState.value["expansions"])
+                    bool withScores = _formKey.currentState.value["with-scores"];
+                    List<CatanExpansion> expansions = List<CatanExpansion>.from(_formKey.currentState.value["expansions"]);
+                    Map<Player, int> scores = _formKey.currentState.value["scores"];
+                    DateTime time = _formKey.currentState.value["time"];
+                    List<Player> players = List<Player>.from(_formKey.currentState.value["players"] ?? []);
+                    Player winner = _formKey.currentState.value["winner"];
+
+                    if (withScores) {
+                      BlocProvider.of<GamesBloc>(context).add(AddEditGameEvent.withScores(
+                        oldGame: game,
+                        time: time,
+                        scores: scores,
+                        expansions: expansions,
                       ));
                     } else {
-                      BlocProvider.of<GamesBloc>(context).add(EditGameEvent(
-                        game,
-                        time: _formKey.currentState.value["time"],
-                        players: List<Player>.from(_formKey.currentState.value["players"]),
-                        winner: _formKey.currentState.value["winner"],
-                        expansions: List<CatanExpansion>.from(_formKey.currentState.value["expansions"])
+                      BlocProvider.of<GamesBloc>(context).add(AddEditGameEvent.noScores(
+                        oldGame: game,
+                        time: time,
+                        players: players,
+                        winner: winner,
+                        expansions: expansions,
                       ));
                     }
                   }

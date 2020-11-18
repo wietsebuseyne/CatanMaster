@@ -28,10 +28,8 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
   Stream<GamesState> mapEventToState(GamesEvent event) async* {
     if (event is LoadGames) {
       yield* _loadGames(event);
-    } else if (event is AddGameEvent) {
-      yield* _addGame(event);
-    } else if (event is EditGameEvent) {
-      yield* _editGame(event);
+    } else if (event is AddEditGameEvent) {
+      yield* _addEditGame(event);
     } else if (event is RemoveGameEvent) {
       yield* _removeGame(event);
     } else if (event is UndoRemoveGameEvent) {
@@ -47,37 +45,38 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
     );
   }
 
-  Stream<GamesState> _addGame(AddGameEvent event) async* {
+  Stream<GamesState> _addEditGame(AddEditGameEvent event) async* {
     final s = state;
     if (s is GamesLoaded) {
       //TODO validate input
       //TODO handle map failure extension of AddGameEvent
-      var game = Game(
-          players: event.players,
-          date: event.time,
-          winner: event.winner,
-          expansions: event.expansions
-      );
-      yield (await gameRepository.addGame(game)).fold(
-        (l) => _feedbackAndReturn(l),
-        (r) => GameAdded(s.games, newGame: game)
-      );
-    }
-  }
 
-  Stream<GamesState> _editGame(EditGameEvent event) async* {
-    final s = state;
-    if (s is GamesLoaded) {
-      var game = Game(
-          players: event.players,
+      var game;
+      if (event.withScores) {
+        game = Game.withScores(
           date: event.time,
-          winner: event.winner,
-          expansions: event.expansions
-      );
-      yield (await gameRepository.editGame(event.oldGame.date.millisecondsSinceEpoch, game)).fold(
-          (f) => _feedbackAndReturn(f, message: "Error while editing game: ${f.toString()}"),
-          (r) => GameEdited(List.of(s.games)..remove(event.oldGame), editedGame: game)
-      );
+          scores: event.scores,
+          expansions: event.expansions,
+        );
+      } else {
+        game = Game.noScores(
+            players: event.players,
+            date: event.time,
+            winner: event.winner,
+            expansions: event.expansions
+        );
+      }
+      if (event.isEdit) {
+        yield (await gameRepository.editGame(event.oldGame.date.millisecondsSinceEpoch, game)).fold(
+                (f) => _feedbackAndReturn(f, message: "Error while editing game: $f"),
+                (r) => GameEdited(List.of(s.games)..remove(event.oldGame), editedGame: game)
+        );
+      } else {
+        yield (await gameRepository.addGame(game)).fold(
+                (f) => _feedbackAndReturn(f, message: "Error while adding game: $f"),
+                (r) => GameAdded(s.games, newGame: game)
+        );
+      }
     }
   }
 

@@ -8,30 +8,32 @@ class LoadGames extends GamesEvent {
   List<Object> get props => [];
 }
 
-class AddGameEvent extends GamesEvent {
-
-  final DateTime time;
-  final List<Player> players;
-  final Player winner;
-  final List<CatanExpansion> expansions;
-
-  AddGameEvent({this.time, this.players, this.winner, this.expansions});
-
-  @override
-  List<Object> get props => [time, players, winner, expansions];
-
-}
-
-class EditGameEvent extends GamesEvent {
+class AddEditGameEvent extends GamesEvent {
 
   final Game oldGame;
-
   final DateTime time;
   final List<Player> players;
   final Player winner;
   final List<CatanExpansion> expansions;
+  final Map<Player, int> scores;
 
-  EditGameEvent(this.oldGame, {this.time, this.players, this.winner, this.expansions}) : assert(oldGame != null);
+  AddEditGameEvent.noScores({
+    this.oldGame,
+    @required this.time,
+    @required this.players,
+    @required this.winner,
+    @required this.expansions
+  }) : scores = null;
+
+  AddEditGameEvent.withScores({
+    this.oldGame,
+    @required this.time,
+    @required this.scores,
+    @required this.expansions
+  }) : assert(scores != null), assert(scores?.isNotEmpty), players = null, winner = null;
+
+  bool get withScores => scores != null;
+  bool get isEdit => oldGame != null;
 
   @override
   List<Object> get props => [oldGame, time, players, winner, expansions];
