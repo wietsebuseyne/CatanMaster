@@ -1,5 +1,6 @@
 import 'package:catan_master/application/main/main_bloc.dart';
 import 'package:catan_master/presentation/core/catan_icons.dart';
+import 'package:catan_master/presentation/core/catan_page_route_builder.dart';
 import 'package:catan_master/presentation/feedback/user_feedback.dart';
 import 'package:catan_master/presentation/games/pages/games_page.dart';
 import 'package:catan_master/presentation/games/screens/add_edit_game_screen.dart';
@@ -28,10 +29,7 @@ class CatanMasterApp extends StatelessWidget {
                 fullscreenDialog: true
               );
             } else if (settings.name == '/games/add') {
-              return MaterialPageRoute(
-                  builder: (context) => AddEditGameScreen.add(),
-                  fullscreenDialog: true
-              );
+              return CatanPageRouteBuilder(page: AddEditGameScreen.add());
             } else if (settings.name == '/games/edit') {
               return MaterialPageRoute(
                   builder: (context) {
@@ -61,8 +59,6 @@ class CatanMasterHomeScreen extends StatelessWidget {
 
   CatanMasterHomeScreen({this.tab = HomePageTab.games, this.onAddTapped});
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,23 +84,52 @@ class CatanMasterHomeScreen extends StatelessWidget {
         onTap: (newIndex) => BlocProvider.of<MainBloc>(context).add(SwitchPageEvent(indexToPage(newIndex))),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: CatanFloatingActionButton(
+          onPressed: () {
+            switch(tab) {
+              case HomePageTab.games:
+                Navigator.of(context).pushNamed("/games/add");
+                break;
+              case HomePageTab.players:
+                Navigator.of(context).pushNamed("/players/add");
+                break;
+            }
+          },
+      ),
+    );
+  }
+}
+
+class CatanFloatingActionButton extends StatelessWidget {
+
+  const CatanFloatingActionButton({
+    Key key,
+    @required this.onPressed,
+  }) : super(key: key);
+
+  final Function() onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Hero(
+      tag: "catan_fab",
+      flightShuttleBuilder: (flightContext, animation, flightDirection, fromHeroContext, toHeroContext) {
+        final Hero toHero = toHeroContext.widget;
+        return RotationTransition(
+          turns: Tween<double>(begin: 0.0, end: 1.0)
+              .animate(CurvedAnimation(parent: animation, curve: Curves.easeInOutSine)),
+          child: toHero.child,
+        );
+      },
+      child: FloatingActionButton(
+        heroTag: null,
         child: Icon(Icons.add),
         shape: PolygonBorder(
           sides: 6,
           borderRadius: 5.0, // Default 0.0 degrees
-          rotate: 30, //TODO rotate when clicked
+          rotate: 30
         ),
-        onPressed: () {
-          switch(tab) {
-            case HomePageTab.games:
-              Navigator.of(context).pushNamed("/games/add");
-              break;
-            case HomePageTab.players:
-              Navigator.of(context).pushNamed("/players/add");
-              break;
-          }
-        },
+        onPressed: () => onPressed(),
       ),
     );
   }
