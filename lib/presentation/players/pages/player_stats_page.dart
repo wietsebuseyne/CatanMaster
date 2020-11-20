@@ -43,6 +43,11 @@ class PlayerStatsPage extends StatelessWidget {
           //Stats
           Divider(indent: 32.0, endIndent: 32.0,),
           HorizontalInfoTile(
+            leading: Icon(Icons.format_list_numbered),
+            start: Text("Games played"),
+            end: Text(statistics.games.length.toString()),
+          ),
+          HorizontalInfoTile(
             leading: Icon(Icons.history),
             start: Text("Last Game"),
             end: Text(DateFormat.yMd().format(statistics.lastGame.date)),
