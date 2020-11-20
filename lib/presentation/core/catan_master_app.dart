@@ -1,11 +1,14 @@
 import 'package:catan_master/application/main/main_bloc.dart';
+import 'package:catan_master/domain/players/player.dart';
 import 'package:catan_master/presentation/core/catan_icons.dart';
 import 'package:catan_master/presentation/core/catan_page_route_builder.dart';
 import 'package:catan_master/presentation/feedback/user_feedback.dart';
 import 'package:catan_master/presentation/games/pages/games_page.dart';
 import 'package:catan_master/presentation/games/screens/add_edit_game_screen.dart';
+import 'package:catan_master/presentation/games/widgets/games_list.dart';
 import 'package:catan_master/presentation/players/pages/players_page.dart';
 import 'package:catan_master/presentation/players/screens/add_player_screen.dart';
+import 'package:catan_master/presentation/players/screens/player_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:polygon_clipper/polygon_border.dart';
@@ -41,6 +44,16 @@ class CatanMasterApp extends StatelessWidget {
                   },
                   fullscreenDialog: true
               );
+            } else if (settings.name == '/players/detail') {
+              return MaterialPageRoute(
+                builder: (context) {
+                  var player = (settings.arguments as Map)["player"] as Player;
+                  if (player == null) {
+                    return Text("Error: no player provided");
+                  }
+                  return PlayerDetailScreen(player.username);
+                }
+            );
             }
             return MaterialPageRoute(
                 builder: (context) => Text("unknown route"),
@@ -143,7 +156,9 @@ Widget _createPage(HomePageTab page) {
       break;
     case HomePageTab.games:
     default:
-      p = GamesPage();
+      p = GamesPage(
+        childBuilder: (context, state) => GamesList(state.games)
+      );
   }
 
   return UserFeedback(child: p);

@@ -68,7 +68,7 @@ class GameListTilePlayer extends StatelessWidget {
         else
           Hexagon(
             color: player.color,
-            size: 8,
+            width: 8,
           ),
         SizedBox(
           width: 4.0,

@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:catan_master/application/players/players_bloc.dart';
 import 'package:catan_master/domain/games/game.dart';
 import 'package:catan_master/domain/players/player.dart';
-import 'package:catan_master/presentation/core/catan_expansion.dart';
+import 'package:catan_master/presentation/core/catan_expansion_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -251,7 +251,6 @@ class _AddEditGamePageState extends State<AddEditGamePage> {
                       ),
                   ),
                   onChanged: (values) {
-                    print(values);
                     setState(() {
                       selectedPlayers = values;
                     });

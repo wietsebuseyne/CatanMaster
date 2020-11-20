@@ -41,7 +41,7 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
     yield GamesLoading();
     yield (await gameRepository.getGames()).fold(
         (l) => _feedbackAndReturn(l),
-        (r) => GamesLoaded(r)
+        (r) => GamesLoaded(Games(r))
     );
   }
 
@@ -69,7 +69,7 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
       if (event.isEdit) {
         yield (await gameRepository.editGame(event.oldGame.date.millisecondsSinceEpoch, game)).fold(
                 (f) => _feedbackAndReturn(f, message: "Error while editing game: $f"),
-                (r) => GameEdited(List.of(s.games)..remove(event.oldGame), editedGame: game)
+                (r) => GameEdited(s.games.delete(event.oldGame), editedGame: game)
         );
       } else {
         yield (await gameRepository.addGame(game)).fold(
@@ -94,7 +94,7 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
                   action: FeedbackAction(text: "UNDO", action: () => add(UndoRemoveGameEvent(game)))
                 ),
             ));
-            return GamesLoaded(List.from(s.games)..remove(event.game));
+            return GamesLoaded(s.games.delete(event.game));
           }
       );
     }

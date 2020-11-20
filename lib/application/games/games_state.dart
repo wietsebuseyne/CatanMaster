@@ -9,12 +9,12 @@ class GamesLoading extends GamesState {}
 
 class GamesLoaded extends GamesState {
 
-  final List<Game> games;
+  final Games games;
 
-  GamesLoaded(List<Game> games) : games = List.unmodifiable(games..sort((g1, g2) => g2.date.compareTo(g1.date)));
+  GamesLoaded(this.games);
 
-  List<Game> getGamesForPlayer(String player) {
-    return games.where((g) => g.players.map((p) => p.name).contains(player));
+  PlayerStatistics getStatisticsForPlayer(Player  player) {
+    return PlayerStatistics.fromGames(player, games);
   }
 
 }
@@ -23,14 +23,15 @@ class GameAdded extends GamesLoaded {
 
   final Game newGame;
 
-  GameAdded(List<Game> games, {this.newGame}) : super(List.from(games)..add(newGame));
+  GameAdded(Games games, {this.newGame}) : super(Games(List.from(games.games)..add(newGame)));
 
 }
 
 class GameEdited extends GamesLoaded {
 
+  //TODO move to games
   final Game editedGame;
 
-  GameEdited(List<Game> games, {this.editedGame}) : super(List.from(games)..add(editedGame));
+  GameEdited(Games games, {this.editedGame}) : super(Games(List.from(games.games)..add(editedGame)));
 
 }

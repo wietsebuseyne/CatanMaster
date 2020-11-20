@@ -18,6 +18,7 @@ class PlayerListTile extends StatelessWidget {
         child: Icon(CatanIcons.medal_solid, size: 16, color: player.onColor),
       ),
       title: Text(player.name, style: Theme.of(context).textTheme.headline6,),
+      onTap: () => Navigator.of(context).pushNamed('/players/detail', arguments: {"player": player}),
     );
   }
 }

@@ -3,25 +3,34 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:polygon_clipper/polygon_border.dart';
 
+/// TODO fix width / height / rotation to tightly match
 class Hexagon extends StatelessWidget {
 
   final Color color;
-  final double size;
+  final double width;
+  final double height;
+  final double rotate;
   final Widget child;
+  final List<BoxShadow> shadows;
 
-  Hexagon({this.color, this.size = 32, this.child});
+  Hexagon({
+    this.color,
+    this.width = 32,
+    this.height = 32,
+    this.rotate = 0,
+    this.shadows = const [],
+    this.child
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: size,
-      height: size,
+      width: width,
+      height: height,
       decoration: ShapeDecoration(
-        shape: PolygonBorder(sides: 6,),
-        shadows: [BoxShadow(
-          spreadRadius: 1.0,
-        )],
-        color: color,
+        shape: PolygonBorder(sides: 6, rotate: rotate),
+        shadows: shadows,
+        color: color ?? IconTheme.of(context).color,
       ),
       child: child,
     );

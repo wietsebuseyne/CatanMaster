@@ -10,7 +10,7 @@ import 'package:polygon_clipper/polygon_border.dart';
 
 class GamesList extends StatelessWidget {
 
-  final List<Game> games;
+  final Games games;
 
   GamesList(this.games);
 

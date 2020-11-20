@@ -1,8 +1,18 @@
 import 'package:catan_master/domain/games/game.dart';
 import 'package:catan_master/presentation/core/catan_icons.dart';
+import 'package:catan_master/presentation/core/widgets/hexagon.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-extension CatanExpansionPresentation on CatanExpansion {
+extension CatanExpansionUi on CatanExpansion {
+
+  Widget get iconWidget {
+    if (this == null) return Padding(
+      padding: const EdgeInsets.all(2.0),
+      child: Hexagon(color: Colors.black,),
+    );
+    return Icon(icon);
+  }
 
   IconData get icon {
     switch (this) {
@@ -17,7 +27,23 @@ extension CatanExpansionPresentation on CatanExpansion {
       case CatanExpansion.legend_of_the_conquerers:
         return CatanIcons.crossed_swords;
     }
-    throw Exception("Unimplemented switch case in CatanExpansion");
+    return null;
+  }
+
+  IconData get iconOutline {
+    switch (this) {
+      case CatanExpansion.cities_and_knights:
+        return CatanIcons.shield;
+      case CatanExpansion.seafarers:
+        return CatanIcons.anchor;
+      case CatanExpansion.explorers_and_pirates:
+        return CatanIcons.compass;
+      case CatanExpansion.traders_and_barbarians:
+        return CatanIcons.axe;
+      case CatanExpansion.legend_of_the_conquerers:
+        return CatanIcons.crossed_swords;
+    }
+    return null;
   }
 
   String get name {
@@ -33,7 +59,7 @@ extension CatanExpansionPresentation on CatanExpansion {
       case CatanExpansion.legend_of_the_conquerers:
         return "Legend of the conquerers";
     }
-    return "Unknown";
+    return null;
   }
 
 }

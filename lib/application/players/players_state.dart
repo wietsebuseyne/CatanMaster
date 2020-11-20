@@ -43,6 +43,8 @@ class PlayersLoaded extends PlayersState {
     return PlayerAdded(players, newPlayer: newPlayer, message: message ?? message);
   }
 
+  Player getPlayer(String username) => players.firstWhere((p) => p.username == username, orElse: null);
+
 }
 
 class PlayerAdded extends PlayersLoaded {

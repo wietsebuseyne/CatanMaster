@@ -18,6 +18,8 @@ class Game extends Equatable {
 
   bool get hasScores => scores.isNotEmpty;
 
+  bool get hasExpansion => expansions.isNotEmpty;
+
   Game.noScores({@required this.date, @required this.players, @required Player winner, this.expansions = const []})
       : assert(date != null),
         assert(winner != null),
@@ -36,6 +38,46 @@ class Game extends Equatable {
   List<Object> get props => [date, players, winner, expansions, scores];
 
 }
+
+@immutable
+class Games {
+
+  final List<Game> games;
+
+  Games(List<Game> games) : this.games = List.unmodifiable(games..sort((g1, g2) => g2.date.compareTo(g1.date)));
+
+  List<Game> getGamesForPlayer(Player player) {
+    return games.where((g) => g.players.contains(player)).toList();
+  }
+
+  ///TODO expand with scores
+  /// * handle same score / nb of games won
+  /// * more points for game with more points
+  /// * more points for expansion games
+  List<Player> getRanking() {
+    Map<Player, int> gamesWon = {};
+    games.expand((g) => g.players).forEach((p) => gamesWon[p] = 0);
+    games.forEach((g) => gamesWon[g.winner] = gamesWon[g.winner] + 1);
+    var entries = gamesWon.entries.toList();
+    entries.sort((e1, e2) => e2.value.compareTo(e1.value));
+    return entries.map((e) => e.key).toList();
+  }
+
+  Games add(Game newGame) => Games(List.from(games)..add(newGame));
+
+  Games delete(Game game) => Games(List.of(games)..remove(game));
+
+  bool get isEmpty => games.isEmpty;
+
+  int get length => games.length;
+
+  Game operator [](int index) {
+    return games[index];
+  }
+
+}
+
+
 
 enum CatanExpansion {
 

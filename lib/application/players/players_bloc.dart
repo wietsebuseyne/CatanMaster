@@ -35,7 +35,6 @@ class PlayersBloc extends Bloc<PlayersEvent, PlayersState> {
                 (r) => s.copyWith(newPlayer: newPlayer, message: Message.success("Player successfully added"))
         );
       } else {
-        print("Trying to add player while state is $s");
         s.copyWith(message: Message.error("Cannot add player right now"));
       }
     }
