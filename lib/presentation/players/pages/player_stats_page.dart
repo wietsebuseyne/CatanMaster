@@ -53,7 +53,7 @@ class PlayerStatsPage extends StatelessWidget {
             end: Text(statistics.lastGame == null ? "TBD" : DateFormat.yMd().format(statistics.lastGame.date)),
           ),
           HorizontalInfoTile(
-            leading: Icon(statistics.mostPlayedExpansion?.icon ?? Icons.help_outline),
+            leading: statistics.mostPlayedExpansion?.iconWidget,
             start: Text("Most Played"),
             end: Text(statistics.mostPlayedExpansion?.name ?? "Regular"),
           ),
