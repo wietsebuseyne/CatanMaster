@@ -9,15 +9,21 @@ import 'package:meta/meta.dart';
 @immutable
 class Player extends Equatable {
 
-  //TODO add sex
   final String username;
   final String name;
+  final Gender gender;
   final Color color;
 
-  Player({@required this.username, @required this.name, @required this.color}) :
+  Player({
+    @required this.username,
+    @required this.name,
+    @required this.gender,
+    @required this.color
+  }) :
         assert(username != null && username.isNotEmpty),
         assert(name != null),
         assert(name.isNotEmpty),
+        assert(gender != null),
         assert(color != null),
         assert(color.alpha == 255);
 
@@ -28,12 +34,15 @@ class Player extends Equatable {
   List<Object> get props => [username, name, color];
 }
 
+enum Gender { male, female, x }
+
 @immutable
 class PlayerStatistics extends Equatable {
 
   final Player player;
   final List<Game> games;
   final Player bestBuddy;
+  //TODO include 'Base' as an option here
   final CatanExpansion mostPlayedExpansion;
   final CatanExpansion mostWonExpansion;
   final int rank;

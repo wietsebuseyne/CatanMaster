@@ -50,7 +50,7 @@ class PlayerStatsPage extends StatelessWidget {
           HorizontalInfoTile(
             leading: Icon(Icons.history),
             start: Text("Last Game"),
-            end: Text(DateFormat.yMd().format(statistics.lastGame.date)),
+            end: Text(statistics.lastGame == null ? "TBD" : DateFormat.yMd().format(statistics.lastGame.date)),
           ),
           HorizontalInfoTile(
             leading: Icon(statistics.mostPlayedExpansion?.icon ?? Icons.help_outline),
@@ -65,7 +65,7 @@ class PlayerStatsPage extends StatelessWidget {
           HorizontalInfoTile(
             leading: Icon(Icons.favorite_outline),
             start: Text("Best Catan Buddy"),
-            end: Text(statistics.bestBuddy?.name),
+            end: Text(statistics.bestBuddy?.name ?? "TBD"),
           ),
         ],
       );

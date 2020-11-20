@@ -29,7 +29,7 @@ class PlayersBloc extends Bloc<PlayersEvent, PlayersState> {
     if (event is AddPlayer) {
       final s = state;
       if (s is PlayersLoaded) {
-        var newPlayer = Player(username: event.name, name: event.name, color: event.color);
+        var newPlayer = Player(username: event.name, name: event.name, gender: event.gender, color: event.color);
         yield (await _repository.addPlayer(newPlayer)).fold(
                 (l) => s.copyWith(message: Message.error("Error while adding player: ${l.message}")),
                 (r) => s.copyWith(newPlayer: newPlayer, message: Message.success("Player successfully added"))

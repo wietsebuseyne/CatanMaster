@@ -8,7 +8,8 @@ class LoadPlayers extends PlayersEvent {}
 class AddPlayer extends PlayersEvent {
 
   final String name;
+  final Gender gender;
   final Color color;
 
-  AddPlayer({@required this.name, @required this.color});
+  AddPlayer({@required this.name, @required this.gender, @required this.color});
 }

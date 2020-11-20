@@ -29,6 +29,7 @@ class AddPlayerScreen extends StatelessWidget {
                   if (_formKey.currentState.saveAndValidate()) {
                     BlocProvider.of<PlayersBloc>(context).add(AddPlayer(
                         name: _formKey.currentState.value["name"],
+                        gender: _formKey.currentState.value["gender"],
                         color: _formKey.currentState.value["color"]
                     ));
                   }

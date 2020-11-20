@@ -1,3 +1,4 @@
+import 'package:catan_master/core/core.dart';
 import 'package:catan_master/domain/players/player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -30,17 +31,28 @@ abstract class PlayerDto with _$PlayerDto {
 class PlayerDto extends HiveObject {
 
   @HiveField(0)
-  String name;
-  @HiveField(1)
-  int color;
-  @HiveField(2)
   String username;
+  @HiveField(1)
+  String name;
+  @HiveField(2)
+  int color;
+  @HiveField(3)
+  String gender;
 
-  PlayerDto({this.username, this.name, this.color});
+  PlayerDto({this.username, this.name, this.gender, this.color});
 
-  PlayerDto.fromDomain(Player player) : this.username = player.username, this.name = player.name, this.color = player.color.value;
+  PlayerDto.fromDomain(Player player) :
+        this.username = player.username,
+        this.name = player.name,
+        this.gender = EnumUtils.convertToString(player.gender),
+        this.color = player.color.value;
 
-  Player toDomain() => Player(username: username, name: name, color: Color(color).withAlpha(255));
+  Player toDomain() => Player(
+      username: username,
+      name: name,
+      gender: EnumUtils.fromString(Gender.values, gender),
+      color: Color(color).withAlpha(255)
+  );
 
   factory PlayerDto.fromJson(Map<String, dynamic> json) => _$PlayerDtoFromJson(json);
 
