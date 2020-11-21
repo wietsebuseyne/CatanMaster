@@ -1,7 +1,7 @@
 /*import 'package:catan_master/application/main/main_bloc.dart';
 import 'package:catan_master/domain/players/player.dart';
 import 'package:catan_master/presentation/core/catan_master_app.dart';
-import 'package:catan_master/presentation/players/pages/add_player_page.dart';
+import 'package:catan_master/presentation/players/pages/add_edit_player_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 

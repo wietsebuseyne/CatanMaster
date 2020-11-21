@@ -29,7 +29,11 @@ class AddEditGameScreen extends StatelessWidget {
           appBar: AppBar(
             title: Text(game == null ? "Add Game" : "Edit Game"),
             actions: [
-              FlatButton(
+              FlatButton.icon(
+                icon: Icon(Icons.save),
+                label: Text("SAVE"),
+                textColor: Theme.of(context).primaryIconTheme.color,
+                shape: CircleBorder(side: BorderSide(color: Colors.transparent)),
                 onPressed: () {
                   if (_formKey.currentState.saveAndValidate()) {
                     bool withScores = _formKey.currentState.value["with-scores"];
@@ -57,9 +61,6 @@ class AddEditGameScreen extends StatelessWidget {
                     }
                   }
                 },
-                child: Text("SAVE"),
-                textColor: Theme.of(context).primaryIconTheme.color,
-                shape: CircleBorder(side: BorderSide(color: Colors.transparent)),
               )
             ],
           ),

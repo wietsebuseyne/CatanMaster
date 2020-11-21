@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:catan_master/core/core.dart';
 import 'package:catan_master/data/players/player_datasource.dart';
 import 'package:catan_master/data/players/player_dtos.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -36,7 +37,21 @@ class FirebasePlayerDatasource extends PlayerDatasource {
   }
 
   @override
-  Future<void> createOrUpdatePlayer(PlayerDto player) {
+  Future<void> createPlayer(PlayerDto player) async {
+    var current = await _playersRef.child(player.name).once();
+    if (current.value != null) {
+      //TODO throw AlreadyExistsException and let the bloc handle the message to prevent duplication
+      throw CacheException("Player with username '${player.username}' already exists.");
+    }
+    return _playersRef.child(player.name).update(player.toJson());
+  }
+
+  @override
+  Future<void> updatePlayer(PlayerDto player) async {
+    var current = await _playersRef.child(player.name).once();
+    if (current.value == null) {
+      throw CacheException("No player with username '${player.username}' found.");
+    }
     return _playersRef.child(player.name).update(player.toJson());
   }
 

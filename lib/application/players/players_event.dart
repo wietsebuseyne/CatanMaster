@@ -5,11 +5,18 @@ abstract class PlayersEvent {}
 
 class LoadPlayers extends PlayersEvent {}
 
-class AddPlayer extends PlayersEvent {
+class AddOrUpdatePlayer extends PlayersEvent {
 
+  final Player toEdit;
   final String name;
   final Gender gender;
   final Color color;
 
-  AddPlayer({@required this.name, @required this.gender, @required this.color});
+  AddOrUpdatePlayer({this.toEdit, @required this.name, @required this.gender, @required this.color});
+
+  AddOrUpdatePlayer.add({@required this.name, @required this.gender, @required this.color}) : toEdit = null;
+
+  AddOrUpdatePlayer.edit({@required this.toEdit, @required this.name, @required this.gender, @required this.color});
+
+  bool get isEdit => toEdit != null;
 }

@@ -6,7 +6,7 @@ import 'package:catan_master/presentation/core/catan_icons.dart';
 import 'package:catan_master/presentation/core/widgets/hexagon.dart';
 import 'package:catan_master/presentation/core/widgets/horizontal_info_tile.dart';
 import 'package:catan_master/presentation/feedback/user_feedback.dart';
-import 'package:catan_master/presentation/players/pages/add_player_page.dart';
+import 'package:catan_master/presentation/players/pages/add_edit_player_page.dart';
 import 'package:catan_master/presentation/players/pages/player_stats_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +52,7 @@ class _PlayerDetailScreen extends StatelessWidget {
           title: Text(player.name),
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () => Navigator.of(context).pushNamed("/players/edit", arguments: {"player": player}),
               icon: Icon(Icons.edit),
             ),
             IconButton(
@@ -61,7 +61,7 @@ class _PlayerDetailScreen extends StatelessWidget {
             )
           ],
         ),
-        body: PlayerStatsPage(player)
+        body: UserFeedback(child: PlayerStatsPage(player))
     );
   }
 }

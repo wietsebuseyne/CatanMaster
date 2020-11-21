@@ -4,9 +4,11 @@ abstract class PlayerDatasource {
 
   Future<List<PlayerDto>> getPlayers();
 
-  Future<void> createOrUpdatePlayer(PlayerDto player);
+  Future<void> createPlayer(PlayerDto player);
 
-  Future<PlayerDto> getPlayer(String name);
+  Future<void> updatePlayer(PlayerDto player);
+
+  Future<PlayerDto> getPlayer(String username);
 
   Future<void> deletePlayer(PlayerDto player);
 

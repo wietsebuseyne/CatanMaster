@@ -8,6 +8,8 @@ abstract class PlayerRepository {
 
   Future<Either<Failure, void>> addPlayer(Player player);
 
+  Future<Either<Failure, void>> editPlayer(Player player);
+
   Future<Either<Failure, void>> deletePlayer(Player player);
 
 }

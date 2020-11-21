@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 //Try to get the FAB by a global key and rotate in transitionsBuilder
 class CatanPageRouteBuilder extends PageRouteBuilder {
 
-  CatanPageRouteBuilder({Widget page})
+  final bool fullscreenDialog;
+
+  CatanPageRouteBuilder({Widget page, this.fullscreenDialog = false})
       : super(
           pageBuilder: (
             BuildContext context,
@@ -24,6 +26,7 @@ class CatanPageRouteBuilder extends PageRouteBuilder {
               page,
             ],);
           },
+          fullscreenDialog: fullscreenDialog,
           transitionDuration: Duration(milliseconds: 500),
           reverseTransitionDuration: Duration(milliseconds: 500),
           transitionsBuilder: (

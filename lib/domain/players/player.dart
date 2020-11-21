@@ -15,12 +15,13 @@ class Player extends Equatable {
   final Color color;
 
   Player({
-    @required this.username,
+    @required String username,
     @required this.name,
     @required this.gender,
     @required this.color
   }) :
         assert(username != null && username.isNotEmpty),
+        this.username = username.toLowerCase(),
         assert(name != null),
         assert(name.isNotEmpty),
         assert(gender != null),

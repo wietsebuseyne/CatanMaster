@@ -56,3 +56,12 @@ class PlayerAdded extends PlayersLoaded {
       message: message
   );
 }
+
+class PlayerEdited extends PlayersLoaded {
+
+  //TODO move to Players object
+  final Player editedPlayer;
+
+  PlayerEdited(List<Player> players, {this.editedPlayer}) : super(List.from(players)..add(editedPlayer));
+
+}

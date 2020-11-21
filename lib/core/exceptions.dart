@@ -10,3 +10,9 @@ class CacheException implements Exception {
   String toString() => message ?? super.toString();
 
 }
+
+class AlreadyExistsException implements Exception {
+
+}
+
+class NotFoundException implements Exception {}

@@ -17,4 +17,12 @@ class FeedbackBloc extends Bloc<FeedbackEvent, FeedbackState> {
   ) async* {
     yield state.copyWith(event.feedback);
   }
+
+  void feedback(FeedbackMessage feedbackMessage) {
+    add(FeedbackEvent(feedbackMessage));
+  }  
+  
+  snackbar(String message, {Severity severity}) {
+    add(FeedbackEvent(FeedbackMessage.snackbar(message, severity: severity)));
+  }
 }

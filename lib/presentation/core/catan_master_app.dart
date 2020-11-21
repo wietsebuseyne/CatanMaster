@@ -7,7 +7,7 @@ import 'package:catan_master/presentation/games/pages/games_page.dart';
 import 'package:catan_master/presentation/games/screens/add_edit_game_screen.dart';
 import 'package:catan_master/presentation/games/widgets/games_list.dart';
 import 'package:catan_master/presentation/players/pages/players_page.dart';
-import 'package:catan_master/presentation/players/screens/add_player_screen.dart';
+import 'package:catan_master/presentation/players/screens/add_edit_player_screen.dart';
 import 'package:catan_master/presentation/players/screens/player_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,12 +27,20 @@ class CatanMasterApp extends StatelessWidget {
           initialRoute: '/',
           onGenerateRoute: (RouteSettings settings) {
             if (settings.name == '/players/add') {
+              return CatanPageRouteBuilder(page: AddEditPlayerScreen.add(), fullscreenDialog: true);
+            } else if (settings.name == '/players/edit') {
               return MaterialPageRoute(
-                builder: (context) => AddPlayerScreen(),
-                fullscreenDialog: true
+                  builder: (context) {
+                    var player = (settings.arguments as Map)["player"];
+                    if (player == null) {
+                      return Text("Error: no player provided");
+                    }
+                    return AddEditPlayerScreen.edit(player);
+                  },
+                  fullscreenDialog: true,
               );
             } else if (settings.name == '/games/add') {
-              return CatanPageRouteBuilder(page: AddEditGameScreen.add());
+              return CatanPageRouteBuilder(page: AddEditGameScreen.add(), fullscreenDialog: true);
             } else if (settings.name == '/games/edit') {
               return MaterialPageRoute(
                   builder: (context) {

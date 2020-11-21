@@ -45,7 +45,20 @@ class CachedPlayerRepository extends PlayerRepository {
   @override
   Future<Either<Failure, void>> addPlayer(Player player) async {
     try {
-      return Right(localDatasource.createOrUpdatePlayer(PlayerDto.fromDomain(player)));
+      return Right(localDatasource.createPlayer(PlayerDto.fromDomain(player)));
+    } on Exception catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> editPlayer(Player player) async {
+    try {
+      var players = await localDatasource.getPlayers();
+      if (players.any((p) => p.username != player.username && p.name.toLowerCase() == player.name.toLowerCase())) {
+        return Left(Failure("A player with name '${player.name}' already exists"));
+      }
+      return Right(localDatasource.updatePlayer(PlayerDto.fromDomain(player)));
     } on Exception catch (e) {
       return Left(Failure(e.toString()));
     }

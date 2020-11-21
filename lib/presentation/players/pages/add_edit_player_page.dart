@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
-class AddPlayerPage extends StatelessWidget {
+class AddEditPlayerPage extends StatelessWidget {
 
+  final Player player;
   final GlobalKey<FormBuilderState> _formKey;
 
-  AddPlayerPage(this._formKey);
+  AddEditPlayerPage(this._formKey, {this.player});
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +23,7 @@ class AddPlayerPage extends StatelessWidget {
             children: [
               FormBuilderTextField(
                 attribute: "name",
+                initialValue: player?.name,
                 decoration: InputDecoration(
                     labelText: "Name",
                     contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
@@ -36,7 +38,7 @@ class AddPlayerPage extends StatelessWidget {
               SizedBox(height: 16.0,),
               FormBuilderRadioGroup(
                 attribute: "gender",
-                initialValue: Gender.male,
+                initialValue: player?.gender ?? Gender.male,
                 options: [
                   FormBuilderFieldOption(value: Gender.male, child: Text("Male"),),
                   FormBuilderFieldOption(value: Gender.female, child: Text("Female"),),
@@ -57,6 +59,7 @@ class AddPlayerPage extends StatelessWidget {
               FormBuilderColorPicker(
                 attribute: "color",
                 colorPickerType: ColorPickerType.BlockPicker,
+                initialValue: player?.color,
                 decoration: InputDecoration(
                     labelText: "Color",
                     contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
