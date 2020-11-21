@@ -20,54 +20,56 @@ class PlayerStatsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GamesPage(childBuilder: (context, state) {
       var statistics = state.getStatisticsForPlayer(player);
-      return Column(
-        children: [
-          PlayerRank(player, statistics.rank),
+      return SingleChildScrollView(
+        child: Column(
+          children: [
+            PlayerRank(player, statistics.rank),
 
-          //Last Games
-          Divider(indent: 32.0, endIndent: 32.0,),
-          Center(child: LastGames(wins: statistics.getWins(13))), //TODO calc nb based on width
+            //Last Games
+            Divider(indent: 32.0, endIndent: 32.0,),
+            Center(child: LastGames(wins: statistics.getWins(13))), //TODO calc nb based on width
 
-          //Prizes
-          if (statistics.prizes.isNotEmpty) Divider(indent: 32.0, endIndent: 32.0,),
-          ...statistics.prizes.map((a) => AchievementLine(a)),
+            //Prizes
+            if (statistics.prizes.isNotEmpty) Divider(indent: 32.0, endIndent: 32.0,),
+            ...statistics.prizes.map((a) => AchievementLine(a)),
 
-          //Achievements
-          Divider(indent: 32.0, endIndent: 32.0,),
-          Text("Achievements", style: Theme.of(context).textTheme.headline6),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("No Achievements \uD83D\uDE22", style: Theme.of(context).textTheme.caption),
-          ),
+            //Achievements
+            Divider(indent: 32.0, endIndent: 32.0,),
+            Text("Achievements", style: Theme.of(context).textTheme.headline6),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text("No Achievements \uD83D\uDE22", style: Theme.of(context).textTheme.caption),
+            ),
 
-          //Stats
-          Divider(indent: 32.0, endIndent: 32.0,),
-          HorizontalInfoTile(
-            leading: Icon(Icons.format_list_numbered),
-            start: Text("Games played"),
-            end: Text(statistics.games.length.toString()),
-          ),
-          HorizontalInfoTile(
-            leading: Icon(Icons.history),
-            start: Text("Last Game"),
-            end: Text(statistics.lastGame == null ? "TBD" : DateFormat.yMd().format(statistics.lastGame.date)),
-          ),
-          HorizontalInfoTile(
-            leading: statistics.mostPlayedExpansion?.iconWidget,
-            start: Text("Most Played"),
-            end: Text(statistics.mostPlayedExpansion?.name ?? "Regular"),
-          ),
-          HorizontalInfoTile(
-            leading: statistics.mostWonExpansion.iconWidget,
-            start: Text("Most Won"),
-            end: Text(statistics.mostWonExpansion?.name ?? "Regular"),
-          ),
-          HorizontalInfoTile(
-            leading: Icon(Icons.favorite_outline),
-            start: Text("Best Catan Buddy"),
-            end: Text(statistics.bestBuddy?.name ?? "TBD"),
-          ),
-        ],
+            //Stats
+            Divider(indent: 32.0, endIndent: 32.0,),
+            HorizontalInfoTile(
+              leading: Icon(Icons.format_list_numbered),
+              start: Text("Games played"),
+              end: Text(statistics.games.length.toString()),
+            ),
+            HorizontalInfoTile(
+              leading: Icon(Icons.history),
+              start: Text("Last Game"),
+              end: Text(statistics.lastGame == null ? "TBD" : DateFormat.yMd().format(statistics.lastGame.date)),
+            ),
+            HorizontalInfoTile(
+              leading: statistics.mostPlayedExpansion?.iconWidget,
+              start: Text("Most Played"),
+              end: Text(statistics.mostPlayedExpansion?.name ?? "Regular"),
+            ),
+            HorizontalInfoTile(
+              leading: statistics.mostWonExpansion.iconWidget,
+              start: Text("Most Won"),
+              end: Text(statistics.mostWonExpansion?.name ?? "Regular"),
+            ),
+            HorizontalInfoTile(
+              leading: Icon(Icons.favorite_outline),
+              start: Text("Best Catan Buddy"),
+              end: Text(statistics.bestBuddy?.name ?? "TBD"),
+            ),
+          ],
+        ),
       );
     });
   }
