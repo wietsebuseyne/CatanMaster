@@ -13,7 +13,7 @@ class GamesLoaded extends GamesState {
 
   GamesLoaded(this.games);
 
-  PlayerStatistics getStatisticsForPlayer(Player  player) {
+  PlayerStatistics getStatisticsForPlayer(Player player) {
     return PlayerStatistics.fromGames(player, games);
   }
 

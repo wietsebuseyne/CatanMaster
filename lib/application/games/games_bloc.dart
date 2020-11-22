@@ -106,7 +106,7 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
       Game game = event.game;
       yield (await gameRepository.undoDelete(game: game)).fold(
           (f) => _feedbackAndReturn(f, message: "Error while undoing remove: ${f.toString()}"),
-          (r) => GamesLoaded(s.games..add(game))
+          (r) => GamesLoaded(s.games.add(game))
       );
     }
   }

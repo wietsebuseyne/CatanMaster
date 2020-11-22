@@ -11,7 +11,7 @@ class HivePlayerDatasource extends PlayerDatasource {
 
   @override
   Future<void> deletePlayer(PlayerDto player) {
-    return player.delete();
+    return _box.delete(player.username);
   }
 
   @override

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:catan_master/domain/feedback/feedback_message.dart';
 import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
 
 part 'feedback_event.dart';
 part 'feedback_state.dart';
@@ -24,5 +25,9 @@ class FeedbackBloc extends Bloc<FeedbackEvent, FeedbackState> {
   
   snackbar(String message, {Severity severity}) {
     add(FeedbackEvent(FeedbackMessage.snackbar(message, severity: severity)));
+  }
+  
+  dialog(String message, {@required String title, Severity severity}) {
+    add(FeedbackEvent(FeedbackMessage.dialog(message, title: title, severity: severity)));
   }
 }

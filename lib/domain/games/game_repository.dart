@@ -6,7 +6,9 @@ abstract class GameRepository {
 
   Future<Either<Failure, List<Game>>> getGames();
 
-  Future<Either<Failure, List<Game>>> getGamesForPlayer(String player);
+  Future<Either<Failure, List<Game>>> getGamesForPlayer(String username);
+
+  Future<Either<Failure, bool>> hasGames(String username);
 
   Future<Either<Failure, void>> addGame(Game game);
 

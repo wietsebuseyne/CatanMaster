@@ -1,17 +1,17 @@
 part of 'players_bloc.dart';
 
 @immutable
-abstract class PlayersState {
+abstract class PlayerState {
 
   final Message message;
 
-  PlayersState({this.message});
+  PlayerState({this.message});
 
-  PlayersState copyWith({Message message});
+  PlayerState copyWith({Message message});
 
 }
 
-class InitialPlayersState extends PlayersState {
+class InitialPlayersState extends PlayerState {
 
   InitialPlayersState({Message message}) : super(message: message);
 
@@ -20,7 +20,7 @@ class InitialPlayersState extends PlayersState {
   }
 }
 
-class PlayersLoading extends PlayersState {
+class PlayersLoading extends PlayerState {
 
   PlayersLoading({Message message}) : super(message: message);
 
@@ -30,10 +30,9 @@ class PlayersLoading extends PlayersState {
 
 }
 
-class PlayersLoaded extends PlayersState {
+class PlayersLoaded extends PlayerState {
 
   final List<Player> players;
-  //Map<String, Game> gameMap;
 
   PlayersLoaded(List<Player> players, {Message message}) :
         this.players = List.unmodifiable(players),
@@ -43,7 +42,7 @@ class PlayersLoaded extends PlayersState {
     return PlayerAdded(players, newPlayer: newPlayer, message: message ?? message);
   }
 
-  Player getPlayer(String username) => players.firstWhere((p) => p.username == username, orElse: null);
+  Player getPlayer(String username) => players.firstWhere((p) => p.username == username, orElse: () => null);
 
 }
 

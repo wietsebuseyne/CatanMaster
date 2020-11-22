@@ -37,6 +37,8 @@ class Game extends Equatable {
   @override
   List<Object> get props => [date, players, winner, expansions, scores];
 
+  @override
+  String toString() => "Game at ${date.toIso8601String()} with [${players.join(', ')}]";
 }
 
 @immutable

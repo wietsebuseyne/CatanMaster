@@ -67,7 +67,6 @@ class CachedPlayerRepository extends PlayerRepository {
   @override
   Future<Either<Failure, void>> deletePlayer(Player player) async {
     try {
-      //check games
       await localDatasource.deletePlayer(PlayerDto.fromDomain(player));
       return Right(null);
     } on Exception catch (e) {

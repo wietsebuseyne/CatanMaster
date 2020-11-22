@@ -36,7 +36,7 @@ class CatanMasterLocalRepositoryProvider extends StatelessWidget {
               providers: [
                 Provider<PlayerRepository>(
                   create: (BuildContext context) => CachedPlayerRepository(
-                      HivePlayerDatasource(playerBox)
+                      HivePlayerDatasource(playerBox),
                   ),
                 ),
                 ProxyProvider<PlayerRepository, GameRepository>(

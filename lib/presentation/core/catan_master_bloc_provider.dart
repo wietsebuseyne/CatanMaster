@@ -2,6 +2,7 @@ import 'package:catan_master/application/feedback/feedback_bloc.dart';
 import 'package:catan_master/application/games/games_bloc.dart';
 import 'package:catan_master/application/main/main_bloc.dart';
 import 'package:catan_master/application/players/players_bloc.dart';
+import 'package:catan_master/application/players/usecases/delete_player.dart';
 import 'package:catan_master/domain/games/game_repository.dart';
 import 'package:catan_master/domain/players/player_repository.dart';
 import 'package:flutter/widgets.dart';
@@ -24,7 +25,11 @@ class CatanMasterBlocProvider extends StatelessWidget {
             BlocProvider<PlayersBloc>(
               create: (BuildContext context) => PlayersBloc(
                 RepositoryProvider.of<PlayerRepository>(context),
-                feedbackBloc: BlocProvider.of<FeedbackBloc>(context)
+                feedbackBloc: BlocProvider.of<FeedbackBloc>(context),
+                deletePlayer: DeletePlayer(
+                    gameRepository: RepositoryProvider.of<GameRepository>(context),
+                    playerRepository: RepositoryProvider.of<PlayerRepository>(context)
+                ),
               )..add(LoadPlayers()),
             ),
             BlocProvider<GamesBloc>(

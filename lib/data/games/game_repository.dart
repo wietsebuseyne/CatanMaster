@@ -19,10 +19,18 @@ class CachedGameRepository extends GameRepository {
   CachedGameRepository({@required this.gameDatasource, @required this.playerRepository});
 
   @override
-  Future<Either<Failure, List<Game>>> getGamesForPlayer(String player) async {
+  Future<Either<Failure, List<Game>>> getGamesForPlayer(String username) async {
     return (await getGames()).fold(
             (failure) => Left(failure),
-            (games) => Right(games.where((g) => g.players.map((p) => p.username).contains(player)).toList())
+            (games) => Right(games.where((g) => g.players.map((p) => p.username).contains(username)).toList())
+    );
+  }
+  
+  @override
+  Future<Either<Failure, bool>> hasGames(String username) async {
+    return (await getGames()).fold(
+            (failure) => Left(failure),
+            (games) => Right(games.any((g) => g.players.map((p) => p.username).contains(username)))
     );
   }
 

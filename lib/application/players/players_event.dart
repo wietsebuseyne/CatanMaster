@@ -1,11 +1,11 @@
 part of 'players_bloc.dart';
 
 @immutable
-abstract class PlayersEvent {}
+abstract class PlayerEvent {}
 
-class LoadPlayers extends PlayersEvent {}
+class LoadPlayers extends PlayerEvent {}
 
-class AddOrUpdatePlayer extends PlayersEvent {
+class AddOrUpdatePlayer extends PlayerEvent {
 
   final Player toEdit;
   final String name;
@@ -19,4 +19,11 @@ class AddOrUpdatePlayer extends PlayersEvent {
   AddOrUpdatePlayer.edit({@required this.toEdit, @required this.name, @required this.gender, @required this.color});
 
   bool get isEdit => toEdit != null;
+}
+
+class DeletePlayerEvent extends PlayerEvent {
+
+  final Player player;
+
+  DeletePlayerEvent(this.player) : assert(player != null);
 }

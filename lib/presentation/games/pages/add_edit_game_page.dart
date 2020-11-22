@@ -34,7 +34,7 @@ class _AddEditGamePageState extends State<AddEditGamePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PlayersBloc, PlayersState>(
+    return BlocBuilder<PlayersBloc, PlayerState>(
         builder: (context, state) {
           if (state is PlayersLoaded) {
             return _createForm(state.players);

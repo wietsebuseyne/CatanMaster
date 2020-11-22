@@ -19,7 +19,7 @@ class AddEditPlayerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<PlayersBloc, PlayersState>(
+    return BlocListener<PlayersBloc, PlayerState>(
       listener: (context, state) {
         if (state is PlayerAdded || state is PlayerEdited) {
           Navigator.of(context).pop();

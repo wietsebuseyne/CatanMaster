@@ -1,5 +1,4 @@
 import 'package:catan_master/application/games/games_bloc.dart';
-import 'package:catan_master/presentation/games/widgets/games_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -13,3 +13,12 @@ abstract class PlayerRepository {
   Future<Either<Failure, void>> deletePlayer(Player player);
 
 }
+
+/// When you try to delete a player which still has games assigned to him
+class PlayerHasGamesFailure extends Failure {
+
+  PlayerHasGamesFailure(Player player, {int nbGames}) : super(
+      "Player '$player' has ${nbGames.toString() + " " ?? ""}game(s).\nOnly players with no games can be deleted. Either delete all the games or remove '$player' from those games."
+  );
+
+}

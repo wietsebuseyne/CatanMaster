@@ -3,8 +3,8 @@ import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:catan_master/application/feedback/feedback_bloc.dart';
+import 'package:catan_master/application/players/usecases/delete_player.dart';
 import 'package:catan_master/core/message.dart';
-import 'package:catan_master/domain/feedback/feedback_message.dart';
 import 'package:catan_master/domain/players/player.dart';
 import 'package:catan_master/domain/players/player_repository.dart';
 import 'package:flutter/material.dart';
@@ -13,23 +13,29 @@ import 'package:meta/meta.dart';
 part 'players_event.dart';
 part 'players_state.dart';
 
-class PlayersBloc extends Bloc<PlayersEvent, PlayersState> {
+class PlayersBloc extends Bloc<PlayerEvent, PlayerState> {
 
+  final DeletePlayer deletePlayer;
   final PlayerRepository _repository;
   final FeedbackBloc feedbackBloc;
 
-  PlayersBloc(this._repository, {@required this.feedbackBloc}) : super(InitialPlayersState());
+  PlayersBloc(this._repository, {
+    @required this.feedbackBloc,
+    @required this.deletePlayer
+  }) : super(InitialPlayersState());
 
   @override
-  Stream<PlayersState> mapEventToState(PlayersEvent event) async* {
+  Stream<PlayerState> mapEventToState(PlayerEvent event) async* {
     if (event is LoadPlayers) {
       yield* _loadPlayers();
     } else if (event is AddOrUpdatePlayer) {
       yield* _addOrUpdatePlayer(event);
+    } else if (event is DeletePlayerEvent) {
+      yield* _deletePlayer(event);
     }
   }
 
-  Stream<PlayersState> _loadPlayers() async* {
+  Stream<PlayerState> _loadPlayers() async* {
     yield PlayersLoading();
     yield (await _repository.getPlayers()).fold(
             (failure) {
@@ -40,7 +46,7 @@ class PlayersBloc extends Bloc<PlayersEvent, PlayersState> {
     );
   }
 
-  Stream<PlayersState> _addOrUpdatePlayer(AddOrUpdatePlayer event) async* {
+  Stream<PlayerState> _addOrUpdatePlayer(AddOrUpdatePlayer event) async* {
     final s = state;
     if (s is PlayersLoaded) {
       var player = Player(
@@ -78,6 +84,27 @@ class PlayersBloc extends Bloc<PlayersEvent, PlayersState> {
     }
   }
 
+  Stream<PlayerState> _deletePlayer(DeletePlayerEvent event) async* {
+    final s = state;
+    if (s is PlayersLoaded) {
+      yield (await deletePlayer.call(event.player)).fold(
+          (failure) {
+            if (failure is PlayerHasGamesFailure) {
+              feedbackBloc.dialog(failure.message, title: "Cannot delete player");
+            } else {
+              feedbackBloc.snackbar("${failure.message}");
+            }
+            return s;
+          },
+          (_) {
+            feedbackBloc.snackbar("Player '${event.player}' successfully deleted");
+            return PlayersLoaded(List.from(s.players)..remove(event.player));
+          }
+      );
+    } else {
+      feedbackBloc.snackbar("Cannot delete player right now");
+    }
+  }
 
 
 }

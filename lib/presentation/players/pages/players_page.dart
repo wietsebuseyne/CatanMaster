@@ -7,8 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class PlayersPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PlayersBloc, PlayersState>(
-      builder: (BuildContext context, PlayersState state) {
+    return BlocBuilder<PlayersBloc, PlayerState>(
+      builder: (BuildContext context, PlayerState state) {
         if (state is PlayersLoading || state is InitialPlayersState) {
           return Center(child: CircularProgressIndicator());
         } else if (state is PlayersLoaded) {
