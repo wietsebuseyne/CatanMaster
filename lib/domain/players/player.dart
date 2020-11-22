@@ -80,6 +80,8 @@ class PlayerStatistics extends Equatable {
         }
       }
     });
+    //Cannot be own best buddy
+    gamesPlayed.remove(player);
     List<Prize> achievements = [];
 
     int nbWinsFive = games.take(5).where((g) => g.winner == player).length;
