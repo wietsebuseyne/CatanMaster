@@ -101,7 +101,7 @@ class PlayerStatistics extends Equatable {
 
   Game get lastGame => games.firstOrNull;
 
-  List<bool> getWins(int nb) => games.take(nb).toList().reversed.map((g) => g.winner == player).toList();
+  List<bool> getWinOrLose(int nb) => games.take(nb).toList().map((g) => g.winner == player).toList();
 
   @override
   List<Object> get props => [player, games];

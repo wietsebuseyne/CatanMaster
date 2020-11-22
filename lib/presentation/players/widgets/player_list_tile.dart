@@ -1,23 +1,33 @@
 import 'package:catan_master/domain/players/player.dart';
-import 'package:catan_master/presentation/core/catan_icons.dart';
 import 'package:catan_master/presentation/core/widgets/hexagon.dart';
 import 'package:catan_master/presentation/players/player_presentation.dart';
+import 'package:catan_master/presentation/players/widgets/win_lose_hex.dart';
 import 'package:flutter/material.dart';
 
 class PlayerListTile extends StatelessWidget {
 
-  final Player player;
+  final PlayerStatistics statistics;
+  Player get player => statistics.player;
 
-  PlayerListTile(this.player, {Key key}) : super(key: key);
+  PlayerListTile(this.statistics, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       leading: Hexagon(
         color: player.color,
-        child: Icon(CatanIcons.medal_solid, size: 16, color: player.onColor),
+        child: Center(child: Text(
+          statistics.rank.toString(),
+          style: Theme.of(context).textTheme.subtitle1.copyWith(color: player.onColor, fontWeight: FontWeight.bold),
+        )),
       ),
-      title: Text(player.name, style: Theme.of(context).textTheme.headline6,),
+      title: Text(player.name, style: Theme.of(context).textTheme.headline6, ),
+      subtitle: Row(
+        children: statistics
+            .getWinOrLose(5)
+            .map((w) => WinLoseHexagon(w, rotate: 0, width: 24,))
+            .toList(),
+      ),
       onTap: () => Navigator.of(context).pushNamed('/players/detail', arguments: {"player": player}),
     );
   }

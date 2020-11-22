@@ -5,7 +5,7 @@ import 'package:catan_master/presentation/core/catan_icons.dart';
 import 'package:catan_master/presentation/core/widgets/hexagon.dart';
 import 'package:catan_master/presentation/core/widgets/horizontal_info_tile.dart';
 import 'package:catan_master/presentation/games/pages/games_page.dart';
-import 'package:catan_master/presentation/players/widgets/last_games.dart';
+import 'package:catan_master/presentation/players/widgets/win_lose_hex.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
@@ -27,7 +27,7 @@ class PlayerStatsPage extends StatelessWidget {
 
             //Last Games
             Divider(indent: 32.0, endIndent: 32.0,),
-            Center(child: LastGames(wins: statistics.getWins(13))), //TODO calc nb based on width
+            Center(child: WinLoseHexagonPath(wins: statistics.getWinOrLose(13))), //TODO calc nb based on width
 
             //Prizes
             if (statistics.prizes.isNotEmpty) Divider(indent: 32.0, endIndent: 32.0,),

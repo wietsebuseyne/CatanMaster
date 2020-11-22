@@ -1,6 +1,7 @@
 import 'package:catan_master/application/games/games_bloc.dart';
 import 'package:catan_master/domain/games/game.dart';
 import 'package:catan_master/presentation/core/catan_icons.dart';
+import 'package:catan_master/presentation/core/widgets/empty_list_message.dart';
 import 'package:catan_master/presentation/games/widgets/game_actions.dart';
 import 'package:catan_master/presentation/games/widgets/game_list_tile.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ class GamesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -37,17 +38,9 @@ class GamesList extends StatelessWidget {
         ),
         if (games.isEmpty)
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("No games", style: Theme.of(context).textTheme.headline5, textAlign: TextAlign.center,),
-                  SizedBox(height: 8.0,),
-                  Text("Get started and add your first game by pressing the (+) button below", style: Theme.of(context).textTheme.bodyText2, textAlign: TextAlign.center),
-                ],
-              ),
+            child: EmptyListMessage(
+              title: Text("No games"),
+              subtitle: Text("Add your first game by pressing the \u2795 button below"),
             ),
           )
         else

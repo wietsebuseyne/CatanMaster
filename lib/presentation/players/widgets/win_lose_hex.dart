@@ -1,13 +1,15 @@
 
+import 'dart:math';
+
 import 'package:catan_master/presentation/core/widgets/hexagon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class LastGames extends StatelessWidget {
+class WinLoseHexagonPath extends StatelessWidget {
 
   final List<bool> wins;
 
-  const LastGames({
+  const WinLoseHexagonPath({
     Key key,
     @required this.wins,
   }) : assert(wins != null), super(key: key);
@@ -43,14 +45,30 @@ class LastGames extends StatelessWidget {
   }
 
   Iterable<Widget> _expandWin(bool win) => [
-    Hexagon(
-        color: win ? Colors.green : Colors.red,
-        shadows: [],
-        child: Icon(win ? Icons.check : Icons.cancel_outlined, color: Colors.white, size: 18,),
-        rotate: 30,
-        width: 32,
-        height: 32
-    ),
+    WinLoseHexagon(win),
     SizedBox(width: 16,),
   ];
+}
+
+class WinLoseHexagon extends StatelessWidget {
+
+  final bool win;
+  final double width;
+  final double height;
+  final double rotate;
+
+  WinLoseHexagon(this.win, {this.rotate = 30, this.width = 32, this.height = 32});
+
+  @override
+  Widget build(BuildContext context) {
+    return Hexagon(
+        color: win ? Colors.green : Colors.red,
+        shadows: [],
+        child: Icon(win ? Icons.check : Icons.cancel_outlined, color: Colors.white, size: min(width, height) / 2 + 2,),
+        rotate: rotate,
+        width: width,
+        height: height
+    );
+  }
+
 }
