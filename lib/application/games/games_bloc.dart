@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:catan_master/application/feedback/feedback_bloc.dart';
+import 'package:catan_master/application/players/players_bloc.dart';
 import 'package:catan_master/core/failures.dart';
 import 'package:catan_master/domain/feedback/feedback_message.dart';
 import 'package:catan_master/domain/games/game.dart';
@@ -19,10 +20,25 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
 
   final FeedbackBloc feedbackBloc;
   final GameRepository gameRepository;
+  final PlayersBloc playersBloc;
+  StreamSubscription _subscription;
 
-  GamesBloc(this.gameRepository, {@required this.feedbackBloc}) :
+  GamesBloc(this.gameRepository, {@required this.playersBloc, @required this.feedbackBloc}) :
         assert(gameRepository != null),
-        super(InitialGamesState());
+        super(InitialGamesState()) {
+    _subscription = playersBloc.listen((state) {
+      if (state is PlayersLoaded) {
+        print("reloading games");
+        add(LoadGames());
+      }
+    });
+  }
+
+  @override
+  Future<void> close() async{
+    await _subscription.cancel();
+    return super.close();
+  }
 
   @override
   Stream<GamesState> mapEventToState(GamesEvent event) async* {

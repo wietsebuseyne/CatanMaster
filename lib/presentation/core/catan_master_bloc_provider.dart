@@ -34,8 +34,9 @@ class CatanMasterBlocProvider extends StatelessWidget {
             ),
             BlocProvider<GamesBloc>(
               create: (BuildContext context) => GamesBloc(
-                  RepositoryProvider.of<GameRepository>(context),
-                  feedbackBloc: BlocProvider.of<FeedbackBloc>(context)
+                RepositoryProvider.of<GameRepository>(context),
+                feedbackBloc: BlocProvider.of<FeedbackBloc>(context),
+                playersBloc: BlocProvider.of<PlayersBloc>(context),
               )..add(LoadGames()),
             ),
             BlocProvider<MainBloc>(
