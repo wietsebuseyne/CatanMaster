@@ -12,8 +12,8 @@ class MainBloc extends Bloc<MainEvent, MainState> {
 
   @override
   Stream<MainState> mapEventToState(MainEvent event) async* {
-    if (event is SwitchPageEvent) {
-      yield MainState(event.page);
+    if (event is SwitchTabEvent) {
+      yield MainState(event.tab);
     }
   }
 }

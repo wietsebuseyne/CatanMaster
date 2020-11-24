@@ -1,7 +1,10 @@
 import 'package:catan_master/application/main/main_bloc.dart';
+import 'package:catan_master/application/players/players_bloc.dart';
+import 'package:catan_master/domain/feedback/feedback_message.dart';
 import 'package:catan_master/domain/players/player.dart';
 import 'package:catan_master/presentation/core/catan_icons.dart';
 import 'package:catan_master/presentation/core/catan_page_route_builder.dart';
+import 'package:catan_master/presentation/feedback/show_feedback.dart';
 import 'package:catan_master/presentation/feedback/user_feedback.dart';
 import 'package:catan_master/presentation/games/pages/games_page.dart';
 import 'package:catan_master/presentation/games/screens/add_edit_game_screen.dart';
@@ -11,6 +14,7 @@ import 'package:catan_master/presentation/players/screens/add_edit_player_screen
 import 'package:catan_master/presentation/players/screens/player_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:polygon_clipper/polygon_border.dart';
 
 class CatanMasterApp extends StatelessWidget {
@@ -102,20 +106,45 @@ class CatanMasterHomeScreen extends StatelessWidget {
               label: 'Players'
           ),
         ],
-        onTap: (newIndex) => BlocProvider.of<MainBloc>(context).add(SwitchPageEvent(indexToPage(newIndex))),
+        onTap: (newIndex) => BlocProvider.of<MainBloc>(context).add(SwitchTabEvent(indexToPage(newIndex))),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: CatanFloatingActionButton(
-          onPressed: () {
-            switch(tab) {
-              case HomePageTab.games:
-                Navigator.of(context).pushNamed("/games/add");
-                break;
-              case HomePageTab.players:
-                Navigator.of(context).pushNamed("/players/add");
-                break;
-            }
-          },
+      floatingActionButton: Builder(
+          builder: (context) => CatanFloatingActionButton(
+            onPressed: () {
+              switch(tab) {
+                case HomePageTab.games:
+                  var playersState = BlocProvider.of<PlayersBloc>(context).state;
+                  if (playersState is PlayersLoaded) {
+                    if (playersState.players.length > 1) {
+                      Navigator.of(context).pushNamed("/games/add");
+                    } else {
+                      showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("No players found"),
+                            content: Text("You must add some players first."),
+                            actions: [
+                              FlatButton(onPressed: () => Navigator.of(context).pop(), child: Text("Cancel")),
+                              FlatButton(onPressed: () {
+                                BlocProvider.of<MainBloc>(context).add(SwitchTabEvent(HomePageTab.players));
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pushNamed("/players/add");
+                              }, child: Text("Add Player")),
+                            ],
+                          )
+                      );
+                    }
+                  } else {
+                    FeedbackMessage.snackbar("Still loading data, please be patient").show(context);
+                  }
+                  break;
+                case HomePageTab.players:
+                  Navigator.of(context).pushNamed("/players/add");
+                  break;
+              }
+            },
+        ),
       ),
     );
   }

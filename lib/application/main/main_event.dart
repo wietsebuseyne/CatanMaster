@@ -3,10 +3,10 @@ part of 'main_bloc.dart';
 @immutable
 abstract class MainEvent {}
 
-class SwitchPageEvent extends MainEvent {
+class SwitchTabEvent extends MainEvent {
 
-  final HomePageTab page;
+  final HomePageTab tab;
 
-  SwitchPageEvent(this.page);
+  SwitchTabEvent(this.tab);
 
 }
