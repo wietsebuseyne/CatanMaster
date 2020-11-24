@@ -28,7 +28,6 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
         super(InitialGamesState()) {
     _subscription = playersBloc.listen((state) {
       if (state is PlayersLoaded) {
-        print("reloading games");
         add(LoadGames());
       }
     });
