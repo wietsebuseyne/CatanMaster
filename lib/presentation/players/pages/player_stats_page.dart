@@ -34,12 +34,12 @@ class PlayerStatsPage extends StatelessWidget {
             ...statistics.prizes.map((a) => AchievementLine(a)),
 
             //Achievements
-            Divider(indent: 32.0, endIndent: 32.0,),
-            Text("Achievements", style: Theme.of(context).textTheme.headline6),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text("No Achievements \uD83D\uDE22", style: Theme.of(context).textTheme.caption),
-            ),
+//            Divider(indent: 32.0, endIndent: 32.0,),
+//            Text("Achievements", style: Theme.of(context).textTheme.headline6),
+//            Padding(
+//              padding: const EdgeInsets.all(8.0),
+//              child: Text("No Achievements \uD83D\uDE22", style: Theme.of(context).textTheme.caption),
+//            ),
 
             //Stats
             Divider(indent: 32.0, endIndent: 32.0,),
@@ -54,14 +54,14 @@ class PlayerStatsPage extends StatelessWidget {
               end: Text(statistics.lastGame == null ? "TBD" : DateFormat.yMd().format(statistics.lastGame.date)),
             ),
             HorizontalInfoTile(
-              leading: statistics.mostPlayedExpansion?.iconWidget,
+              leading: statistics.mostPlayedExpansion.iconWidget,
               start: Text("Most Played"),
-              end: Text(statistics.mostPlayedExpansion?.name ?? "Regular"),
+              end: Text(statistics.mostPlayedExpansion.name ),
             ),
             HorizontalInfoTile(
               leading: statistics.mostWonExpansion.iconWidget,
               start: Text("Most Won"),
-              end: Text(statistics.mostWonExpansion?.name ?? "Regular"),
+              end: Text(statistics.mostWonExpansion.name),
             ),
             HorizontalInfoTile(
               leading: Icon(Icons.favorite_outline),

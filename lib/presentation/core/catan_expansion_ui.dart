@@ -47,6 +47,7 @@ extension CatanExpansionUi on CatanExpansion {
   }
 
   String get name {
+    if (this == null) return "Regular";
     switch(this) {
       case CatanExpansion.cities_and_knights:
         return "Cities & Knights";
