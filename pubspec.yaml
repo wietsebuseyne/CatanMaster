@@ -1,5 +1,5 @@
-name: catan_master
-description: CatanMaster data manager
+name: "Catan Master"
+description: A clean & simple Catan player & game data manager
 
 version: 0.0.1
 
