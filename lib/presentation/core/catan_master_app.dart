@@ -14,7 +14,6 @@ import 'package:catan_master/presentation/players/screens/add_edit_player_screen
 import 'package:catan_master/presentation/players/screens/player_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:polygon_clipper/polygon_border.dart';
 
 class CatanMasterApp extends StatelessWidget {
