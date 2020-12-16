@@ -90,7 +90,7 @@ class CatanMasterHomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text("Catan Master"),
         actions: [
-          IconButton(icon: Icon(Icons.settings), onPressed: () {}),
+//          IconButton(icon: Icon(Icons.settings), onPressed: () {}),
         ],
       ),
       body: _createPage(tab),
