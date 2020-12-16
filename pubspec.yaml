@@ -36,6 +36,12 @@ dev_dependencies:
   json_serializable: ^3.4.1
 #  freezed: 0.12.1
   hive_generator: ^0.7.2+1
+  flutter_launcher_icons: ^0.8.0
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon/icon.png"
 
 flutter:
   uses-material-design: true
