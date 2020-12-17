@@ -77,6 +77,8 @@ class Games {
     return games[index];
   }
 
+  @override
+  String toString() => "[${games.join(", ")}]";
 }
 
 
