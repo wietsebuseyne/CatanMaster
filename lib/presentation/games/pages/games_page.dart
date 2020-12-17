@@ -20,6 +20,7 @@ class GamesPage extends StatelessWidget {
           } else if (state is GamesLoaded) {
             return childBuilder(context, state);
           }
+          assert(false);
           return Text("Unimplemented state: $state");
         }
     );

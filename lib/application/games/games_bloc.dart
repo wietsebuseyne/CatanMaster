@@ -81,6 +81,7 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
             expansions: event.expansions
         );
       }
+      //TODO use returned value to ensure equality (to prevent issues like difference in Color and MaterialColor)
       if (event.isEdit) {
         yield (await gameRepository.editGame(event.oldGame.date.millisecondsSinceEpoch, game)).fold(
                 (f) => _feedbackAndReturn(f, message: "Error while editing game: $f"),

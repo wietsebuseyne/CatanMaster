@@ -68,6 +68,7 @@ class PlayersBloc extends Bloc<PlayerEvent, PlayerState> {
             }
         );
       } else {
+        //TODO use return values
         yield (await _repository.addPlayer(player)).fold(
             (l) {
               feedbackBloc.snackbar("${l.message}");
