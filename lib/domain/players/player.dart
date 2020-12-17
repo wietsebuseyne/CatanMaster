@@ -18,7 +18,7 @@ class Player extends Equatable {
     @required String username,
     @required this.name,
     @required this.gender,
-    @required this.color
+    @required Color color
   }) :
         assert(username != null && username.isNotEmpty),
         this.username = username.toLowerCase(),
@@ -26,13 +26,14 @@ class Player extends Equatable {
         assert(name.isNotEmpty),
         assert(gender != null),
         assert(color != null),
-        assert(color.alpha == 255);
+        assert(color.alpha == 255),
+        this.color = Color(color.value);
 
   @override
   String toString() => name;
 
   @override
-  List<Object> get props => [username, name, color];
+  List<Object> get props => [username, name, gender, color.value];
 }
 
 enum Gender { male, female, x }
