@@ -5,8 +5,9 @@ class EmptyListMessage extends StatelessWidget {
 
   final Widget title;
   final Widget subtitle;
+  final Widget action;
 
-  EmptyListMessage({@required this.title, this.subtitle}) : assert(title != null);
+  EmptyListMessage({@required this.title, this.subtitle, this.action}) : assert(title != null);
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +24,8 @@ class EmptyListMessage extends StatelessWidget {
               textAlign: TextAlign.center,
               child: subtitle
           ),
+          if (action != null) SizedBox(height: 8.0,),
+          if (action != null) action,
         ],
       ),
     );

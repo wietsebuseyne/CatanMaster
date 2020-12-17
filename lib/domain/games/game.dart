@@ -52,6 +52,14 @@ class Games {
     return games.where((g) => g.players.contains(player)).toList();
   }
 
+  Games filterExpansion(Set<CatanExpansion> expansions) {
+    if (expansions.isEmpty) return this;
+    return Games(games.where((g) {
+      // Base game or any expansion in provided set
+      return g.expansions.isEmpty && expansions.contains(null) || g.expansions.any((e) => expansions.contains(e));
+    }).toList());
+  }
+
   ///TODO expand with scores
   /// * handle same score / nb of games won
   /// * more points for game with more points
