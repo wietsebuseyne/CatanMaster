@@ -19,7 +19,8 @@ class PlayersList extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) => PlayerListTile(
           statistics[index],
         ),
-        itemCount: statistics.length
+        itemCount: statistics.length,
+        padding: const EdgeInsets.only(bottom: 48.0),
     );
   }
 }
