@@ -24,13 +24,21 @@ class AddEditGamePage extends StatefulWidget {
   AddEditGamePage(this._formKey, {this.game});
 
   @override
-  _AddEditGamePageState createState() => _AddEditGamePageState();
+  _AddEditGamePageState createState() => _AddEditGamePageState(
+    withScores: game.hasScores,
+    selectedPlayers: game.players
+  );
 }
 
 class _AddEditGamePageState extends State<AddEditGamePage> {
 
   bool withScores = true;
   List<Player> selectedPlayers = [];
+
+  _AddEditGamePageState({
+    this.withScores = true,
+    this.selectedPlayers = const [],
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +126,7 @@ class _AddEditGamePageState extends State<AddEditGamePage> {
               child: FormBuilderCustomField(
                 attribute: "with-scores",
                   formField: FormField<bool>(
-                    initialValue: true,
+                    initialValue: withScores,
                     builder: (FormFieldState<bool> field) {
                       return Center(
                         child: ToggleButtons(
