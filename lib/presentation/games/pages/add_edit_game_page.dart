@@ -25,8 +25,8 @@ class AddEditGamePage extends StatefulWidget {
 
   @override
   _AddEditGamePageState createState() => _AddEditGamePageState(
-    withScores: game.hasScores,
-    selectedPlayers: game.players
+    withScores: game?.hasScores ?? true,
+    selectedPlayers: game?.players ?? [],
   );
 }
 
