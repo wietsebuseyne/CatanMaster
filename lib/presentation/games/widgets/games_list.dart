@@ -70,7 +70,6 @@ class _GamesListState extends State<GamesList> {
               ),
               itemCount: filteredGames.length,
               padding: const EdgeInsets.only(bottom: 48.0),
-
             ),
           )
       ],
