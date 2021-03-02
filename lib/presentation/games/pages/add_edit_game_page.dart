@@ -198,9 +198,12 @@ class _AddEditGamePageState extends State<AddEditGamePage> {
                                           value: (scores[p] ?? 0).toDouble(),
                                           onChanged: (v) {
                                             Map<Player, int> newScores = Map.from(scores);
-                                            int score = v.toInt();
-                                            if (score == 0) score = null;
-                                            newScores[p] = score;
+                                            int score = v.toInt() ?? 0;
+                                            if (score == 0) {
+                                              newScores.remove(p);
+                                            } else {
+                                              newScores[p] = score;
+                                            }
                                             field.didChange(newScores);
                                           }),
                                     ],
@@ -212,7 +215,7 @@ class _AddEditGamePageState extends State<AddEditGamePage> {
                                 if (selected) {
                                   newScores[p] = 5;
                                 } else {
-                                  newScores[p] = null;
+                                  newScores.remove(p);
                                 }
                                 field.didChange(newScores);
                               }

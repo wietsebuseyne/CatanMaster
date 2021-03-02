@@ -68,6 +68,11 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
 
       var game;
       if (event.withScores) {
+        if (event.scores.values.any((score) => score == null || score < 1)) {
+          var failed = event.scores.entries.firstWhere((e) => e.value == null || e.value < 1);
+          yield _feedbackAndReturn(MapFailure("Invalid score '${failed.value}' for player '${failed.key}'"));
+          return ;
+        }
         game = Game.withScores(
           date: event.time,
           scores: event.scores,
