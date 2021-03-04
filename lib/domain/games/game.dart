@@ -1,3 +1,4 @@
+import 'package:catan_master/core/core.dart';
 import 'package:catan_master/domain/players/player.dart';
 import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -7,32 +8,89 @@ class Game extends Equatable {
 
   final DateTime date;
   final List<Player> players;
-  final Player _winner;
+  final Player winner;
   final Map<Player, int> scores;
   final List<CatanExpansion> expansions;
-
-  Player get winner {
-    if (scores.isNotEmpty) return players.first;
-    return _winner;
-  }
 
   bool get hasScores => scores.isNotEmpty;
 
   bool get hasExpansion => expansions.isNotEmpty;
 
-  Game.noScores({@required this.date, @required this.players, @required Player winner, this.expansions = const []})
+  Game._({
+    @required this.date,
+    @required List<Player> players,
+    @required this.winner,
+    Map<Player, int> scores,
+    List<CatanExpansion> expansions = const [],
+  })
       : assert(date != null),
         assert(winner != null),
-        scores = {},
-        _winner = winner;
+        assert(expansions != null),
+        this.players = List.unmodifiable(players..sort((p1, p2) => p1.name.compareTo(p2.name))),
+        this.expansions = List.unmodifiable(expansions ?? const []),
+        this.scores = Map.unmodifiable(scores ?? {});
 
-  Game.withScores({
-    @required this.date,
+  factory Game.noScores({
+    @required DateTime date,
+    @required List<Player> players,
+    @required Player winner,
+    List<CatanExpansion> expansions = const [],
+  }) {
+    if (date == null) throw DomainException("Date must not be null", "date");
+    if (winner == null) throw DomainException("Winner must not be empty", "winner");
+    if (!players.any((p) => p == winner)) {
+      throw DomainException("Winner must be one of the players", "winner");
+    }
+
+    return Game._(
+      date: date,
+      winner: winner,
+      players: players,
+      expansions: expansions,
+    );
+  }
+
+  factory Game.withScores({
+    @required DateTime date,
     Map<Player, int> scores,
-    this.expansions = const []
-  })  : this.scores = Map.unmodifiable(scores),
-        this.players = List.unmodifiable(List.of(scores.keys)..sort((p1, p2) => scores[p2].compareTo(scores[p1]))),
-        this._winner = null;
+    List<CatanExpansion> expansions = const []
+  }) {
+    if (date == null) throw DomainException("Date must not be null", "date");
+    if (scores.containsKey(null)) throw DomainException("Null player in scores map", "scores");
+
+    List<Player> players = scores.keys.toList();
+    if (players.any((p) => !_isValidScore(scores[p]))) {
+      var player = players.firstWhere((p) => !_isValidScore(scores[p]));
+      throw DomainException("Invalid score '${scores[player]}' provided for player '$player'", "scores");
+    }
+    Player winner;
+    bool multiple = false;
+    for (Player p in players) {
+      if (winner == null) {
+        winner = p;
+      } else if (scores[p] > scores[winner]) {
+        multiple = false;
+        winner = p;
+      } else if (scores[p] == scores[winner]) {
+        multiple = true;
+      }
+    }
+    if (multiple) {
+      throw DomainException("Only one player can have the highest score", "scores");
+    }
+
+    return Game._(
+      date: date,
+      scores: Map.unmodifiable(scores),
+      players: players,
+      winner: winner,
+      expansions: expansions,
+    );
+  }
+
+  static bool _isValidScore(int score) {
+    return score != null && score > 0;
+  }
 
   @override
   List<Object> get props => [date, players, winner, expansions, scores];

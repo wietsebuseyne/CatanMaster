@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:catan_master/application/feedback/feedback_bloc.dart';
 import 'package:catan_master/application/players/players_bloc.dart';
+import 'package:catan_master/core/core.dart';
 import 'package:catan_master/core/failures.dart';
 import 'package:catan_master/domain/feedback/feedback_message.dart';
 import 'package:catan_master/domain/games/game.dart';
@@ -67,36 +68,35 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
       //TODO handle map failure extension of AddGameEvent
 
       var game;
-      if (event.withScores) {
-        if (event.scores.values.any((score) => score == null || score < 1)) {
-          var failed = event.scores.entries.firstWhere((e) => e.value == null || e.value < 1);
-          yield _feedbackAndReturn(MapFailure("Invalid score '${failed.value}' for player '${failed.key}'"));
-          return ;
-        }
-        game = Game.withScores(
-          date: event.time,
-          scores: event.scores,
-          expansions: event.expansions,
-        );
-      } else {
-        game = Game.noScores(
-            players: event.players,
+      try {
+        if (event.withScores) {
+          game = Game.withScores(
             date: event.time,
-            winner: event.winner,
-            expansions: event.expansions
-        );
-      }
-      //TODO use returned value to ensure equality (to prevent issues like difference in Color and MaterialColor)
-      if (event.isEdit) {
-        yield (await gameRepository.editGame(event.oldGame.date.millisecondsSinceEpoch, game)).fold(
-                (f) => _feedbackAndReturn(f, message: "Error while editing game: $f"),
-                (r) => GameEdited(s.games.delete(event.oldGame), editedGame: game)
-        );
-      } else {
-        yield (await gameRepository.addGame(game)).fold(
-                (f) => _feedbackAndReturn(f, message: "Error while adding game: $f"),
-                (r) => GameAdded(s.games, newGame: game)
-        );
+            scores: event.scores,
+            expansions: event.expansions,
+          );
+        } else {
+          game = Game.noScores(
+              players: event.players,
+              date: event.time,
+              winner: event.winner,
+              expansions: event.expansions
+          );
+        }
+        //TODO use returned value to ensure equality (to prevent issues like difference in Color and MaterialColor)
+        if (event.isEdit) {
+          yield (await gameRepository.editGame(event.oldGame.date.millisecondsSinceEpoch, game)).fold(
+                  (f) => _feedbackAndReturn(f, message: "Error while editing game: $f"),
+                  (r) => GameEdited(s.games.delete(event.oldGame), editedGame: game)
+          );
+        } else {
+          yield (await gameRepository.addGame(game)).fold(
+                  (f) => _feedbackAndReturn(f, message: "Error while adding game: $f"),
+                  (r) => GameAdded(s.games, newGame: game)
+          );
+        }
+      } on DomainException catch(e) {
+        yield _feedbackAndReturn(DataValidationFailure(message: e.message, part: e.part));
       }
     }
   }
