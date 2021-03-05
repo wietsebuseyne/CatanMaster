@@ -32,7 +32,7 @@ class CatanMasterApp extends StatelessWidget {
             if (settings.name == '/players/add') {
               return CatanPageRouteBuilder(page: AddEditPlayerScreen.add(), fullscreenDialog: true);
             } else if (settings.name == '/players/edit') {
-              return MaterialPageRoute(
+              /*return MaterialPageRoute(
                   builder: (context) {
                     var player = (settings.arguments as Map)["player"];
                     if (player == null) {
@@ -41,11 +41,11 @@ class CatanMasterApp extends StatelessWidget {
                     return AddEditPlayerScreen.edit(player);
                   },
                   fullscreenDialog: true,
-              );
+              );*/
             } else if (settings.name == '/games/add') {
-              return CatanPageRouteBuilder(page: AddEditGameScreen.add(), fullscreenDialog: true);
+              //return CatanPageRouteBuilder(page: AddEditGameScreen.add(), fullscreenDialog: true);
             } else if (settings.name == '/games/edit') {
-              return MaterialPageRoute(
+              /*return MaterialPageRoute(
                   builder: (context) {
                     var game = (settings.arguments as Map)["game"];
                     if (game == null) {
@@ -54,7 +54,7 @@ class CatanMasterApp extends StatelessWidget {
                     return AddEditGameScreen.edit(game);
                   },
                   fullscreenDialog: true
-              );
+              );*/
             } else if (settings.name == '/players/detail') {
               return MaterialPageRoute(
                 builder: (context) {
