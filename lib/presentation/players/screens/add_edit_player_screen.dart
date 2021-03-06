@@ -10,9 +10,13 @@ class AddEditPlayerScreen extends StatelessWidget {
 
   final Player player;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final AddEditPlayerFormData formData = AddEditPlayerFormData();
+  final PlayerFormData formData = PlayerFormData();
 
-  AddEditPlayerScreen._({this.player});
+  AddEditPlayerScreen._({this.player}) {
+    formData.name = player?.name;
+    formData.gender = player?.gender;
+    formData.color = player?.color;
+  }
 
   factory AddEditPlayerScreen.add() => AddEditPlayerScreen._();
   factory AddEditPlayerScreen.edit(Player player) => AddEditPlayerScreen._(player: player);
@@ -49,17 +53,8 @@ class AddEditPlayerScreen extends StatelessWidget {
               )
             ],
           ),
-          body: UserFeedback(child: AddEditPlayerPage(_formKey, formData: formData, player: player,))
+          body: UserFeedback(child: AddEditPlayerPage(_formKey, formData: formData,))
       ),
     );
   }
-}
-
-class AddEditPlayerFormData {
-
-  Player toEdit;
-  String name;
-  Gender gender;
-  Color color;
-
 }

@@ -8,11 +8,10 @@ import 'package:flutter/widgets.dart';
 
 class AddEditPlayerPage extends StatelessWidget {
 
-  final Player player;
   final GlobalKey<FormState> _formKey;
-  final AddEditPlayerFormData formData;
+  final PlayerFormData formData;
 
-  AddEditPlayerPage(this._formKey, {@required this.formData, this.player});
+  AddEditPlayerPage(this._formKey, {@required this.formData});
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +20,11 @@ class AddEditPlayerPage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          autovalidateMode: AutovalidateMode.always,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Column(
             children: [
               TextFormField(
-                initialValue: player?.name,
+                initialValue: formData?.name,
                 decoration: InputDecoration(
                     labelText: "Name",
                     contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
@@ -34,12 +33,11 @@ class AddEditPlayerPage extends StatelessWidget {
                     )
                 ),
                 onSaved: (newValue) => formData.name = newValue,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (value) => (value?.length ?? 0) < 2 ? "Not enough letters, mi lord!" : null,
               ),
               SizedBox(height: 16.0,),
               FormField<Gender>(
-                initialValue: player?.gender ?? Gender.x,
+                initialValue: formData?.gender ?? Gender.x,
                 builder: (state) {
                   return CatanDecorator(
                     label: "Gender",
@@ -62,7 +60,7 @@ class AddEditPlayerPage extends StatelessWidget {
               ),
               SizedBox(height: 16.0,),
               FormField<Color>(
-                initialValue: player?.color,
+                initialValue: formData?.color,
                 builder: (state) {
                   return CatanDecorator(
                     label: "Color",
@@ -85,5 +83,12 @@ class AddEditPlayerPage extends StatelessWidget {
       ),
     );
   }
+}
+
+class PlayerFormData {
+
+  String name;
+  Gender gender;
+  Color color;
 
 }
