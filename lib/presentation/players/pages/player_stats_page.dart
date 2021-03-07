@@ -97,9 +97,9 @@ class PlayerRank extends StatelessWidget {
   }
 
   Widget get _rankIcon {
-    if (rank == 1) return Icon(CatanIcons.trophy, size: 32, color: Color.fromARGB(255, 218, 165, 32),);
-    if (rank == 2) return Icon(CatanIcons.medal, size: 32, color: Color.fromARGB(255, 150, 150, 150),);
-    if (rank == 3) return Icon(CatanIcons.medal, size: 32, color: Color.fromARGB(255, 176, 141, 87),);
+    if (rank == 1) return Icon(CatanIcons.trophy, size: 32, color: const Color.fromARGB(255, 218, 165, 32),);
+    if (rank == 2) return Icon(CatanIcons.medal, size: 32, color: const Color.fromARGB(255, 150, 150, 150),);
+    if (rank == 3) return Icon(CatanIcons.medal, size: 32, color: const Color.fromARGB(255, 176, 141, 87),);
     return Hexagon(color: player.color,);
   }
 

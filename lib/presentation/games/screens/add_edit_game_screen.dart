@@ -6,54 +6,63 @@ import 'package:catan_master/presentation/games/pages/add_edit_game_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 class AddEditGameScreen extends StatelessWidget {
 
-  final GlobalKey<FormBuilderState> _formKey;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Game game;
+  final GameFormData formData;
+  final bool edit;
 
-  AddEditGameScreen.add() : _formKey = GlobalKey<FormBuilderState>(), game = null;
+  AddEditGameScreen.add() : formData = GameFormData(), edit = false, game = null;
 
-  AddEditGameScreen.edit(this.game) : _formKey = GlobalKey<FormBuilderState>();
+  AddEditGameScreen.edit(this.game) :
+        formData = GameFormData.fromGame(game),
+        edit = true;
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<GamesBloc, GamesState>(
       listener: (context, state) {
-        if ((game == null && state is GameAdded) || (game != null && state is GameEdited)) {
+        if ((!edit && state is GameAdded) || (edit && state is GameEdited)) {
           Navigator.of(context).pop();
         }
       },
       child: Scaffold(
           appBar: AppBar(
-            title: Text(game == null ? "Add Game" : "Edit Game"),
+            title: Text(edit ? "Edit Game" : "Add Game"),
             actions: [
-              FlatButton.icon(
+              TextButton.icon(
                 icon: Icon(Icons.save),
-                label: Text("SAVE"),
-                textColor: Theme.of(context).primaryIconTheme.color,
-                shape: CircleBorder(side: BorderSide(color: Colors.transparent)),
+                label: Text("Save"),
+                style: TextButton.styleFrom(
+                  primary: Colors.white,
+                  textStyle: TextStyle(fontSize: 16),
+                  shape: CircleBorder(side: BorderSide(color: Colors.transparent)),
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                ),
                 onPressed: () {
-                  if (_formKey.currentState.saveAndValidate()) {
-                    bool withScores = _formKey.currentState.value["with-scores"];
-                    List<CatanExpansion> expansions = List<CatanExpansion>.from(_formKey.currentState.value["expansions"]);
-                    Map<Player, int> scores = _formKey.currentState.value["scores"];
-                    DateTime time = _formKey.currentState.value["time"];
-                    List<Player> players = List<Player>.from(_formKey.currentState.value["players"] ?? []);
-                    Player winner = _formKey.currentState.value["winner"];
+                  if (_formKey.currentState.validate()) {
+                    _formKey.currentState.save();
+
+                    bool withScores = formData.withScores;
+                    List<CatanExpansion> expansions = formData.expansions;
+                    Map<Player, int> scores = formData.scores;
+                    DateTime date = formData.date;
+                    List<Player> players = formData.players;
+                    Player winner = formData.winner;
 
                     if (withScores) {
                       BlocProvider.of<GamesBloc>(context).add(AddEditGameEvent.withScores(
                         oldGame: game,
-                        time: time,
+                        time: date,
                         scores: scores,
                         expansions: expansions,
                       ));
                     } else {
                       BlocProvider.of<GamesBloc>(context).add(AddEditGameEvent.noScores(
                         oldGame: game,
-                        time: time,
+                        time: date,
                         players: players,
                         winner: winner,
                         expansions: expansions,
@@ -64,7 +73,7 @@ class AddEditGameScreen extends StatelessWidget {
               )
             ],
           ),
-          body: UserFeedback(child: AddEditGamePage(_formKey, game: game))
+          body: UserFeedback(child: AddEditGamePage(_formKey, formData: formData))
       ),
     );
   }

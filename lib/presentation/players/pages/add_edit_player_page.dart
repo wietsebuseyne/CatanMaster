@@ -1,5 +1,5 @@
 import 'package:catan_master/domain/players/player.dart';
-import 'package:catan_master/presentation/core/widgets/catan_decorator.dart';
+import 'package:catan_master/presentation/core/widgets/catan_input_decorator.dart';
 import 'package:catan_master/presentation/core/widgets/grid_color_picker.dart';
 import 'package:catan_master/presentation/players/screens/add_edit_player_screen.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +39,7 @@ class AddEditPlayerPage extends StatelessWidget {
               FormField<Gender>(
                 initialValue: formData?.gender ?? Gender.x,
                 builder: (state) {
-                  return CatanDecorator(
+                  return CatanInputDecorator(
                     label: "Gender",
                     child: Row(
                       children: [
@@ -62,7 +62,7 @@ class AddEditPlayerPage extends StatelessWidget {
               FormField<Color>(
                 initialValue: formData?.color,
                 builder: (state) {
-                  return CatanDecorator(
+                  return CatanInputDecorator(
                     label: "Color",
                     errorText: state.errorText,
                     child: Padding(

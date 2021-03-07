@@ -4,48 +4,39 @@ import 'package:catan_master/application/players/players_bloc.dart';
 import 'package:catan_master/domain/games/game.dart';
 import 'package:catan_master/domain/players/player.dart';
 import 'package:catan_master/presentation/core/catan_expansion_ui.dart';
+import 'package:catan_master/presentation/core/catan_icons.dart';
+import 'package:catan_master/presentation/core/widgets/catan_input_decorator.dart';
+import 'package:catan_master/presentation/games/pages/players_with_scores_input.dart';
+import 'package:catan_master/presentation/games/pages/players_with_winner_input.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
 
-class AddEditGamePage extends StatefulWidget {
+const notEnoughPlayersMsgs = ["Moooore players needed", "Players needed", "Not enough players, mi lord"];
 
-  final GlobalKey<FormBuilderState> _formKey;
-  final Game game;
+notEnoughPlayersMsg() => notEnoughPlayersMsgs[Random().nextInt(3)];
 
-  Map<Player, int> get scores {
+class AddEditGamePage extends StatelessWidget {
+
+  final GlobalKey<FormState> _formKey;
+  final GameFormData formData;
+
+  /*Map<Player, int> get scores {
     if (game == null) return {};
     if (game.hasScores) return Map.from(game.scores);
     return Map.fromIterable(game.players, key: (p) => p, value: (p) => 5);
-  }
+  }*/
 
-  AddEditGamePage(this._formKey, {this.game});
-
-  @override
-  _AddEditGamePageState createState() => _AddEditGamePageState(
-    withScores: game?.hasScores ?? true,
-    selectedPlayers: game?.players ?? [],
-  );
-}
-
-class _AddEditGamePageState extends State<AddEditGamePage> {
-
-  bool withScores = true;
-  List<Player> selectedPlayers = [];
-
-  _AddEditGamePageState({
-    this.withScores = true,
-    this.selectedPlayers = const [],
-  });
+  AddEditGamePage(this._formKey, {this.formData});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PlayersBloc, PlayerState>(
         builder: (context, state) {
           if (state is PlayersLoaded) {
-            return _createForm(state.players);
+            return _createForm(context, state.players);
           } else if (state is PlayersLoading) {
             return Center(child: CircularProgressIndicator(),);
           }
@@ -54,254 +45,183 @@ class _AddEditGamePageState extends State<AddEditGamePage> {
     );
   }
 
-  Widget _createForm(List<Player> players) {
+  Widget _createForm(BuildContext context, List<Player> players) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.only(bottom: 48.0),
-      child: FormBuilder(
-        key: widget._formKey,
-        initialValue: {},
+      padding: const EdgeInsets.only(bottom: 48.0, top: 16.0, right: 16.0, left: 16.0),
+      child: Form(
+        key: _formKey,
         autovalidateMode: AutovalidateMode.always,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: FormBuilderDateTimePicker(
-                attribute: "time",
-                inputType: InputType.both,
-                format: DateFormat.yMd().add_Hm(),
-                initialValue: widget.game?.date ?? DateTime.now(),
-                lastDate: DateTime.fromMillisecondsSinceEpoch(
-                    max(DateTime.now().millisecondsSinceEpoch, widget.game?.date?.millisecondsSinceEpoch ?? 0)
-                ),
-                initialTime: null,
-                decoration: InputDecoration(
-                    labelText: "Time",
-                    contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5.0))
-                    )
-                ),
-                validators: [
-                  FormBuilderValidators.required(errorText: "Please pick a time"),
-                  (dateTime) {
-                      if ((dateTime?.millisecondsSinceEpoch ?? 0) > DateTime.now().millisecondsSinceEpoch) {
-                        return "Sadly, no timetravelling allowed. Please pick a valid time";
-                      }
-                      return null;
-                  },
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: FormBuilderCheckboxGroup(
-                attribute: "expansions",
-                initialValue: widget.game?.expansions ?? [], //TODO same players as last game
-                orientation: GroupedCheckboxOrientation.vertical,
-                options: CatanExpansion.values.map((e) {
-                  return FormBuilderFieldOption(
-                    child: Row(
-                      children: [
-                        Icon(e.icon),
-                        SizedBox(width: 8.0,),
-                        Text(e.name, textAlign: TextAlign.center,)
-                      ],
-                    ),
-                    value: e,
+            DateTimeField(
+              format: DateFormat("dd/MM/yyyy HH:mm"), //TODO customize based on device locale
+              decoration: catanInputDecoration(label: "Date & Time"),
+              initialValue: formData.date ?? DateTime.now(),
+              validator: (date) {
+                if (date == null) return "Please pick a time, mi lord";
+                if (date.millisecondsSinceEpoch > DateTime.now().millisecondsSinceEpoch) return "Can't timetravel, mi lord";
+                return null;
+              },
+              onShowPicker: (context, currentValue) async {
+                final date = await showDatePicker(
+                    context: context,
+                    firstDate: DateTime.fromMillisecondsSinceEpoch(0),
+                    initialDate: currentValue ?? DateTime.now(),
+                    lastDate: DateTime.now());
+                if (date != null) {
+                  final time = await showTimePicker(
+                    context: context,
+                    initialTime:
+                    TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
                   );
-                }).toList(),
-                decoration: InputDecoration(
-                  labelText: "Expansions",
-                  contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(5.0))
-                  ),
-                ),
-                validators: [],
-              ),
+                  return DateTimeField.combine(date, time);
+                } else {
+                  return currentValue;
+                }
+              },
+              onSaved: (DateTime date) {
+                formData.date = date;
+              },
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: FormBuilderCustomField(
-                attribute: "with-scores",
-                  formField: FormField<bool>(
-                    initialValue: withScores,
-                    builder: (FormFieldState<bool> field) {
-                      return Center(
-                        child: ToggleButtons(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text("No scores"),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text("Scores"),
-                            )
-                          ],
-                          constraints: BoxConstraints(minHeight: 32),
-                          borderColor: Colors.blue.withOpacity(0.3),
-                          selectedBorderColor: Colors.blue,
-                          isSelected: [!field.value, field.value],
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          onPressed: (i) {
-                            var scores = i == 1;
-                            field.didChange(scores);
-                            setState(() {
-                              withScores = scores;
-                            });
+            SizedBox(height: 16.0,),
+            FormField<Set<CatanExpansion>>(
+              initialValue: {},
+              builder: (state) {
+                return CatanInputDecorator(
+                  label: "Expansions",
+                  errorText: state.errorText,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Column(
+                      children: CatanExpansion.values.map((expansion) {
+                        return GestureDetector(
+                          onTap: () {
+                            if (!state.value.contains(expansion)) {
+                              state.didChange(state.value..add(expansion));
+                            } else {
+                              state.didChange(state.value..remove(expansion));
+                            }
                           },
-                        ),
-                      );
-                    },
-                  )
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Visibility(
-                visible: withScores,
-                child: FormBuilderCustomField<Map<Player, int>>(
-                  attribute: "scores",
-                  initialValue: widget.scores,
-                  formField: FormField<Map<Player, int>>(
-                    builder: (FormFieldState<Map<Player, int>> field) {
-                      Map<Player, int> scores = field.value ?? {};
-                      return InputDecorator(
-                        decoration: InputDecoration(
-                          errorText: field.errorText,
-                          border: OutlineInputBorder(),
-                          contentPadding: const EdgeInsets.only(),
-                        ),
-                        child: Column(
-                          children: players.map((p) => CheckboxListTile(
-                              activeColor: p.color,
-                              value: scores[p] != null,
-                              controlAffinity: ListTileControlAffinity.leading,
-                              contentPadding: const EdgeInsets.only(),
-                              dense: true,
-                              title: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Flexible(child: Text(p.name)),
-                                  Row(
-                                    children: [
-                                      if (scores[p] != null) SizedBox(width: 16.0,),
-                                      if (scores[p] != null) Chip(label: Text(scores[p].toString()),),
-                                      Slider(
-                                          label: scores[p]?.toString(),
-                                          activeColor: p.color,
-                                          min: 0,
-                                          max: 20,
-                                          divisions: 20,
-                                          value: (scores[p] ?? 0).toDouble(),
-                                          onChanged: (v) {
-                                            Map<Player, int> newScores = Map.from(scores);
-                                            int score = v.toInt() ?? 0;
-                                            if (score == 0) {
-                                              newScores.remove(p);
-                                            } else {
-                                              newScores[p] = score;
-                                            }
-                                            field.didChange(newScores);
-                                          }),
-                                    ],
-                                  ),
-                                ]
-                              ),
-                              onChanged: (selected) {
-                                Map<Player, int> newScores = Map.from(scores);
-                                if (selected) {
-                                  newScores[p] = 5;
-                                } else {
-                                  newScores.remove(p);
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Checkbox(
+                                value: state.value.contains(expansion),
+                                onChanged: (selected) {
+                                  if (selected) {
+                                    state.didChange(state.value..add(expansion));
+                                  } else {
+                                    state.didChange(state.value..remove(expansion));
+                                  }
                                 }
-                                field.didChange(newScores);
-                              }
-                          )).toList(),
-                        ),
-                      );
-                    },
-                  ),
-                  validators: [
-                    FormBuilderValidators.minLength(2, errorText: "Please pick at least two players"),
-                    (s) {
-                      if (s == null) return null;
-                      var scores = (s as Map<Player, int>).values.where((s) => s != null);
-                      if (scores.length < 2) return "Please pick at least two players";
-                      var maxScore = scores.reduce(max);
-                      if (scores.where((s) => s == maxScore).length > 1) {
-                        return "Only one player can have the most points";
-                      }
-                      return null;
-                    }
-                  ],
-                ),
-              ),
-            ),
-            Visibility(
-              visible: !withScores,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: FormBuilderCheckboxGroup<Player>(
-                  attribute: "players",
-                  initialValue: List.from(widget.game?.players ?? []),
-                  orientation: GroupedCheckboxOrientation.vertical,
-                  options: players.map((p) {
-                    return FormBuilderFieldOption(
-                      child: Text(p.name),
-                      value: p,
-                    );
-                  }).toList(),
-                  decoration: InputDecoration(
-                      labelText: "Players",
-                      contentPadding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5.0))
-                      ),
-                  ),
-                  onChanged: (values) {
-                    setState(() {
-                      selectedPlayers = values;
-                    });
-                  },
-                  validators: [
-                    FormBuilderValidators.minLength(2, errorText: "Please pick at least two players"),
-                  ],
-                ),
-              ),
-            ),
-            Visibility(
-              visible: !withScores,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: FormBuilderRadioGroup(
-                  attribute: "winner",
-                  initialValue: widget.game?.winner ?? [],
-                  orientation: GroupedRadioOrientation.vertical,
-                  options: selectedPlayers.map((p) {
-                    return FormBuilderFieldOption(
-                      child: Text(p.name),
-                      value: p,
-                    );
-                  }).toList(),
-                  decoration: InputDecoration(
-                    labelText: "Winner",
-                    contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5.0))
+                              ),
+                              Icon(expansion.icon),
+                              SizedBox(width: 8.0),
+                              Text(expansion.name),
+                            ],
+                          ),
+                        );
+                      }).toList(),
                     ),
                   ),
-                  validators: [
-                    FormBuilderValidators.required(errorText: "Please pick a winner"),
-                    (val)  {
-                      if (!_pickedPlayers().contains(val)) return "Winner must be one of the players";
-                      return null;
-                    }
+                );
+              },
+              onSaved: (Set<CatanExpansion> expansions) {
+                formData.expansions = expansions.toList();
+              },
+            ),
+            SizedBox(height: 16.0,),
+            FormField<PlayersFormState>(
+              initialValue: PlayersFormState(),
+              builder: (FormFieldState<PlayersFormState> state) {
+                Map<Player, int> scores = state.value.scores ?? {};
+                return Column(
+                  children: [
+                    Center(
+                      child: ToggleButtons(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("No scores"),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("Scores"),
+                          )
+                        ],
+                        constraints: BoxConstraints(minHeight: 32),
+                        borderColor: Colors.blue.withOpacity(0.3),
+                        selectedBorderColor: Colors.blue,
+                        isSelected: [!state.value.withScores, state.value.withScores],
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        onPressed: (i) {
+                          state.value.withScores = i == 1;
+                          state.didChange(state.value);
+                          _formKey.currentState.validate();
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 8.0,),
+                    if (state.value.withScores) CatanInputDecorator(
+                      child: PlayersWithScoresInput(
+                        scores: scores,
+                        players: players,
+                        onChanged: (scores) {
+                          state.value.scores = scores;
+                          state.didChange(state.value);
+                        }
+                      ),
+                      errorText: state.errorText,
+                    ),
+                    if (!state.value.withScores) CatanInputDecorator(
+                      child: PlayersWithWinnerInput(
+                        players: players,
+                        selected: state.value.players,
+                        winner: state.value.winner,
+                        onSelectionChanged: (Set<Player> players) {
+                          state.value.players = players;
+                          state.didChange(state.value);
+                        },
+                        onWinnerChanged: (Player winner) {
+                          state.value.winner = winner;
+                          state.didChange(state.value);
+                        },
+                      ),
+                      errorText: state.errorText,
+                    ),
                   ],
-                ),
-              ),
+                );
+              },
+              validator: (PlayersFormState state) {
+                var scores = state.scores;
+                if ((state.withScores ? scores.length : state.players.length) < 2) {
+                  return notEnoughPlayersMsg();
+                }
+                if (state.withScores) {
+                  var scoreList = scores.values;
+                  var maxScore = scores.values.reduce(max);
+                  if (scoreList
+                      .where((s) => s == maxScore)
+                      .length > 1) {
+                    return "Can't have two winners, my lord";
+                  }
+                } else {
+                  if (state.winner == null) {
+                    return "Winner needed!";
+                  }
+                  if (!state.players.contains(state.winner)) {
+                    return "Winner must one the players";
+                  }
+                }
+                return null;
+              },
+              onSaved: (playersData) {
+                formData.withScores = playersData.withScores;
+                formData.scores = playersData.scores;
+                formData.winner = playersData.winner;
+                formData.players = playersData.players.toList();
+              },
             ),
           ],
         ),
@@ -309,7 +229,6 @@ class _AddEditGamePageState extends State<AddEditGamePage> {
     );
   }
 
-  List<Player> _pickedPlayers() => List.from(widget._formKey.currentState.fields['players'].currentState.value ?? <Player>[]);
 }
 
 class PlayerWithScore {
@@ -321,4 +240,35 @@ class PlayerWithScore {
   PlayerWithScore.unselected(this.player) : score = null;
 
   bool get selected => score != null;
+}
+
+class PlayersFormState {
+
+  bool withScores = true;
+  Set<Player> players = {};
+  Map<Player, int> scores = {};
+  Player winner;
+
+}
+
+class GameFormData {
+
+  bool withScores = true;
+  DateTime date;
+  List<Player> players;
+  Map<Player, int> scores;
+  Player winner;
+  List<CatanExpansion> expansions;
+
+  GameFormData();
+
+  GameFormData.fromGame(Game game) {
+    this.date = game.date;
+    this.players = game.players;
+    this.scores = game.scores;
+    this.winner = game.winner;
+    this.expansions = game.expansions;
+    this.withScores = game.hasScores;
+  }
+
 }
