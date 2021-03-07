@@ -4,7 +4,6 @@ import 'package:catan_master/application/players/players_bloc.dart';
 import 'package:catan_master/domain/games/game.dart';
 import 'package:catan_master/domain/players/player.dart';
 import 'package:catan_master/presentation/core/catan_expansion_ui.dart';
-import 'package:catan_master/presentation/core/catan_icons.dart';
 import 'package:catan_master/presentation/core/widgets/catan_input_decorator.dart';
 import 'package:catan_master/presentation/games/pages/players_with_scores_input.dart';
 import 'package:catan_master/presentation/games/pages/players_with_winner_input.dart';
@@ -22,12 +21,6 @@ class AddEditGamePage extends StatelessWidget {
 
   final GlobalKey<FormState> _formKey;
   final GameFormData formData;
-
-  /*Map<Player, int> get scores {
-    if (game == null) return {};
-    if (game.hasScores) return Map.from(game.scores);
-    return Map.fromIterable(game.players, key: (p) => p, value: (p) => 5);
-  }*/
 
   AddEditGamePage(this._formKey, {this.formData});
 
