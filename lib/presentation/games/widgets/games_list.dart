@@ -1,13 +1,13 @@
 import 'package:catan_master/application/games/games_bloc.dart';
 import 'package:catan_master/domain/games/game.dart';
 import 'package:catan_master/presentation/core/catan_expansion_ui.dart';
+import 'package:catan_master/presentation/core/polygon/polygon_border.dart';
 import 'package:catan_master/presentation/core/widgets/empty_list_message.dart';
 import 'package:catan_master/presentation/games/widgets/game_actions.dart';
 import 'package:catan_master/presentation/games/widgets/game_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:polygon_clipper/polygon_border.dart';
 
 //TODO save expansion filters in Bloc and keep them between both main pages
 class GamesList extends StatefulWidget {
@@ -158,7 +158,7 @@ class ExpansionFilter extends StatelessWidget {
       avatar: Icon(expansion.icon, size: 12, color: selected ? Colors.white : Colors.black ,),
       labelPadding: const EdgeInsets.only(),
       label: SizedBox(),
-      shape: PolygonBorder(
+      shape: PolygonBorder( //TODO implement OutlinedBorder
         sides: 6,
         rotate: 30,
       ),
