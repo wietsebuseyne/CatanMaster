@@ -11,7 +11,7 @@ extension ShowFeedback on FeedbackMessage {
         Fluttertoast.showToast(msg: message);
         break;
       case FeedbackType.snackbar:
-        Scaffold.of(context).showSnackBar(SnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(message),
           action: hasAction
               ? SnackBarAction(
