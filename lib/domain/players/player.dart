@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:catan_master/core/core.dart';
 import 'package:catan_master/domain/games/game.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 @immutable
