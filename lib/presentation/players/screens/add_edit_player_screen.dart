@@ -5,14 +5,18 @@ import 'package:catan_master/presentation/players/pages/add_edit_player_page.dar
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 class AddEditPlayerScreen extends StatelessWidget {
 
   final Player player;
-  final GlobalKey<FormBuilderState> _formKey;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final PlayerFormData formData = PlayerFormData();
 
-  AddEditPlayerScreen._({this.player}) : _formKey = GlobalKey<FormBuilderState>();
+  AddEditPlayerScreen._({this.player}) {
+    formData.name = player?.name;
+    formData.gender = player?.gender;
+    formData.color = player?.color;
+  }
 
   factory AddEditPlayerScreen.add() => AddEditPlayerScreen._();
   factory AddEditPlayerScreen.edit(Player player) => AddEditPlayerScreen._(player: player);
@@ -30,25 +34,30 @@ class AddEditPlayerScreen extends StatelessWidget {
             title: Text(player == null ? "Add Player" : "Edit Player"),
             backgroundColor: player?.color,
             actions: [
-              FlatButton.icon(
+              TextButton.icon(
                 icon: Icon(Icons.save),
-                label: Text("SAVE"),
-                textColor: Theme.of(context).primaryIconTheme.color,
-                shape: CircleBorder(side: BorderSide(color: Colors.transparent)),
+                label: Text("Save"),
+                style: TextButton.styleFrom(
+                  primary: Colors.white,
+                  textStyle: TextStyle(fontSize: 16),
+                  shape: CircleBorder(side: BorderSide(color: Colors.transparent)),
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                ),
                 onPressed: () {
-                  if (_formKey.currentState.saveAndValidate()) {
+                  if (_formKey.currentState.validate()) {
+                    _formKey.currentState.save();
                     BlocProvider.of<PlayersBloc>(context).add(AddOrUpdatePlayer(
                       toEdit: player,
-                      name: _formKey.currentState.value["name"],
-                      gender: _formKey.currentState.value["gender"],
-                      color: _formKey.currentState.value["color"]
+                      name: formData.name,
+                      gender: formData.gender,
+                      color: formData.color
                     ));
                   }
                 },
               )
             ],
           ),
-          body: UserFeedback(child: AddEditPlayerPage(_formKey, player: player,))
+          body: UserFeedback(child: AddEditPlayerPage(_formKey, formData: formData,))
       ),
     );
   }

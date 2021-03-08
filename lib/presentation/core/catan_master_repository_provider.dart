@@ -1,15 +1,12 @@
-import 'package:catan_master/data/games/firebase_game_datasource.dart';
 import 'package:catan_master/data/games/game_dtos.dart';
 import 'package:catan_master/data/games/game_repository.dart';
 import 'package:catan_master/data/games/hive_game_datasource.dart';
-import 'package:catan_master/data/players/firebase_player_datasource.dart';
 import 'package:catan_master/data/players/hive_player_datasource.dart';
 import 'package:catan_master/data/players/player_dtos.dart';
 import 'package:catan_master/data/players/player_repository.dart';
 import 'package:catan_master/domain/games/game_repository.dart';
 import 'package:catan_master/domain/players/player_repository.dart';
 import 'package:catan_master/presentation/core/catan_master_bloc_provider.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
@@ -53,7 +50,7 @@ class CatanMasterLocalRepositoryProvider extends StatelessWidget {
   }
 }
 
-class CatanMasterFirebaseRepositoryProvider extends StatelessWidget {
+/*class CatanMasterFirebaseRepositoryProvider extends StatelessWidget {
 
   final Widget child;
   final FirebaseDatabase database;
@@ -79,4 +76,4 @@ class CatanMasterFirebaseRepositoryProvider extends StatelessWidget {
       child: CatanMasterBlocProvider(child: child)
     );
   }
-}
+}*/

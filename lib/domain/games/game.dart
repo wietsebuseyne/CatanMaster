@@ -38,6 +38,7 @@ class Game extends Equatable {
   }) {
     if (date == null) throw DomainException("Date must not be null", "date");
     if (winner == null) throw DomainException("Winner must not be empty", "winner");
+    if (expansions == null) throw DomainException("expansions cannot be null", "expansions");
     if (!players.any((p) => p == winner)) {
       throw DomainException("Winner must be one of the players", "winner");
     }
@@ -57,6 +58,7 @@ class Game extends Equatable {
   }) {
     if (date == null) throw DomainException("Date must not be null", "date");
     if (scores.containsKey(null)) throw DomainException("Null player in scores map", "scores");
+    if (expansions == null) throw DomainException("expansions cannot be null", "expansions");
 
     List<Player> players = scores.keys.toList();
     if (players.any((p) => !_isValidScore(scores[p]))) {

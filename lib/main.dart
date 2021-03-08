@@ -1,10 +1,7 @@
-
 import 'package:catan_master/data/games/game_dtos.dart';
 import 'package:catan_master/data/players/player_dtos.dart';
 import 'package:catan_master/presentation/core/catan_master_app.dart';
 import 'package:catan_master/presentation/core/catan_master_repository_provider.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -12,6 +9,15 @@ import 'package:hive_flutter/hive_flutter.dart';
 void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
+
+
+  await Hive.initFlutter();
+  Hive.registerAdapter(PlayerDtoAdapter());
+  Hive.registerAdapter(GameDtoAdapter());
+  runApp(CatanMasterLocalRepositoryProvider(child: CatanMasterApp()));
+}
+
+/*_initFirebase() {
   FirebaseDatabase database;
   try {
     final newApp = await Firebase.initializeApp(
@@ -31,9 +37,4 @@ void main() async {
   } on Exception {
     database = FirebaseDatabase.instance;
   }
-
-  await Hive.initFlutter();
-  Hive.registerAdapter(PlayerDtoAdapter());
-  Hive.registerAdapter(GameDtoAdapter());
-  runApp(CatanMasterLocalRepositoryProvider(child: CatanMasterApp()));
-}
+}*/
