@@ -29,8 +29,8 @@ extension ShowFeedback on FeedbackMessage {
               title: Text(title),
               content: Text(message),
               actions: [
-                if (!hasAction) FlatButton(onPressed: () => Navigator.of(context).pop(), child: Text("OK")),
-                ...actions.map((a) => FlatButton(onPressed: a.action, child: Text(a.text)))
+                if (!hasAction) TextButton(onPressed: () => Navigator.of(context).pop(), child: Text("OK")),
+                ...actions.map((a) => TextButton(onPressed: a.action, child: Text(a.text)))
               ],
             )
         );

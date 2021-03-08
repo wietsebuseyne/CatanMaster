@@ -121,11 +121,11 @@ class CatanMasterHomeScreen extends StatelessWidget {
                       showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            title: Text("No players found"),
-                            content: Text("You must add some players first."),
+                            title: Text("Not enough players, my lord"),
+                            content: Text("You must add at least 2 players before adding a game."),
                             actions: [
-                              FlatButton(onPressed: () => Navigator.of(context).pop(), child: Text("Cancel")),
-                              FlatButton(onPressed: () {
+                              TextButton(onPressed: () => Navigator.of(context).pop(), child: Text("Cancel")),
+                              ElevatedButton(onPressed: () {
                                 BlocProvider.of<MainBloc>(context).add(SwitchTabEvent(HomePageTab.players));
                                 Navigator.of(context).pop();
                                 Navigator.of(context).pushNamed("/players/add");

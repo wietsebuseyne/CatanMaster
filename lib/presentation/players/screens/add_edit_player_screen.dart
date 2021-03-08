@@ -34,11 +34,15 @@ class AddEditPlayerScreen extends StatelessWidget {
             title: Text(player == null ? "Add Player" : "Edit Player"),
             backgroundColor: player?.color,
             actions: [
-              FlatButton.icon(
+              TextButton.icon(
                 icon: Icon(Icons.save),
-                label: Text("SAVE"),
-                textColor: Theme.of(context).primaryIconTheme.color,
-                shape: CircleBorder(side: BorderSide(color: Colors.transparent)),
+                label: Text("Save"),
+                style: TextButton.styleFrom(
+                  primary: Colors.white,
+                  textStyle: TextStyle(fontSize: 16),
+                  shape: CircleBorder(side: BorderSide(color: Colors.transparent)),
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                ),
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
                     _formKey.currentState.save();

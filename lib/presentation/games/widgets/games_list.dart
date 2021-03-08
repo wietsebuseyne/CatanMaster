@@ -49,8 +49,9 @@ class _GamesListState extends State<GamesList> {
               ),
               action: selectedExpansions.isEmpty
                   ? null
-                  : OutlineButton.icon(
+                  : OutlinedButton.icon(
                       icon: Icon(Icons.clear),
+                      style: OutlinedButton.styleFrom(primary: Theme.of(context).colorScheme.onSurface),
                       onPressed: () {
                         setState(() {
                           selectedExpansions.clear();
