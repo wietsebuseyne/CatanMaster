@@ -35,11 +35,14 @@ class CatanPageRouteBuilder extends PageRouteBuilder {
             Animation<double> secondaryAnimation,
             Widget child,
           ) {
+            var begin = Offset(0.0, -1.0);
+            var end = Offset.zero;
+            var curve = Curves.easeOutSine;
+
+            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
             return SlideTransition(
-              position: new Tween<Offset>(
-                begin: const Offset(0.0, -1.0),
-                end: Offset.zero,
-              ).animate(animation),
+              position: tween.animate(animation),
               child: Container(
                 child: child,
                 decoration: BoxDecoration(boxShadow: [
