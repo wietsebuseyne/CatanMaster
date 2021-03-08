@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:catan_master/presentation/core/color.dart';
+import 'package:catan_master/presentation/core/polygon/polygon_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -91,16 +92,28 @@ class _ColorPickerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color shadowColor = color.withOpacity(0.8);
+
+    final bool isLight = Theme.of(context).brightness == Brightness.light;
+    if (isLight && color == Colors.white) {
+      shadowColor = Colors.black.withOpacity(0.4);
+    } else if (!isLight && color == Colors.black) {
+      shadowColor = Colors.white.withOpacity(0.4);
+    }
+
     return Container(
       margin: EdgeInsets.all(spacing),
       width: radius,
       height: radius,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(radius),
+      decoration: ShapeDecoration(
+        shape: PolygonBorder(
+            sides: 6,
+            rotate: 30,
+        ),
         color: color,
-        boxShadow: [
+        shadows: [
           BoxShadow(
-            color: color.withOpacity(0.8),
+            color: shadowColor,
             offset: Offset(1.0, 2.0),
             blurRadius: 3.0,
           ),
@@ -110,7 +123,7 @@ class _ColorPickerItem extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: onSelected,
-          borderRadius: BorderRadius.circular(radius),
+          customBorder: PolygonBorder(sides: 6, rotate: 30),
           child: AnimatedOpacity(
             duration: const Duration(milliseconds: 210),
             opacity: selected ? 1.0 : 0.0,
