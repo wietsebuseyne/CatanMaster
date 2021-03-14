@@ -27,7 +27,10 @@ class PlayerStatsPage extends StatelessWidget {
 
             //Last Games
             Divider(indent: 32.0, endIndent: 32.0,),
-            Center(child: WinLoseHexagonPath(wins: statistics.getWinOrLose(13))), //TODO calc nb based on width
+            Center(child: WinLoseHexagonPath(
+              wins: statistics.getWinOrLose(13),
+              width: MediaQuery.of(context).size.width,
+            )), //TODO calc nb based on width
 
             //Prizes
             if (statistics.prizes.isNotEmpty) Divider(indent: 32.0, endIndent: 32.0,),
