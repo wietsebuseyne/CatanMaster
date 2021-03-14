@@ -1,3 +1,4 @@
+import 'package:catan_master/application/players/players_bloc.dart';
 import 'package:catan_master/domain/games/game.dart';
 import 'package:catan_master/domain/players/player.dart';
 import 'package:catan_master/presentation/core/catan_expansion_ui.dart';
@@ -8,7 +9,7 @@ import 'package:catan_master/presentation/games/pages/games_page.dart';
 import 'package:catan_master/presentation/players/widgets/win_lose_hex.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PlayerStatsPage extends StatelessWidget {
   
@@ -20,23 +21,65 @@ class PlayerStatsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GamesPage(childBuilder: (context, state) {
       var statistics = state.getStatisticsForPlayer(player);
-      return SingleChildScrollView(
-        child: Column(
-          children: [
-            PlayerRank(player, statistics.rank),
+      return NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
+          return <Widget>[
+            SliverOverlapAbsorber(
+              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+              sliver: SliverAppBar(
+                centerTitle: true,
+                flexibleSpace: FlexibleSpaceBar(title: Text(player.name), centerTitle: true,),
+                collapsedHeight: kToolbarHeight,
+                toolbarHeight: kToolbarHeight,
+                expandedHeight: 100.0,
+                pinned: true,
+                backgroundColor: player.color,
+                actions: [
+                  IconButton(
+                    onPressed: () => Navigator.of(context).pushNamed("/players/edit", arguments: {"player": player}),
+                    icon: Icon(Icons.edit),
+                  ),
+                  IconButton(
+                    onPressed: () => BlocProvider.of<PlayersBloc>(context).add(DeletePlayerEvent(player)),
+                    icon: Icon(Icons.delete),
+                  )
+                ],
+              ),
+            )
+          ];
+        },
+        body: Builder(
+          builder: (context) {
+            return _stats(context, statistics);
+          }
+        ),
+      );
+    });
+  }
 
-            //Last Games
-            Divider(indent: 32.0, endIndent: 32.0,),
-            Center(child: WinLoseHexagonPath(
-              wins: statistics.getWinOrLose(13),
-              width: MediaQuery.of(context).size.width,
-            )), //TODO calc nb based on width
+  Widget _stats(BuildContext context, PlayerStatistics statistics) {
+    return CustomScrollView(
+      slivers: <Widget>[
+        SliverOverlapInjector(
+          handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+        ),
+        SliverToBoxAdapter(
+          child: Column(
+            children: [
+              PlayerRank(player, statistics.rank),
 
-            //Prizes
-            if (statistics.prizes.isNotEmpty) Divider(indent: 32.0, endIndent: 32.0,),
-            ...statistics.prizes.map((a) => AchievementLine(a)),
+              //Last Games
+              Divider(indent: 32.0, endIndent: 32.0,),
+              Center(child: WinLoseHexagonPath(
+                wins: statistics.getWinOrLose(13),
+                width: MediaQuery.of(context).size.width,
+              )), //TODO calc nb based on width
 
-            //Achievements
+              //Prizes
+              if (statistics.prizes.isNotEmpty) Divider(indent: 32.0, endIndent: 32.0,),
+              ...statistics.prizes.map((a) => AchievementLine(a)),
+
+              //Achievements
 //            Divider(indent: 32.0, endIndent: 32.0,),
 //            Text("Achievements", style: Theme.of(context).textTheme.headline6),
 //            Padding(
@@ -44,38 +87,40 @@ class PlayerStatsPage extends StatelessWidget {
 //              child: Text("No Achievements \uD83D\uDE22", style: Theme.of(context).textTheme.caption),
 //            ),
 
-            //Stats
-            Divider(indent: 32.0, endIndent: 32.0,),
-            HorizontalInfoTile(
-              leading: Icon(Icons.format_list_numbered),
-              start: Text("Games played"),
-              end: Text(statistics.games.length.toString()),
-            ),
-            HorizontalInfoTile(
-              leading: Icon(Icons.history),
-              start: Text("Last Game"),
-              end: Text(statistics.lastGame == null ? "TBD" : DateFormat.yMd().format(statistics.lastGame.date)),
-            ),
-            HorizontalInfoTile(
-              leading: statistics.mostPlayedExpansion.iconWidget,
-              start: Text("Most Played"),
-              end: Text(statistics.mostPlayedExpansion.name ),
-            ),
-            HorizontalInfoTile(
-              leading: statistics.mostWonExpansion.iconWidget,
-              start: Text("Most Won"),
-              end: Text(statistics.mostWonExpansion.name),
-            ),
-            HorizontalInfoTile(
-              leading: Icon(Icons.favorite_outline),
-              start: Text("Best Catan Buddy"),
-              end: Text(statistics.bestBuddy?.name ?? "TBD"),
-            ),
-          ],
+              //Stats
+              Divider(indent: 32.0, endIndent: 32.0,),
+              HorizontalInfoTile(
+                leading: Icon(Icons.format_list_numbered),
+                start: Text("Games played"),
+                end: Text(statistics.games.length.toString()),
+              ),
+              HorizontalInfoTile(
+                leading: Icon(Icons.history),
+                start: Text("Last Game"),
+                end: Text(statistics.lastGame == null ? "TBD" : DateFormat.yMd().format(statistics.lastGame.date)),
+              ),
+              HorizontalInfoTile(
+                leading: statistics.mostPlayedExpansion.iconWidget,
+                start: Text("Most Played"),
+                end: Text(statistics.mostPlayedExpansion.name ),
+              ),
+              HorizontalInfoTile(
+                leading: statistics.mostWonExpansion.iconWidget,
+                start: Text("Most Won"),
+                end: Text(statistics.mostWonExpansion.name),
+              ),
+              HorizontalInfoTile(
+                leading: Icon(Icons.favorite_outline),
+                start: Text("Best Catan Buddy"),
+                end: Text(statistics.bestBuddy?.name ?? "TBD"),
+              ),
+            ],
+          ),
         ),
-      );
-    });
+      ],
+    );
   }
+
 }
 
 class PlayerRank extends StatelessWidget {

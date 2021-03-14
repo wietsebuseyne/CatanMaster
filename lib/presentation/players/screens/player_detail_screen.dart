@@ -42,20 +42,6 @@ class _PlayerDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: player.color,
-          title: Text(player.name),
-          actions: [
-            IconButton(
-              onPressed: () => Navigator.of(context).pushNamed("/players/edit", arguments: {"player": player}),
-              icon: Icon(Icons.edit),
-            ),
-            IconButton(
-              onPressed: () => BlocProvider.of<PlayersBloc>(context).add(DeletePlayerEvent(player)),
-              icon: Icon(Icons.delete),
-            )
-          ],
-        ),
         body: UserFeedback(child: PlayerStatsPage(player))
     );
   }
