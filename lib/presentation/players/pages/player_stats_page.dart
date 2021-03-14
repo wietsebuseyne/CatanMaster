@@ -117,7 +117,7 @@ class PlayerRank extends StatelessWidget {
     if (rank == 1) return "All hail the mighty $player!";
     if (rank == 2) return "One stab in the back away from first place.";
     if (rank == 3) return "On the way to the top.";
-    return "Practice you negotation skills."; //"Needs some more practice";
+    return "Practice your negotation skills."; //"Needs some more practice";
   }
 
 }
