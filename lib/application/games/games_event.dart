@@ -11,10 +11,10 @@ class LoadGames extends GamesEvent {
 class AddEditGameEvent extends GamesEvent {
 
   final Game oldGame;
-  final DateTime time;
-  final List<Player> players;
+  final DateTime/*!*/ time;
+  final List<Player>/*!*/ players;
   final Player winner;
-  final List<CatanExpansion> expansions;
+  final List<CatanExpansion>/*!*/ expansions;
   final Map<Player, int> scores;
 
   AddEditGameEvent.noScores({
@@ -37,7 +37,6 @@ class AddEditGameEvent extends GamesEvent {
 
   @override
   List<Object> get props => [oldGame, time, players, winner, expansions];
-
 }
 
 class RemoveGameEvent extends GamesEvent {

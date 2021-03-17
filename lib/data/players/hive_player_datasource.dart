@@ -5,7 +5,7 @@ import 'package:hive/hive.dart';
 
 class HivePlayerDatasource extends PlayerDatasource {
 
-  final Box<PlayerDto> _box;
+  final Box<PlayerDto>/*!*/ _box;
 
   HivePlayerDatasource(this._box);
 
@@ -15,7 +15,7 @@ class HivePlayerDatasource extends PlayerDatasource {
   }
 
   @override
-  Future<PlayerDto> getPlayer(String username) async {
+  Future<PlayerDto/*!*/> getPlayer(String username) async {
     return _box.get(username);
   }
 

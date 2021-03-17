@@ -21,7 +21,7 @@ class GamesLoaded extends GamesState {
 
 class GameAdded extends GamesLoaded {
 
-  final Game newGame;
+  final Game/*!*/ newGame;
 
   GameAdded(Games games, {this.newGame}) : super(Games(List.from(games.games)..add(newGame)));
 
@@ -30,7 +30,7 @@ class GameAdded extends GamesLoaded {
 class GameEdited extends GamesLoaded {
 
   //TODO move to games
-  final Game editedGame;
+  final Game/*!*/ editedGame;
 
   GameEdited(Games games, {this.editedGame}) : super(Games(List.from(games.games)..add(editedGame)));
 

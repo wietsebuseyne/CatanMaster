@@ -8,9 +8,9 @@ class LoadPlayers extends PlayerEvent {}
 class AddOrUpdatePlayer extends PlayerEvent {
 
   final Player toEdit;
-  final String name;
-  final Gender gender;
-  final Color color;
+  final String/*!*/ name;
+  final Gender/*!*/ gender;
+  final Color/*!*/ color;
 
   AddOrUpdatePlayer({this.toEdit, @required this.name, @required this.gender, @required this.color});
 

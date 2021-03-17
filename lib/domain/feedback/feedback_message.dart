@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 class FeedbackMessage {
 
   final FeedbackType type;
-  final Severity severity;
+  final Severity/*!*/ severity;
   final String title;
   final String message;
   final List<FeedbackAction> actions;

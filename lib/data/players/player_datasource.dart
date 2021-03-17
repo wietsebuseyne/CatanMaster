@@ -8,7 +8,7 @@ abstract class PlayerDatasource {
 
   Future<void> updatePlayer(PlayerDto player);
 
-  Future<PlayerDto> getPlayer(String username);
+  Future<PlayerDto/*!*/> getPlayer(String username);
 
   Future<void> deletePlayer(PlayerDto player);
 
