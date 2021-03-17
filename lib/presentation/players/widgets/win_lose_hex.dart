@@ -41,6 +41,9 @@ class WinLoseHexagonPath extends StatefulWidget {
 
   @override
   _WinLoseHexagonPathState createState() => _WinLoseHexagonPathState();
+
+  int get nbHexagons => top.length + bottom.length;
+
 }
 
 class _WinLoseHexagonPathState extends State<WinLoseHexagonPath> with SingleTickerProviderStateMixin {
@@ -101,7 +104,7 @@ class _WinLoseHexagonPathState extends State<WinLoseHexagonPath> with SingleTick
     return AnimatedBuilder(
       builder: (BuildContext context, Widget child) {
         var totalWidth = MediaQuery.of(context).size.width;
-        var contentWidth = 32.0*(half+1) + 16.0*half;
+        var contentWidth = _contentWidth(widget.nbHexagons);
         var startInset = (totalWidth - contentWidth) / 2.0;
         return Container(
           height: 48,
