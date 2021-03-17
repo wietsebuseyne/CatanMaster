@@ -4,6 +4,7 @@ import 'package:catan_master/domain/feedback/feedback_message.dart';
 import 'package:catan_master/domain/players/player.dart';
 import 'package:catan_master/presentation/core/catan_icons.dart';
 import 'package:catan_master/presentation/core/catan_page_route_builder.dart';
+import 'package:catan_master/presentation/core/polygon/polygon_border.dart';
 import 'package:catan_master/presentation/feedback/show_feedback.dart';
 import 'package:catan_master/presentation/feedback/user_feedback.dart';
 import 'package:catan_master/presentation/games/pages/games_page.dart';
@@ -14,7 +15,6 @@ import 'package:catan_master/presentation/players/screens/add_edit_player_screen
 import 'package:catan_master/presentation/players/screens/player_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:polygon_clipper/polygon_border.dart';
 
 class CatanMasterApp extends StatelessWidget {
   @override
