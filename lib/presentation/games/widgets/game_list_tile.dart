@@ -12,9 +12,9 @@ class GameListTile extends StatelessWidget {
 
   final Game game;
   final DateFormat _dateFormat = DateFormat("EE dd MMM yyyy, HH:mm");
-  final Function onTap;
+  final Function? onTap;
 
-  GameListTile(this.game, {this.onTap, Key key}) : super(key: key);
+  GameListTile(this.game, {this.onTap, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class GameListTile extends StatelessWidget {
           ),
         ]
       ),
-      onTap: onTap,
+      onTap: onTap as void Function()?,
     );
   }
 

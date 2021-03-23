@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddEditPlayerScreen extends StatelessWidget {
 
-  final Player player;
+  final Player? player;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final PlayerFormData formData = PlayerFormData();
 
@@ -44,13 +44,13 @@ class AddEditPlayerScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 24.0),
                 ),
                 onPressed: () {
-                  if (_formKey.currentState.validate()) {
-                    _formKey.currentState.save();
+                  if (_formKey.currentState!.validate()) {
+                    _formKey.currentState!.save();
                     BlocProvider.of<PlayersBloc>(context).add(AddOrUpdatePlayer(
                       toEdit: player,
-                      name: formData.name,
-                      gender: formData.gender,
-                      color: formData.color
+                      name: formData.name!,
+                      gender: formData.gender!,
+                      color: formData.color!
                     ));
                   }
                 },

@@ -8,7 +8,7 @@ class GameActions extends StatelessWidget {
   final VoidCallback onEdit;
   final VoidCallback onDelete;
 
-  GameActions({@required this.game, @required this.onEdit, @required this.onDelete});
+  GameActions({required this.game, required this.onEdit, required this.onDelete});
 
   @override
   Widget build(BuildContext context) {

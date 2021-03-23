@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 /// TODO fix width / height / rotation to tightly match
 class Hexagon extends StatelessWidget {
 
-  final Color color;
+  final Color? color;
   final double width;
   final double height;
   final double rotate;
-  final Widget child;
+  final Widget? child;
   final List<BoxShadow> shadows;
 
   Hexagon({

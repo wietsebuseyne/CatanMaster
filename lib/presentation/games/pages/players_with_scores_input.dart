@@ -8,9 +8,9 @@ class PlayersWithScoresInput extends StatelessWidget {
   final ValueChanged<Map<Player, int>> onChanged;
 
   PlayersWithScoresInput({
-    @required this.scores,
-    @required this.players,
-    @required this.onChanged,
+    required this.scores,
+    required this.players,
+    required this.onChanged,
   });
 
   @override
@@ -39,7 +39,7 @@ class PlayersWithScoresInput extends StatelessWidget {
                         value: (scores[p] ?? 0).toDouble(),
                         onChanged: (v) {
                           Map<Player, int> newScores = Map.from(scores);
-                          int score = v.toInt() ?? 0;
+                          int score = v.toInt();
                           if (score == 0) {
                             newScores.remove(p);
                           } else {
@@ -53,7 +53,7 @@ class PlayersWithScoresInput extends StatelessWidget {
           ),
           onChanged: (selected) {
             Map<Player, int> newScores = Map.from(scores);
-            if (selected) {
+            if (selected!) {
               newScores[p] = 5;
             } else {
               newScores.remove(p);

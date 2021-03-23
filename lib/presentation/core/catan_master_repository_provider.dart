@@ -10,14 +10,13 @@ import 'package:catan_master/presentation/core/catan_master_bloc_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
-import 'package:meta/meta.dart';
 import 'package:provider/provider.dart';
 
 class CatanMasterLocalRepositoryProvider extends StatelessWidget {
 
   final Widget child;
 
-  CatanMasterLocalRepositoryProvider({Key key, @required this.child}) : super(key: key);
+  CatanMasterLocalRepositoryProvider({Key? key, required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

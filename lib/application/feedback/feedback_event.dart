@@ -4,7 +4,7 @@ class FeedbackEvent extends Equatable {
 
   final FeedbackMessage feedback;
 
-  const FeedbackEvent(this.feedback) : assert(feedback != null);
+  const FeedbackEvent(this.feedback);
 
   @override
   List<Object> get props => [feedback];

@@ -98,17 +98,17 @@ class PlayerStatsPage extends StatelessWidget {
               HorizontalInfoTile(
                 leading: Icon(Icons.history),
                 start: Text("Last Game"),
-                end: Text(statistics.lastGame == null ? "TBD" : DateFormat.yMd().format(statistics.lastGame.date)),
+                end: Text(statistics.lastGame == null ? "TBD" : DateFormat.yMd().format(statistics.lastGame!.date)),
               ),
               HorizontalInfoTile(
                 leading: statistics.mostPlayedExpansion.iconWidget,
                 start: Text("Most Played"),
-                end: Text(statistics.mostPlayedExpansion.name ),
+                end: Text(statistics.mostPlayedExpansion.name! ),
               ),
               HorizontalInfoTile(
                 leading: statistics.mostWonExpansion.iconWidget,
                 start: Text("Most Won"),
-                end: Text(statistics.mostWonExpansion.name),
+                end: Text(statistics.mostWonExpansion.name!),
               ),
               HorizontalInfoTile(
                 leading: Icon(Icons.favorite_outline),
@@ -187,22 +187,23 @@ class AchievementLine extends StatelessWidget {
   }
 }
 
-extension AchievementUi on Prize {
+extension PrizeUi on Prize {
 
-  IconData get icon {
+  IconData? get icon {
       switch (this.type) {
         case PrizeType.expansion_master:
           return (value as CatanExpansion).icon;
         case PrizeType.on_a_roll:
           return CatanIcons.dice;
+        //TODO add more icons
         case PrizeType.catan_addict:
         case PrizeType.newbie:
         case PrizeType.loser:
       }
-      return Icons.help_outline;
+      return null;
   }
 
-  Widget get leadingWidget => this == null ? Hexagon() : Icon(icon);
+  Widget get leadingWidget => icon == null ? Hexagon() : Icon(icon);
 
   String get title {
     switch (this.type) {
@@ -234,8 +235,8 @@ extension AchievementUi on Prize {
 
 class DetailLine extends StatelessWidget {
 
-  final IconData icon;
-  final Widget child;
+  final IconData? icon;
+  final Widget? child;
 
   DetailLine({this.icon, this.child});
 
@@ -245,7 +246,7 @@ class DetailLine extends StatelessWidget {
       children: [
         Icon(icon),
         SizedBox(width: 16.0,),
-        child,
+        child!,
       ],
     );
   }

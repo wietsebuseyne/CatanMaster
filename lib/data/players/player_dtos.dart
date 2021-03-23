@@ -31,13 +31,13 @@ abstract class PlayerDto with _$PlayerDto {
 class PlayerDto extends HiveObject {
 
   @HiveField(0)
-  String username;
+  String? username;
   @HiveField(1)
-  String name;
+  String? name;
   @HiveField(2)
-  int color;
+  int? color;
   @HiveField(3)
-  String gender;
+  String? gender;
 
   PlayerDto({this.username, this.name, this.gender, this.color});
 
@@ -48,10 +48,10 @@ class PlayerDto extends HiveObject {
         this.color = player.color.value;
 
   Player toDomain() => Player(
-      username: username,
-      name: name,
-      gender: EnumUtils.fromString(Gender.values, gender),
-      color: Color(color).withAlpha(255)
+      username: username!,
+      name: name!,
+      gender: EnumUtils.fromString(Gender.values, gender)!,
+      color: Color(color!).withAlpha(255)
   );
 
   factory PlayerDto.fromJson(Map<String, dynamic> json) => _$PlayerDtoFromJson(json);

@@ -17,11 +17,11 @@ class GameDtoAdapter extends TypeAdapter<GameDto> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return GameDto(
-      time: fields[0] as int,
-      players: (fields[1] as List)?.cast<String>(),
-      winner: fields[2] as String,
-      expansions: (fields[3] as List)?.cast<String>(),
-      scores: (fields[4] as Map)?.cast<String, int>(),
+      time: fields[0] as int?,
+      players: (fields[1] as List?)?.cast<String>(),
+      winner: fields[2] as String?,
+      expansions: (fields[3] as List?)?.cast<String>(),
+      scores: (fields[4] as Map?)?.cast<String, int>(),
     );
   }
 
@@ -58,11 +58,11 @@ class GameDtoAdapter extends TypeAdapter<GameDto> {
 
 GameDto _$GameDtoFromJson(Map<String, dynamic> json) {
   return GameDto(
-    time: json['time'] as int,
-    players: (json['players'] as List)?.map((e) => e as String)?.toList(),
-    winner: json['winner'] as String,
-    expansions: (json['expansions'] as List)?.map((e) => e as String)?.toList(),
-    scores: (json['scores'] as Map<String, dynamic>)?.map(
+    time: json['time'] as int?,
+    players: (json['players'] as List?)?.map((e) => e as String)?.toList(),
+    winner: json['winner'] as String?,
+    expansions: (json['expansions'] as List?)?.map((e) => e as String)?.toList(),
+    scores: (json['scores'] as Map<String, dynamic>?)?.map(
       (k, e) => MapEntry(k, e as int),
     ),
   );

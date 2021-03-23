@@ -31,8 +31,8 @@ const List<Color> _defaultColors = [
 
 class GridColorPicker extends StatelessWidget {
 
-  final Color selected;
-  final ValueChanged<Color> onSelected;
+  final Color? selected;
+  final ValueChanged<Color>? onSelected;
   final List<Color> availableColors;
   final double maxCircleRadius;
   final double spacing;
@@ -64,7 +64,7 @@ class GridColorPicker extends StatelessWidget {
           return _ColorPickerItem(
             color: c,
             selected: selected == c,
-            onSelected: () => onSelected(c),
+            onSelected: () => onSelected!(c),
             radius: radius,
             spacing: spacing,
           );
@@ -83,9 +83,9 @@ class _ColorPickerItem extends StatelessWidget {
   final Function onSelected;
 
   _ColorPickerItem({
-    @required this.color,
-    @required this.selected,
-    @required this.onSelected,
+    required this.color,
+    required this.selected,
+    required this.onSelected,
     this.radius = 100.0,
     this.spacing = 5.0,
   });
@@ -122,7 +122,7 @@ class _ColorPickerItem extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: onSelected,
+          onTap: onSelected as void Function()?,
           customBorder: PolygonBorder(sides: 6, rotate: 30),
           child: AnimatedOpacity(
             duration: const Duration(milliseconds: 210),

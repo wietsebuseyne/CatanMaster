@@ -9,7 +9,7 @@ class GamesPage extends StatelessWidget {
 
   final GamesWidgetBuilder childBuilder;
 
-  GamesPage({@required this.childBuilder}) : assert(childBuilder != null);
+  GamesPage({required this.childBuilder});
 
   @override
   Widget build(BuildContext context) {

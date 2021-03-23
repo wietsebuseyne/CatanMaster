@@ -14,15 +14,15 @@ class GameDto extends HiveObject {
 
   //Primary key
   @HiveField(0)
-  int time;
+  int? time;
   @HiveField(1)
-  List<String> players;
+  List<String>? players;
   @HiveField(2)
-  String winner;
+  String? winner;
   @HiveField(3)
-  List<String> expansions;
+  List<String>? expansions;
   @HiveField(4)
-  Map<String, int> scores;
+  Map<String, int>? scores;
 
   GameDto({this.time, this.players, this.winner, this.expansions, this.scores});
 
@@ -43,42 +43,57 @@ class GameMapper {
 
   final Map<String, Player> playerMap;
 
-  GameMapper(Map<String, Player> playerMap) : this.playerMap = Map.unmodifiable(playerMap);
+  GameMapper(Map<String?, Player?> playerMap) : this.playerMap = Map.unmodifiable(playerMap);
 
   Either<MapFailure, Game> map(GameDto gameDto) {
-    if (!gameDto.players.contains(gameDto.winner)) {
-      return Left(MapFailure("Game of ${gameDto.time}: Winner [${gameDto.winner}] should be one of the players [${gameDto.players.join(", ")}]"));
+    final List<String>? playerStrings = gameDto.players;
+    if (playerStrings == null) {
+      return Left(MapFailure("Players should be null"));
+    }
+    if (!playerStrings.contains(gameDto.winner)) {
+      return Left(MapFailure("Game of ${gameDto.time}: Winner [${gameDto.winner}] should be one of the players [${gameDto.players!.join(", ")}]"));
     }
     if (gameDto.time == null) {
       return Left(MapFailure("Time should not be null"));
     }
-    if (gameDto.players.any((p) => !playerMap.containsKey(p))) {
-      return Left(MapFailure("Not all players [${gameDto.players.join(", ")}] are in the player map!"));
+    List<Player> players = <Player>[];
+    for(String playerString in playerStrings) {
+      Player? player = playerMap[playerString];
+      if (player == null) {
+        return Left(MapFailure("Not all players [${gameDto.players!.join(", ")}] are in the player map!"));
+      } else {
+        players.add(player);
+      }
     }
-    var expansions;
+
+    List<CatanExpansion> expansions = <CatanExpansion>[];
+    List<String>? expStrings = gameDto.expansions;
     try {
-      expansions = gameDto.expansions.map((e) =>
-          EnumUtils.fromString(
+      if (expStrings != null) {
+        for (String exp in expStrings) {
+          expansions.add(EnumUtils.fromString(
               CatanExpansion.values,
-              e,
-              orElse: () => throw FormatException("Invalid expansion")
-          )).toList();
+              exp,
+              orElse: () => throw FormatException("Invalid expansion: $exp")
+          ));
+        }
+      }
     } on FormatException catch(e) {
       return Left(MapFailure(e.message));
     }
 
-    if (gameDto.scores.isNotEmpty) {
+    if (gameDto.scores!.isNotEmpty) {
       return Right(Game.withScores(
-          scores: Map.fromIterable(gameDto.players, key: (p) => playerMap[p], value: (p) => gameDto.scores[p]),
-          date: DateTime.fromMillisecondsSinceEpoch(gameDto.time),
+          scores: Map.fromIterable(gameDto.players!, key: (p) => playerMap[p], value: (p) => gameDto.scores![p]),
+          date: DateTime.fromMillisecondsSinceEpoch(gameDto.time!),
           expansions: expansions
       ));
     }
 
     return Right(Game.noScores(
-      players: gameDto.players.map((p) => playerMap[p]).toList(),
-      date: DateTime.fromMillisecondsSinceEpoch(gameDto.time),
-      winner: playerMap[gameDto.winner],
+      players: players,
+      date: DateTime.fromMillisecondsSinceEpoch(gameDto.time!),
+      winner: playerMap[gameDto.winner!],
       expansions: expansions
     ));
   }

@@ -4,14 +4,13 @@ import 'package:catan_master/domain/games/game_repository.dart';
 import 'package:catan_master/domain/players/player.dart';
 import 'package:catan_master/domain/players/player_repository.dart';
 import 'package:dartz/dartz.dart';
-import 'package:meta/meta.dart';
 
 class DeletePlayer extends UseCase<void, Player> {
 
   final PlayerRepository playerRepository;
   final GameRepository gameRepository;
 
-  DeletePlayer({@required this.playerRepository, @required this.gameRepository});
+  DeletePlayer({required this.playerRepository, required this.gameRepository});
 
   @override
   Future<Either<Failure, void>> call(Player player) async {

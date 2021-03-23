@@ -8,7 +8,6 @@ import 'package:catan_master/domain/games/game_repository.dart';
 import 'package:catan_master/domain/players/player.dart';
 import 'package:catan_master/domain/players/player_repository.dart';
 import 'package:dartz/dartz.dart';
-import 'package:meta/meta.dart';
 
 class CachedGameRepository extends GameRepository {
 
@@ -16,7 +15,7 @@ class CachedGameRepository extends GameRepository {
   final PlayerRepository playerRepository;
   final ListQueue<Game> deletedGames = ListQueue();
 
-  CachedGameRepository({@required this.gameDatasource, @required this.playerRepository});
+  CachedGameRepository({required this.gameDatasource, required this.playerRepository});
 
   @override
   Future<Either<Failure, List<Game>>> getGamesForPlayer(String username) async {
@@ -56,7 +55,7 @@ class CachedGameRepository extends GameRepository {
     }
   }
 
-  Future<Either<Failure, Game>> undoDelete({Game game}) async {
+  Future<Either<Failure, Game?>> undoDelete({Game? game}) async {
     if (game == null && deletedGames.isEmpty) return Right(null);
     try {
       if (game == null) {
@@ -90,7 +89,7 @@ class CachedGameRepository extends GameRepository {
 
   Future<Either<Failure, List<Game>>> _getGamesInternal(List<Player> players) async {
     try {
-      Map<String, Player> playerMap = Map.fromIterable(players, key: (p) => p.username, value: (p) => p);
+      Map<String?, Player?> playerMap = Map.fromIterable(players, key: (p) => p.username, value: (p) => p);
 
       var gamesDtos = await gameDatasource.getGames();
       GameMapper mapper = GameMapper(playerMap);
