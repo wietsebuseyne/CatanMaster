@@ -18,14 +18,16 @@ class Game extends Equatable {
 
   Game._({
     required this.date,
-    required List<Player?> players,
     required this.winner,
-    Map<Player, int>? scores,
+    required List<Player> players,
+    Map<Player, int> scores = const {},
     List<CatanExpansion> expansions = const [],
   })
-      : this.players = List.unmodifiable(players..sort((p1, p2) => p1!.name.compareTo(p2!.name))),
+      : assert(scores.isNotEmpty || players.isEmpty),
+        assert(scores.isEmpty || players.isNotEmpty),
+        this.players = List.unmodifiable(players..sort((p1, p2) => p1.name.compareTo(p2.name))),
         this.expansions = List.unmodifiable(expansions),
-        this.scores = Map.unmodifiable(scores ?? {});
+        this.scores = Map.unmodifiable(scores);
 
   factory Game.noScores({
     required DateTime? date,
@@ -50,14 +52,13 @@ class Game extends Equatable {
 
   factory Game.withScores({
     required DateTime? date,
-    required Map<Player?, int?> scores,
+    required Map<Player, int> scores,
     List<CatanExpansion>? expansions = const []
   }) {
     if (date == null) throw DomainException("Date must not be null", "date");
-    if (scores.containsKey(null)) throw DomainException("Null player in scores map", "scores");
     if (expansions == null) throw DomainException("expansions cannot be null", "expansions");
 
-    List<Player?> players = scores.keys.toList();
+    List<Player> players = scores.keys.toList();
     if (players.any((p) => !_isValidScore(scores[p]))) {
       var player = players.firstWhere((p) => !_isValidScore(scores[p]));
       throw DomainException("Invalid score '${scores[player]}' provided for player '$player'", "scores");

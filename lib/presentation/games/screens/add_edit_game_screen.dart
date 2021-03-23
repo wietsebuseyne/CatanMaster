@@ -42,8 +42,9 @@ class AddEditGameScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 24.0),
                 ),
                 onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
+                  FormState? formState = _formKey.currentState;
+                  if (formState != null && formState.validate()) {
+                    formState.save();
 
                     bool withScores = formData.withScores;
                     List<CatanExpansion> expansions = formData.expansions;

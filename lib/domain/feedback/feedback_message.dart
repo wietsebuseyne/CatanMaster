@@ -1,4 +1,6 @@
 
+import 'package:flutter/foundation.dart';
+
 class FeedbackMessage {
 
   final FeedbackType type;
@@ -30,7 +32,7 @@ class FeedbackMessage {
 class FeedbackAction {
 
   final String text;
-  final Function action;
+  final VoidCallback action;
 
   FeedbackAction({required this.text, required this.action});
 

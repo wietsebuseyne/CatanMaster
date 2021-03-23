@@ -26,8 +26,8 @@ class CatanMasterLocalRepositoryProvider extends StatelessWidget {
           //TODO show error for reporting
           if (snapshot.hasError) return MaterialApp(home: Scaffold(body: Center(child: Text("Fatal error occured"))));
           if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
-          var playerBox = snapshot.data[0];
-          var gameBox = snapshot.data[1];
+          Box<PlayerDto> playerBox = snapshot.data[0];
+          Box<GameDto> gameBox = snapshot.data[1];
           return MultiProvider(
               providers: [
                 Provider<PlayerRepository>(

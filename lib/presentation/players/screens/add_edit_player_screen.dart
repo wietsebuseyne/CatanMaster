@@ -44,8 +44,9 @@ class AddEditPlayerScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 24.0),
                 ),
                 onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
+                  FormState? state = _formKey.currentState;
+                  if (state != null && state.validate()) {
+                    state.save();
                     BlocProvider.of<PlayersBloc>(context).add(AddOrUpdatePlayer(
                       toEdit: player,
                       name: formData.name!,

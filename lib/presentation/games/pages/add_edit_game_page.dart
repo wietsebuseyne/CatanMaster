@@ -163,7 +163,7 @@ class AddEditGamePage extends StatelessWidget {
                         onPressed: (i) {
                           formState.withScores = i == 1;
                           state.didChange(formState);
-                          _formKey.currentState!.validate();
+                          _formKey.currentState?.validate();
                         },
                       ),
                     ),
@@ -199,7 +199,8 @@ class AddEditGamePage extends StatelessWidget {
                 );
               },
               validator: (PlayersFormState? state) {
-                var scores = state!.scores;
+                if (state == null) return "Invalid state: <null>";
+                var scores = state.scores;
                 if ((state.withScores ? scores.length : state.players.length) < 2) {
                   return notEnoughPlayersMsg();
                 }

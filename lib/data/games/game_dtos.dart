@@ -51,7 +51,7 @@ class GameMapper {
       return Left(MapFailure("Players should be null"));
     }
     if (!playerStrings.contains(gameDto.winner)) {
-      return Left(MapFailure("Game of ${gameDto.time}: Winner [${gameDto.winner}] should be one of the players [${gameDto.players!.join(", ")}]"));
+      return Left(MapFailure("Game of ${gameDto.time}: Winner [${gameDto.winner}] should be one of the players [${playerStrings.join(", ")}]"));
     }
     if (gameDto.time == null) {
       return Left(MapFailure("Time should not be null"));
@@ -60,7 +60,7 @@ class GameMapper {
     for(String playerString in playerStrings) {
       Player? player = playerMap[playerString];
       if (player == null) {
-        return Left(MapFailure("Not all players [${gameDto.players!.join(", ")}] are in the player map!"));
+        return Left(MapFailure("Not all players [${playerStrings.join(", ")}] are in the player map!"));
       } else {
         players.add(player);
       }
@@ -82,9 +82,14 @@ class GameMapper {
       return Left(MapFailure(e.message));
     }
 
-    if (gameDto.scores!.isNotEmpty) {
+    //TODO catch DomainExceptions
+    Map<String, int>? scores = gameDto.scores;
+    if (scores != null && scores.isNotEmpty) {
+      if (players.any((p) => scores[p] == null)) {
+        return Left(MapFailure("Score for a player was null"));
+      }
       return Right(Game.withScores(
-          scores: Map.fromIterable(gameDto.players!, key: (p) => playerMap[p], value: (p) => gameDto.scores![p]),
+          scores: Map.fromIterable(players, key: (p) => p, value: (p) => scores[p.name]!),
           date: DateTime.fromMillisecondsSinceEpoch(gameDto.time!),
           expansions: expansions
       ));

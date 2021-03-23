@@ -17,7 +17,7 @@ extension ShowFeedback on FeedbackMessage {
               ? SnackBarAction(
                   textColor: severity == Severity.error ? Colors.red : null,
                   label: action!.text,
-                  onPressed: action!.action as void Function()
+                  onPressed: action!.action
               )
               : null,
         ));
@@ -30,7 +30,7 @@ extension ShowFeedback on FeedbackMessage {
               content: Text(message),
               actions: [
                 if (!hasAction) TextButton(onPressed: () => Navigator.of(context).pop(), child: Text("OK")),
-                ...actions.map((a) => TextButton(onPressed: a.action as void Function()?, child: Text(a.text)))
+                ...actions.map((a) => TextButton(onPressed: a.action, child: Text(a.text)))
               ],
             )
         );

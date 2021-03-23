@@ -13,7 +13,7 @@ class UserFeedback extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<FeedbackBloc, FeedbackState>(
-      listenWhen: (_s1, _s2) => ModalRoute.of(context)!.isCurrent,
+      listenWhen: (_s1, _s2) => ModalRoute.of(context)?.isCurrent ?? false,
       listener: (context, FeedbackState state) {
         FeedbackMessage feedback = state.last;
         feedback.show(context);
