@@ -21,7 +21,7 @@ class PlayersPage extends StatelessWidget {
                         (p) => PlayerStatistics.fromGames(p, gamesState.games)
                 ).toList();
                 statistics.sort((s1, s2) => s1.rank.compareTo(s2.rank));
-                return PlayersList(statistics);
+                return Center(child: PlayersList(statistics));
               }
               return Center(child: CircularProgressIndicator(),);
             }
