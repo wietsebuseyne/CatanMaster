@@ -23,8 +23,7 @@ class Game extends Equatable {
     Map<Player, int> scores = const {},
     List<CatanExpansion> expansions = const [],
   })
-      : assert(scores.isNotEmpty || players.isNotEmpty),
-        assert(scores.isEmpty || players.isEmpty),
+      : assert(players.isNotEmpty),
         this.players = List.unmodifiable(players..sort((p1, p2) => p1.name.compareTo(p2.name))),
         this.expansions = List.unmodifiable(expansions),
         this.scores = Map.unmodifiable(scores);
