@@ -85,11 +85,11 @@ class GameMapper {
     //TODO catch DomainExceptions
     Map<String, int>? scores = gameDto.scores;
     if (scores != null && scores.isNotEmpty) {
-      if (players.any((p) => scores[p] == null)) {
+      if (players.any((p) => scores[p.username] == null)) {
         return Left(MapFailure("Score for a player was null"));
       }
       return Right(Game.withScores(
-          scores: Map.fromIterable(players, key: (p) => p, value: (p) => scores[p.name]!),
+          scores: Map.fromIterable(players, key: (p) => p, value: (p) => scores[p.username]!),
           date: DateTime.fromMillisecondsSinceEpoch(gameDto.time!),
           expansions: expansions
       ));

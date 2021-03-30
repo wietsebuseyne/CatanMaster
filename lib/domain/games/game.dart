@@ -23,8 +23,8 @@ class Game extends Equatable {
     Map<Player, int> scores = const {},
     List<CatanExpansion> expansions = const [],
   })
-      : assert(scores.isNotEmpty || players.isEmpty),
-        assert(scores.isEmpty || players.isNotEmpty),
+      : assert(scores.isNotEmpty || players.isNotEmpty),
+        assert(scores.isEmpty || players.isEmpty),
         this.players = List.unmodifiable(players..sort((p1, p2) => p1.name.compareTo(p2.name))),
         this.expansions = List.unmodifiable(expansions),
         this.scores = Map.unmodifiable(scores);
@@ -37,7 +37,8 @@ class Game extends Equatable {
   }) {
     if (date == null) throw DomainException("Date must not be null", "date");
     if (winner == null) throw DomainException("Winner must not be empty", "winner");
-    if (players == null) throw DomainException("players cannot be null", "players");
+    if (players == null) throw DomainException("Players cannot be null", "players");
+    if (players.isEmpty) throw DomainException("Players cannot be empty", "players");
     if (!players.any((p) => p == winner)) {
       throw DomainException("Winner must be one of the players", "winner");
     }
