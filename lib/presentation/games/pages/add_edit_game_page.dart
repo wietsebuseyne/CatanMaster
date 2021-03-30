@@ -104,6 +104,7 @@ class AddEditGamePage extends StatelessWidget {
                             children: [
                               Checkbox(
                                 value: currentSelection.contains(expansion),
+                                activeColor: expansion.color,
                                 onChanged: (selected) {
                                   if (!currentSelection.contains(expansion)) {
                                     currentSelection.add(expansion);

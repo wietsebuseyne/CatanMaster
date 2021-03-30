@@ -14,6 +14,23 @@ extension CatanExpansionUi on CatanExpansion? {
     return Icon(icon);
   }
 
+  Color get color {
+    switch (this) {
+      case null:
+        return Colors.red;
+      case CatanExpansion.cities_and_knights:
+        return Colors.orange;
+      case CatanExpansion.seafarers:
+        return Colors.blue;
+      case CatanExpansion.explorers_and_pirates:
+        return Colors.blue[900]!;
+      case CatanExpansion.traders_and_barbarians:
+        return Colors.purple;
+      case CatanExpansion.legend_of_the_conquerers:
+        return Colors.green;
+    }
+  }
+
   IconData? get icon {
     switch (this) {
       case null:
