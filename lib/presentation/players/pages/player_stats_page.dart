@@ -24,17 +24,20 @@ class PlayerStatsPage extends StatelessWidget {
       var statistics = state.getStatisticsForPlayer(player);
       return NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
+          Brightness brightness = ThemeData.estimateBrightnessForColor(player.color);
+          var theme = ThemeData(brightness: brightness);
           return <Widget>[
             SliverOverlapAbsorber(
               handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
               sliver: SliverAppBar(
                 centerTitle: true,
-                flexibleSpace: FlexibleSpaceBar(title: Text(player.name), centerTitle: true,),
+                flexibleSpace: FlexibleSpaceBar(title: Text(player.name, style: theme.textTheme.headline6), centerTitle: true,),
                 collapsedHeight: kToolbarHeight,
                 toolbarHeight: kToolbarHeight,
                 expandedHeight: 100.0,
                 pinned: true,
                 backgroundColor: player.color,
+                iconTheme: brightness == Brightness.light ? IconTheme.of(context).copyWith(color: Colors.black) : null,
                 actions: [
                   IconButton(
                     onPressed: () => Navigator.of(context).pushNamed("/players/edit", arguments: {"player": player}),
