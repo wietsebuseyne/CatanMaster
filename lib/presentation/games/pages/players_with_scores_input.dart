@@ -1,4 +1,5 @@
 import 'package:catan_master/domain/players/player.dart';
+import 'package:catan_master/presentation/core/color.dart';
 import 'package:flutter/material.dart';
 
 class PlayersWithScoresInput extends StatelessWidget {
@@ -18,6 +19,7 @@ class PlayersWithScoresInput extends StatelessWidget {
     return Column(
       children: players.map((p) => CheckboxListTile(
           activeColor: p.color,
+          checkColor: useWhiteForeground(p.color) ? Colors.white : Colors.black,
           value: scores[p] != null,
           controlAffinity: ListTileControlAffinity.leading,
           contentPadding: const EdgeInsets.only(),
