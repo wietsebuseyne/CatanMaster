@@ -16,15 +16,11 @@ import 'polygon_path_drawer.dart';
 class PolygonBorder extends OutlinedBorder {
 
   const PolygonBorder({
-    @required this.sides,
+    required this.sides,
     this.rotate = 0.0,
     this.borderRadius = 0.0,
     BorderSide border = BorderSide.none,
-  })  : assert(sides != null),
-        assert(rotate != null),
-        assert(borderRadius != null),
-        assert(border != null),
-        super(side: border);
+  })  : super(side: border);
 
   final int sides;
   final double rotate;
@@ -46,12 +42,12 @@ class PolygonBorder extends OutlinedBorder {
   }
 
   @override
-  ShapeBorder lerpFrom(ShapeBorder a, double t) {
+  ShapeBorder? lerpFrom(ShapeBorder? a, double t) {
     if (a is PolygonBorder && a.sides == sides) {
       return PolygonBorder(
         sides: sides,
-        rotate: lerpDouble(a.rotate, rotate, t),
-        borderRadius: lerpDouble(a.borderRadius, borderRadius, t),
+        rotate: lerpDouble(a.rotate, rotate, t)!,
+        borderRadius: lerpDouble(a.borderRadius, borderRadius, t)!,
         border: BorderSide.lerp(a.side, side, t),
       );
     } else {
@@ -60,12 +56,12 @@ class PolygonBorder extends OutlinedBorder {
   }
 
   @override
-  ShapeBorder lerpTo(ShapeBorder b, double t) {
+  ShapeBorder? lerpTo(ShapeBorder? b, double t) {
     if (b is PolygonBorder && b.sides == sides) {
       return PolygonBorder(
         sides: sides,
-        rotate: lerpDouble(rotate, b.rotate, t),
-        borderRadius: lerpDouble(borderRadius, b.borderRadius, t),
+        rotate: lerpDouble(rotate, b.rotate, t)!,
+        borderRadius: lerpDouble(borderRadius, b.borderRadius, t)!,
         border: BorderSide.lerp(side, b.side, t),
       );
     } else {
@@ -74,7 +70,7 @@ class PolygonBorder extends OutlinedBorder {
   }
 
   @override
-  void paint(Canvas canvas, Rect rect, {TextDirection textDirection}) {
+  void paint(Canvas canvas, Rect rect, {TextDirection? textDirection}) {
     switch (side.style) {
       case BorderStyle.none:
         break;
@@ -87,12 +83,12 @@ class PolygonBorder extends OutlinedBorder {
   }
 
   @override
-  Path getInnerPath(Rect rect, {TextDirection textDirection}) {
+  Path getInnerPath(Rect rect, {TextDirection? textDirection}) {
     return _getPath(rect, math.max(0.0, rect.shortestSide / 2.0 - side.width));
   }
 
   @override
-  Path getOuterPath(Rect rect, {TextDirection textDirection}) {
+  Path getOuterPath(Rect rect, {TextDirection? textDirection}) {
     return _getPath(rect, math.max(0.0, rect.shortestSide / 2.0));
   }
 
@@ -115,19 +111,19 @@ class PolygonBorder extends OutlinedBorder {
 
   @override
   bool operator ==(other) {
-    if (runtimeType != other.runtimeType) {
-      return false;
+    if (identical(this, other)) {
+      return true;
     }
 
-    final PolygonBorder typedOther = other;
-    return sides == typedOther.sides &&
-        rotate == typedOther.rotate &&
-        borderRadius == typedOther.borderRadius &&
-        side == typedOther.side;
+    return other is PolygonBorder &&
+        sides == other.sides &&
+        rotate == other.rotate &&
+        borderRadius == other.borderRadius &&
+        side == other.side;
   }
 
   @override
-  OutlinedBorder copyWith({BorderSide side}) {
+  OutlinedBorder copyWith({BorderSide? side}) {
     if (side == null) return this;
     return PolygonBorder(
       sides: sides,

@@ -10,14 +10,13 @@ import 'package:catan_master/presentation/core/catan_master_bloc_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
-import 'package:meta/meta.dart';
 import 'package:provider/provider.dart';
 
 class CatanMasterLocalRepositoryProvider extends StatelessWidget {
 
   final Widget child;
 
-  CatanMasterLocalRepositoryProvider({Key key, @required this.child}) : super(key: key);
+  CatanMasterLocalRepositoryProvider({Key? key, required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +26,8 @@ class CatanMasterLocalRepositoryProvider extends StatelessWidget {
           //TODO show error for reporting
           if (snapshot.hasError) return MaterialApp(home: Scaffold(body: Center(child: Text("Fatal error occured"))));
           if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
-          var playerBox = snapshot.data[0];
-          var gameBox = snapshot.data[1];
+          Box<PlayerDto> playerBox = snapshot.data[0];
+          Box<GameDto> gameBox = snapshot.data[1];
           return MultiProvider(
               providers: [
                 Provider<PlayerRepository>(

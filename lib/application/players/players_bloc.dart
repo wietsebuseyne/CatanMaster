@@ -9,6 +9,7 @@ import 'package:catan_master/domain/players/player.dart';
 import 'package:catan_master/domain/players/player_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 
 part 'players_event.dart';
 part 'players_state.dart';
@@ -20,8 +21,8 @@ class PlayersBloc extends Bloc<PlayerEvent, PlayerState> {
   final FeedbackBloc feedbackBloc;
 
   PlayersBloc(this._repository, {
-    @required this.feedbackBloc,
-    @required this.deletePlayer
+    required this.feedbackBloc,
+    required this.deletePlayer
   }) : super(InitialPlayersState());
 
   @override
@@ -47,7 +48,7 @@ class PlayersBloc extends Bloc<PlayerEvent, PlayerState> {
   }
 
   Stream<PlayerState> _addOrUpdatePlayer(AddOrUpdatePlayer event) async* {
-    final s = state;
+    final PlayerState s = state;
     if (s is PlayersLoaded) {
       var player = Player(
           username: event.toEdit?.username ?? event.name,
@@ -86,7 +87,7 @@ class PlayersBloc extends Bloc<PlayerEvent, PlayerState> {
   }
 
   Stream<PlayerState> _deletePlayer(DeletePlayerEvent event) async* {
-    final s = state;
+    final PlayerState s = state;
     if (s is PlayersLoaded) {
       yield (await deletePlayer.call(event.player)).fold(
           (failure) {

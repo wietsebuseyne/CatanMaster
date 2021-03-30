@@ -22,7 +22,7 @@ class AddEditGamePage extends StatelessWidget {
   final GlobalKey<FormState> _formKey;
   final GameFormData formData;
 
-  AddEditGamePage(this._formKey, {this.formData});
+  AddEditGamePage(this._formKey, {required this.formData});
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +73,7 @@ class AddEditGamePage extends StatelessWidget {
                   return currentValue;
                 }
               },
-              onSaved: (DateTime date) {
+              onSaved: (DateTime? date) {
                 formData.date = date;
               },
             ),
@@ -81,6 +81,7 @@ class AddEditGamePage extends StatelessWidget {
             FormField<Set<CatanExpansion>>(
               initialValue: {},
               builder: (state) {
+                Set<CatanExpansion> currentSelection = state.value ?? {};
                 return CatanInputDecorator(
                   label: "Expansions",
                   errorText: state.errorText,
@@ -90,28 +91,32 @@ class AddEditGamePage extends StatelessWidget {
                       children: CatanExpansion.values.map((expansion) {
                         return GestureDetector(
                           onTap: () {
-                            if (!state.value.contains(expansion)) {
-                              state.didChange(state.value..add(expansion));
+                            if (!currentSelection.contains(expansion)) {
+                              currentSelection.add(expansion);
+                              state.didChange(currentSelection);
                             } else {
-                              state.didChange(state.value..remove(expansion));
+                              currentSelection.remove(expansion);
+                              state.didChange(currentSelection);
                             }
                           },
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Checkbox(
-                                value: state.value.contains(expansion),
+                                value: currentSelection.contains(expansion),
                                 onChanged: (selected) {
-                                  if (selected) {
-                                    state.didChange(state.value..add(expansion));
+                                  if (!currentSelection.contains(expansion)) {
+                                    currentSelection.add(expansion);
+                                    state.didChange(currentSelection);
                                   } else {
-                                    state.didChange(state.value..remove(expansion));
+                                    currentSelection.remove(expansion);
+                                    state.didChange(currentSelection);
                                   }
                                 }
                               ),
                               Icon(expansion.icon),
                               SizedBox(width: 8.0),
-                              Text(expansion.name),
+                              Text(expansion.name!),
                             ],
                           ),
                         );
@@ -120,15 +125,22 @@ class AddEditGamePage extends StatelessWidget {
                   ),
                 );
               },
-              onSaved: (Set<CatanExpansion> expansions) {
-                formData.expansions = expansions.toList();
+              onSaved: (Set<CatanExpansion>? expansions) {
+                formData.expansions = (expansions ?? {}).toList();
               },
             ),
             SizedBox(height: 16.0,),
             FormField<PlayersFormState>(
-              initialValue: PlayersFormState(),
+              initialValue: PlayersFormState(
+                players: formData.players.toSet(),
+                winner: formData.winner,
+                withScores: formData.withScores,
+                scores: formData.scores ?? {}
+              ),
               builder: (FormFieldState<PlayersFormState> state) {
-                Map<Player, int> scores = state.value.scores ?? {};
+                PlayersFormState formState = state.value ?? PlayersFormState();
+
+                Map<Player, int> scores = formState.scores;
                 return Column(
                   children: [
                     Center(
@@ -146,39 +158,39 @@ class AddEditGamePage extends StatelessWidget {
                         constraints: BoxConstraints(minHeight: 32),
                         borderColor: Colors.blue.withOpacity(0.3),
                         selectedBorderColor: Colors.blue,
-                        isSelected: [!state.value.withScores, state.value.withScores],
+                        isSelected: [!formState.withScores, formState.withScores],
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         onPressed: (i) {
-                          state.value.withScores = i == 1;
-                          state.didChange(state.value);
-                          _formKey.currentState.validate();
+                          formState.withScores = i == 1;
+                          state.didChange(formState);
+                          _formKey.currentState?.validate();
                         },
                       ),
                     ),
                     SizedBox(height: 8.0,),
-                    if (state.value.withScores) CatanInputDecorator(
+                    if (formState.withScores) CatanInputDecorator(
                       child: PlayersWithScoresInput(
                         scores: scores,
                         players: players,
                         onChanged: (scores) {
-                          state.value.scores = scores;
-                          state.didChange(state.value);
+                          formState.scores = scores;
+                          state.didChange(formState);
                         }
                       ),
                       errorText: state.errorText,
                     ),
-                    if (!state.value.withScores) CatanInputDecorator(
+                    if (!formState.withScores) CatanInputDecorator(
                       child: PlayersWithWinnerInput(
                         players: players,
-                        selected: state.value.players,
-                        winner: state.value.winner,
+                        selected: formState.players,
+                        winner: formState.winner,
                         onSelectionChanged: (Set<Player> players) {
-                          state.value.players = players;
-                          state.didChange(state.value);
+                          formState.players = players;
+                          state.didChange(formState);
                         },
-                        onWinnerChanged: (Player winner) {
-                          state.value.winner = winner;
-                          state.didChange(state.value);
+                        onWinnerChanged: (Player? winner) {
+                          formState.winner = winner;
+                          state.didChange(formState);
                         },
                       ),
                       errorText: state.errorText,
@@ -186,7 +198,8 @@ class AddEditGamePage extends StatelessWidget {
                   ],
                 );
               },
-              validator: (PlayersFormState state) {
+              validator: (PlayersFormState? state) {
+                if (state == null) return "Invalid state: <null>";
                 var scores = state.scores;
                 if ((state.withScores ? scores.length : state.players.length) < 2) {
                   return notEnoughPlayersMsg();
@@ -194,9 +207,7 @@ class AddEditGamePage extends StatelessWidget {
                 if (state.withScores) {
                   var scoreList = scores.values;
                   var maxScore = scores.values.reduce(max);
-                  if (scoreList
-                      .where((s) => s == maxScore)
-                      .length > 1) {
+                  if (scoreList.where((s) => s == maxScore).length > 1) {
                     return "Can't have two winners, my lord";
                   }
                 } else {
@@ -209,7 +220,8 @@ class AddEditGamePage extends StatelessWidget {
                 }
                 return null;
               },
-              onSaved: (playersData) {
+              onSaved: (PlayersFormState? playersData) {
+                playersData ??= PlayersFormState();
                 formData.withScores = playersData.withScores;
                 formData.scores = playersData.scores;
                 formData.winner = playersData.winner;
@@ -226,7 +238,7 @@ class AddEditGamePage extends StatelessWidget {
 
 class PlayerWithScore {
   final Player player;
-  final int score;
+  final int? score;
 
   PlayerWithScore.selected(this.player, this.score);
 
@@ -240,18 +252,24 @@ class PlayersFormState {
   bool withScores = true;
   Set<Player> players = {};
   Map<Player, int> scores = {};
-  Player winner;
+  Player? winner;
 
+  PlayersFormState({
+    this.withScores = true,
+    this.players = const {},
+    this.scores = const {},
+    this.winner,
+  });
 }
 
 class GameFormData {
 
   bool withScores = true;
-  DateTime date;
-  List<Player> players;
-  Map<Player, int> scores;
-  Player winner;
-  List<CatanExpansion> expansions;
+  DateTime? date;
+  List<Player> players = [];
+  Map<Player, int>? scores;
+  Player? winner;
+  List<CatanExpansion> expansions = [];
 
   GameFormData();
 

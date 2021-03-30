@@ -11,7 +11,7 @@ class PlayerDetailScreen extends StatelessWidget {
   //We use username here and listen to player changes
   final String username;
 
-  PlayerDetailScreen(this.username) : assert(username != null);
+  PlayerDetailScreen(this.username);
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +34,8 @@ class PlayerDetailScreen extends StatelessWidget {
 class _PlayerDetailScreen extends StatelessWidget {
 
   const _PlayerDetailScreen(this.player, {
-    Key key,
-  }) : assert(player != null), super(key: key);
+    Key? key,
+  }) : super(key: key);
 
   final Player player;
 

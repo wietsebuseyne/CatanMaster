@@ -1,28 +1,29 @@
-import 'package:meta/meta.dart';
+
+import 'package:flutter/foundation.dart';
 
 class FeedbackMessage {
 
   final FeedbackType type;
   final Severity severity;
-  final String title;
+  final String? title;
   final String message;
   final List<FeedbackAction> actions;
 
   bool get hasAction => actions.isNotEmpty;
 
-  FeedbackAction get action => actions.isNotEmpty ? actions.first : null;
+  FeedbackAction? get action => actions.isNotEmpty ? actions.first : null;
 
   FeedbackMessage.toast(this.message, {this.severity = Severity.message})
       : actions = const [],
         title = null,
         type = FeedbackType.toast;
 
-  FeedbackMessage.snackbar(this.message, {FeedbackAction action, this.severity = Severity.message})
+  FeedbackMessage.snackbar(this.message, {FeedbackAction? action, this.severity = Severity.message})
       : actions = action == null ? const [] : List.unmodifiable([action]),
         title = null,
         type = FeedbackType.snackbar;
 
-  FeedbackMessage.dialog(this.message, {@required this.title, this.severity = Severity.message})
+  FeedbackMessage.dialog(this.message, {required this.title, this.severity = Severity.message})
       : actions = const [],
         type = FeedbackType.dialog;
 
@@ -31,9 +32,9 @@ class FeedbackMessage {
 class FeedbackAction {
 
   final String text;
-  final Function action;
+  final VoidCallback action;
 
-  FeedbackAction({@required this.text, @required this.action}) : assert(text != null), assert(action != null);
+  FeedbackAction({required this.text, required this.action});
 
 }
 

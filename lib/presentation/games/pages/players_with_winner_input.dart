@@ -5,17 +5,17 @@ import 'package:flutter/material.dart';
 class PlayersWithWinnerInput extends StatelessWidget {
 
   final List<Player> players;
-  final Player winner;
+  final Player? winner;
   final Set<Player> selected;
   final ValueChanged<Set<Player>> onSelectionChanged;
-  final ValueChanged<Player> onWinnerChanged;
+  final ValueChanged<Player?> onWinnerChanged;
 
   PlayersWithWinnerInput({
-    @required this.players,
-    @required this.selected,
-    @required this.winner,
-    @required this.onSelectionChanged,
-    @required this.onWinnerChanged,
+    required this.players,
+    required this.selected,
+    required this.winner,
+    required this.onSelectionChanged,
+    required this.onWinnerChanged,
   });
 
   @override
@@ -29,7 +29,7 @@ class PlayersWithWinnerInput extends StatelessWidget {
               children: [
                 Checkbox(
                   value: selected.contains(p),
-                  onChanged: (s) => _onPlayerSelected(p, s),
+                  onChanged: (s) => _onPlayerSelected(p, s!),
                   activeColor: p.color,
                 ),
                 Text(p.name),

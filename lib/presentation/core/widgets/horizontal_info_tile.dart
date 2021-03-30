@@ -3,19 +3,19 @@ import 'package:flutter/widgets.dart';
 
 class HorizontalInfoTile extends StatelessWidget {
 
-  final Widget start;
-  final Widget end;
-  final Widget leading;
-  final Widget trailing;
+  final Widget? start;
+  final Widget? end;
+  final Widget? leading;
+  final Widget? trailing;
 
   final EdgeInsets padding;
   final double internalSpace;
 
-  final Function onTap;
-  final Function onLongPress;
-  final Function onDoubleTap;
-  final Function onTapDown;
-  final Function onTapCancel;
+  final Function? onTap;
+  final Function? onLongPress;
+  final Function? onDoubleTap;
+  final Function? onTapDown;
+  final Function? onTapCancel;
 
   HorizontalInfoTile({
     this.start,
@@ -33,11 +33,11 @@ class HorizontalInfoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap,
-      onLongPress: onLongPress,
-      onDoubleTap: onDoubleTap,
-      onTapDown: onTapDown,
-      onTapCancel: onTapCancel,
+      onTap: onTap as void Function()?,
+      onLongPress: onLongPress as void Function()?,
+      onDoubleTap: onDoubleTap as void Function()?,
+      onTapDown: onTapDown as void Function(TapDownDetails)?,
+      onTapCancel: onTapCancel as void Function()?,
       child: Container(
           padding: const EdgeInsets.symmetric(vertical: 0),
           child: Row(
@@ -58,7 +58,7 @@ class HorizontalInfoTile extends StatelessWidget {
                       if (end != null) _end(context)
                     ],
                   )),),
-              if (trailing != null) trailing
+              if (trailing != null) trailing!
             ],
           )),
     );
@@ -69,8 +69,8 @@ class HorizontalInfoTile extends StatelessWidget {
         child: Padding(
             padding: EdgeInsets.symmetric(vertical: padding.vertical),
             child: DefaultTextStyle(
-              style: theme.textTheme.subtitle2,
-              child: start,
+              style: theme.textTheme.subtitle2!,
+              child: start!,
             )
         )
     );
@@ -80,9 +80,9 @@ class HorizontalInfoTile extends StatelessWidget {
     return SizedBox(
         width: MediaQuery.of(context).size.width * 0.25,
         child: DefaultTextStyle(
-          style: Theme.of(context).textTheme.bodyText2.apply(fontSizeDelta: -1),
+          style: Theme.of(context).textTheme.bodyText2!.apply(fontSizeDelta: -1),
           textAlign: TextAlign.end,
-          child: end,
+          child: end!,
         )
     );
   }

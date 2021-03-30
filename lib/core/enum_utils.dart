@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart';
+
 class EnumUtils {
 
   static bool _isEnumItem(enumItem) {
@@ -13,7 +15,7 @@ class EnumUtils {
   ///
   /// If you pass in the option [camelCase]=true it will convert it to words
   /// So TestEnum.valueOne will become Value One
-  static String convertToString(enumItem) {
+  static String? convertToString(enumItem) {
     if (enumItem == null) return null;
 
     if (!_isEnumItem(enumItem)) {
@@ -30,12 +32,19 @@ class EnumUtils {
   /// Example final result = EnumToString.fromString(TestEnum.values, "valueOne")
   /// result == TestEnum.valueOne //true
   ///
-  static T fromString<T>(List<T> enumValues, String value, {T orElse()}) {
-    if (value == null || enumValues == null) return null;
-
+  static T fromString<T>(List<T> enumValues, String? value, {T orElse()?}) {
     return enumValues.singleWhere(
-            (enumItem) => EnumUtils.convertToString(enumItem)?.toLowerCase() == value?.toLowerCase(),
-        orElse: orElse ?? () => null);
+      (enumItem) => EnumUtils.convertToString(enumItem)?.toLowerCase() == value?.toLowerCase(),
+      orElse: orElse
+    );
+  }
+
+  static T? fromStringOrNull<T>(List<T> enumValues, String? value) {
+    if (value == null) return null;
+
+    return enumValues.singleWhereOrNull(
+      (enumItem) => EnumUtils.convertToString(enumItem)?.toLowerCase() == value.toLowerCase(),
+    );
   }
 
 }

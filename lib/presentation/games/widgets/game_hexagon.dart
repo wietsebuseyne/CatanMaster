@@ -8,7 +8,7 @@ class GameHexagon extends StatelessWidget {
 
   final Game game;
 
-  GameHexagon(this.game) : assert(game != null);
+  GameHexagon(this.game);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class GameHexagon extends StatelessWidget {
       child: _leadingChild(),
     );
   }
-  Widget _leadingChild() {
+  Widget? _leadingChild() {
     if (game.expansions.length == 1) {
       return Icon(game.expansions.first.icon, size: 16, color: game.winner.onColor,);
     } else if (game.expansions.length > 1) {

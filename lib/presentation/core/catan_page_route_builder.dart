@@ -8,7 +8,7 @@ class CatanPageRouteBuilder extends PageRouteBuilder {
 
   final bool fullscreenDialog;
 
-  CatanPageRouteBuilder({Widget page, this.fullscreenDialog = false})
+  CatanPageRouteBuilder({Widget? page, this.fullscreenDialog = false})
       : super(
           pageBuilder: (
             BuildContext context,
@@ -23,7 +23,7 @@ class CatanPageRouteBuilder extends PageRouteBuilder {
                     child: CatanFloatingActionButton(onPressed: () {},)
                 ),
               ),
-              page,
+              page!,
             ],);
           },
           fullscreenDialog: fullscreenDialog,

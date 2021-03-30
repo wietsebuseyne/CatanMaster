@@ -19,10 +19,11 @@ class MapFailure extends Failure {
 
 class DataValidationFailure extends Failure {
 
-  final String part;
+  final String? part;
 
-  const DataValidationFailure({@required String message, this.part})
-      : assert(message != null),
-        super(message);
+  const DataValidationFailure({
+    required String message,
+    this.part
+  }) : super(message);
 
 }

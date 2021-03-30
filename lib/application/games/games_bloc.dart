@@ -22,12 +22,11 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
   final FeedbackBloc feedbackBloc;
   final GameRepository gameRepository;
   final PlayersBloc playersBloc;
-  StreamSubscription _subscription;
+  late StreamSubscription _subscription;
 
-  GamesBloc(this.gameRepository, {@required this.playersBloc, @required this.feedbackBloc}) :
-        assert(gameRepository != null),
+  GamesBloc(this.gameRepository, {required this.playersBloc, required this.feedbackBloc}) :
         super(InitialGamesState()) {
-    _subscription = playersBloc.listen((state) {
+    _subscription = playersBloc.stream.listen((state) {
       if (state is PlayersLoaded) {
         add(LoadGames());
       }
@@ -62,7 +61,7 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
   }
 
   Stream<GamesState> _addEditGame(AddEditGameEvent event) async* {
-    final s = state;
+    final GamesState s = state;
     if (s is GamesLoaded) {
       //TODO validate input
       //TODO handle map failure extension of AddGameEvent
@@ -72,20 +71,23 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
         if (event.withScores) {
           game = Game.withScores(
             date: event.time,
-            scores: event.scores,
+            scores: event.scores!,
             expansions: event.expansions,
           );
         } else {
-          game = Game.noScores(
-              players: event.players,
-              date: event.time,
-              winner: event.winner,
-              expansions: event.expansions
-          );
+          if(event.players != null) {
+            game = Game.noScores(
+                players: event.players,
+                date: event.time,
+                winner: event.winner,
+                expansions: event.expansions
+            );
+          }
         }
         //TODO use returned value to ensure equality (to prevent issues like difference in Color and MaterialColor)
-        if (event.isEdit) {
-          yield (await gameRepository.editGame(event.oldGame.date.millisecondsSinceEpoch, game)).fold(
+        Game? oldGame = event.oldGame;
+        if (oldGame != null) {
+          yield (await gameRepository.editGame(oldGame.date.millisecondsSinceEpoch, game)).fold(
                   (f) => _feedbackAndReturn(f, message: "Error while editing game: $f"),
                   (r) => GameEdited(s.games.delete(event.oldGame), editedGame: game)
           );
@@ -96,13 +98,13 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
           );
         }
       } on DomainException catch(e) {
-        yield _feedbackAndReturn(DataValidationFailure(message: e.message, part: e.part));
+        yield _feedbackAndReturn(DataValidationFailure(message: e.message!, part: e.part));
       }
     }
   }
 
   Stream<GamesState> _removeGame(RemoveGameEvent event) async* {
-    final s = state;
+    final GamesState s = state;
     if (s is GamesLoaded) {
       Game game = event.game;
       yield (await gameRepository.deleteGame(game)).fold(
@@ -122,7 +124,7 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
   }
 
   Stream<GamesState> _undoRemoveGame(UndoRemoveGameEvent event) async* {
-    final s = state;
+    final GamesState s = state;
     if (s is GamesLoaded) {
       Game game = event.game;
       yield (await gameRepository.undoDelete(game: game)).fold(
@@ -132,7 +134,7 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
     }
   }
 
-  GamesState _feedbackAndReturn(Failure failure, {String message}) {
+  GamesState _feedbackAndReturn(Failure failure, {String? message}) {
     feedbackBloc.add(FeedbackEvent(FeedbackMessage.toast(message ?? failure.message)));
     return state;
   }

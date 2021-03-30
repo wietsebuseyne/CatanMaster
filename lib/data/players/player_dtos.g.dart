@@ -17,10 +17,10 @@ class PlayerDtoAdapter extends TypeAdapter<PlayerDto> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return PlayerDto(
-      username: fields[0] as String,
-      name: fields[1] as String,
-      gender: fields[3] as String,
-      color: fields[2] as int,
+      username: fields[0] as String?,
+      name: fields[1] as String?,
+      gender: fields[3] as String?,
+      color: fields[2] as int?,
     );
   }
 
@@ -55,10 +55,10 @@ class PlayerDtoAdapter extends TypeAdapter<PlayerDto> {
 
 PlayerDto _$PlayerDtoFromJson(Map<String, dynamic> json) {
   return PlayerDto(
-    username: json['username'] as String,
-    name: json['name'] as String,
-    gender: json['gender'] as String,
-    color: json['color'] as int,
+    username: json['username'] as String?,
+    name: json['name'] as String?,
+    gender: json['gender'] as String?,
+    color: json['color'] as int?,
   );
 }
 

@@ -16,7 +16,7 @@ class HivePlayerDatasource extends PlayerDatasource {
 
   @override
   Future<PlayerDto> getPlayer(String username) async {
-    return _box.get(username);
+    return _box.get(username)!;
   }
 
   @override

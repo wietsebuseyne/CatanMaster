@@ -10,7 +10,7 @@ class AddEditPlayerPage extends StatelessWidget {
   final GlobalKey<FormState> _formKey;
   final PlayerFormData formData;
 
-  AddEditPlayerPage(this._formKey, {@required this.formData});
+  AddEditPlayerPage(this._formKey, {required this.formData});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class AddEditPlayerPage extends StatelessWidget {
           child: Column(
             children: [
               TextFormField(
-                initialValue: formData?.name,
+                initialValue: formData.name ?? "",
                 decoration: InputDecoration(
                     labelText: "Name",
                     contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
@@ -36,30 +36,30 @@ class AddEditPlayerPage extends StatelessWidget {
               ),
               SizedBox(height: 16.0,),
               FormField<Gender>(
-                initialValue: formData?.gender ?? Gender.x,
+                initialValue: formData.gender ?? Gender.x,
                 builder: (state) {
                   return CatanInputDecorator(
                     label: "Gender",
                     child: Row(
                       children: [
-                        Radio(value: Gender.male, groupValue: state.value, onChanged: (g) => state.didChange(g)),
+                        Radio(value: Gender.male, groupValue: state.value, onChanged: (dynamic g) => state.didChange(g)),
                         GestureDetector(child: Text("Male"), onTap: () => state.didChange(Gender.male),),
-                        Radio(value: Gender.female, groupValue: state.value, onChanged: (g) => state.didChange(g)),
+                        Radio(value: Gender.female, groupValue: state.value, onChanged: (dynamic g) => state.didChange(g)),
                         GestureDetector(child: Text("Female"), onTap: () => state.didChange(Gender.female),),
-                        Radio(value: Gender.x, groupValue: state.value, onChanged: (g) => state.didChange(g)),
+                        Radio(value: Gender.x, groupValue: state.value, onChanged: (dynamic g) => state.didChange(g)),
                         GestureDetector(child: Text("X"), onTap: () => state.didChange(Gender.x),),
                       ],
                     ),
                   );
                 },
                 onSaved: (gender) {
-                  return formData.gender = gender;
+                  formData.gender = gender;
                 },
                 validator: (gender) => gender == null ? "Please pick a gender" : null,
               ),
               SizedBox(height: 16.0,),
               FormField<Color>(
-                initialValue: formData?.color,
+                initialValue: formData.color,
                 builder: (state) {
                   return CatanInputDecorator(
                     label: "Color",
@@ -86,8 +86,8 @@ class AddEditPlayerPage extends StatelessWidget {
 
 class PlayerFormData {
 
-  String name;
-  Gender gender;
-  Color color;
+  String? name;
+  Gender? gender;
+  Color? color;
 
 }

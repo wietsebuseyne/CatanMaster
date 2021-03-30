@@ -4,6 +4,7 @@ import 'package:catan_master/domain/feedback/feedback_message.dart';
 import 'package:catan_master/domain/players/player.dart';
 import 'package:catan_master/presentation/core/catan_icons.dart';
 import 'package:catan_master/presentation/core/catan_page_route_builder.dart';
+import 'package:catan_master/presentation/core/polygon/polygon_border.dart';
 import 'package:catan_master/presentation/feedback/show_feedback.dart';
 import 'package:catan_master/presentation/feedback/user_feedback.dart';
 import 'package:catan_master/presentation/games/pages/games_page.dart';
@@ -14,7 +15,6 @@ import 'package:catan_master/presentation/players/screens/add_edit_player_screen
 import 'package:catan_master/presentation/players/screens/player_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:polygon_clipper/polygon_border.dart';
 
 class CatanMasterApp extends StatelessWidget {
   @override
@@ -58,7 +58,7 @@ class CatanMasterApp extends StatelessWidget {
             } else if (settings.name == '/players/detail') {
               return MaterialPageRoute(
                 builder: (context) {
-                  var player = (settings.arguments as Map)["player"] as Player;
+                  var player = (settings.arguments as Map)["player"] as Player?;
                   if (player == null) {
                     return Text("Error: no player provided");
                   }
@@ -79,7 +79,7 @@ class CatanMasterApp extends StatelessWidget {
 class CatanMasterHomeScreen extends StatelessWidget {
 
   final HomePageTab tab;
-  final Function onAddTapped;
+  final Function? onAddTapped;
 
   CatanMasterHomeScreen({this.tab = HomePageTab.games, this.onAddTapped});
 
@@ -113,7 +113,7 @@ class CatanMasterHomeScreen extends StatelessWidget {
             onPressed: () {
               switch(tab) {
                 case HomePageTab.games:
-                  var playersState = BlocProvider.of<PlayersBloc>(context).state;
+                  PlayerState playersState = BlocProvider.of<PlayersBloc>(context).state;
                   if (playersState is PlayersLoaded) {
                     if (playersState.players.length > 1) {
                       Navigator.of(context).pushNamed("/games/add");
@@ -152,8 +152,8 @@ class CatanMasterHomeScreen extends StatelessWidget {
 class CatanFloatingActionButton extends StatelessWidget {
 
   const CatanFloatingActionButton({
-    Key key,
-    @required this.onPressed,
+    Key? key,
+    required this.onPressed,
   }) : super(key: key);
 
   final Function() onPressed;
@@ -163,7 +163,7 @@ class CatanFloatingActionButton extends StatelessWidget {
     return Hero(
       tag: "catan_fab",
       flightShuttleBuilder: (flightContext, animation, flightDirection, fromHeroContext, toHeroContext) {
-        final Hero toHero = toHeroContext.widget;
+        final Hero toHero = toHeroContext.widget as Hero;
         return RotationTransition(
           turns: Tween<double>(begin: 0.0, end: 1.0)
               .animate(CurvedAnimation(parent: animation, curve: Curves.easeInOutSine)),

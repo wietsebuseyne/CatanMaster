@@ -22,7 +22,7 @@ class GamesList extends StatefulWidget {
 
 class _GamesListState extends State<GamesList> {
 
-  final Set<CatanExpansion> selectedExpansions = {};
+  final Set<CatanExpansion?> selectedExpansions = {};
 
   @override
   Widget build(BuildContext context) {
@@ -102,12 +102,12 @@ class _GamesListState extends State<GamesList> {
 
 class ExpansionFiltersHeader extends StatelessWidget {
 
-  final Function(CatanExpansion, bool) onSelectionChanged;
-  final Set<CatanExpansion> selection;
+  final Function(CatanExpansion?, bool) onSelectionChanged;
+  final Set<CatanExpansion?> selection;
 
   ExpansionFiltersHeader({
-    @required this.onSelectionChanged,
-    @required Iterable<CatanExpansion> selection,
+    required this.onSelectionChanged,
+    required Iterable<CatanExpansion?> selection,
   }) : this.selection = selection.toSet();
 
   @override
@@ -132,12 +132,12 @@ class ExpansionFiltersHeader extends StatelessWidget {
     );
   }
 
-  Widget _filter(CatanExpansion e) {
+  Widget _filter(CatanExpansion? e) {
     return ExpansionFilter(
       expansion: e,
       selected: selection.contains(e),
       onSelected: (selected) {
-        onSelectionChanged?.call(e, selected);
+        onSelectionChanged.call(e, selected);
       },
     );
   }
@@ -146,11 +146,11 @@ class ExpansionFiltersHeader extends StatelessWidget {
 
 class ExpansionFilter extends StatelessWidget {
 
-  final CatanExpansion expansion;
+  final CatanExpansion? expansion;
   final bool selected;
   final ValueChanged<bool> onSelected;
 
-  ExpansionFilter({@required this.expansion, @required this.selected, @required this.onSelected});
+  ExpansionFilter({required this.expansion, required this.selected, required this.onSelected});
 
   @override
   Widget build(BuildContext context) {
@@ -158,12 +158,12 @@ class ExpansionFilter extends StatelessWidget {
       avatar: Icon(expansion.icon, size: 12, color: selected ? Colors.white : Colors.black ,),
       labelPadding: const EdgeInsets.only(),
       label: SizedBox(),
-      shape: PolygonBorder( //TODO implement OutlinedBorder
+      shape: PolygonBorder(
         sides: 6,
         rotate: 30,
       ),
       visualDensity: VisualDensity.compact,
-      onPressed: () => onSelected?.call(!selected),
+      onPressed: () => onSelected.call(!selected),
       backgroundColor: selected ? Colors.black : null,
       tooltip: expansion.name,
       padding: const EdgeInsets.all(8.0),

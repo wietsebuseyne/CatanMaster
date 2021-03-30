@@ -4,10 +4,10 @@ import 'package:flutter/widgets.dart';
 class CatanInputDecorator extends StatelessWidget {
 
   final Widget child;
-  final String label;
-  final String errorText;
+  final String? label;
+  final String? errorText;
 
-  CatanInputDecorator({Key key, this.label, @required this.child, this.errorText}) : super(key: key);
+  CatanInputDecorator({Key? key, this.label, required this.child, this.errorText}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class CatanInputDecorator extends StatelessWidget {
   }
 }
 
-InputDecoration catanInputDecoration({String label, String errorText}) =>
+InputDecoration catanInputDecoration({String? label, String? errorText}) =>
     InputDecoration(
       labelText: label,
       contentPadding: EdgeInsets.symmetric(horizontal: 16.0),

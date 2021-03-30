@@ -15,18 +15,17 @@ class WinLoseHexagonPath extends StatefulWidget {
   final double width;
 
   const WinLoseHexagonPath._({
-    @required this.top,
-    @required this.bottom,
-    @required this.width,
-    Key key,
+    required this.top,
+    required this.bottom,
+    required this.width,
+    Key? key,
   })  : super(key: key);
 
   factory WinLoseHexagonPath({
-    Key key,
-    @required List<bool> wins,
-    @required double width,
+    Key? key,
+    required List<bool> wins,
+    required double width,
   }) {
-    assert(wins != null);
     List<bool> top = <bool>[];
     List<bool> bottom = <bool>[];
     wins.asMap().forEach((i, value) {
@@ -48,10 +47,10 @@ class WinLoseHexagonPath extends StatefulWidget {
 
 class _WinLoseHexagonPathState extends State<WinLoseHexagonPath> with SingleTickerProviderStateMixin {
 
-  AnimationController controller;
+  late AnimationController controller;
   List<Animation<double>> flyInAnimations = [];
-  int total;
-  int half;
+  late int total;
+  int? half;
 
   @override
   void initState() {
@@ -102,7 +101,7 @@ class _WinLoseHexagonPathState extends State<WinLoseHexagonPath> with SingleTick
     var topNb = 1;
     var bottomNb = 0;
     return AnimatedBuilder(
-      builder: (BuildContext context, Widget child) {
+      builder: (BuildContext context, Widget? child) {
         var totalWidth = MediaQuery.of(context).size.width;
         var contentWidth = _contentWidth(widget.nbHexagons);
         var startInset = (totalWidth - contentWidth) / 2.0;

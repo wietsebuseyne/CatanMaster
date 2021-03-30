@@ -2,7 +2,7 @@ import 'dart:core';
 
 class CacheException implements Exception {
 
-  String message;
+  String? message;
 
   CacheException([this.message]);
 
@@ -21,8 +21,8 @@ class NotFoundException implements Exception {}
 ///e.g. constructing a domain obect with invalid data
 class DomainException implements Exception {
 
-  final String part;
-  final String message;
+  final String? part;
+  final String? message;
 
   const DomainException([this.message, this.part]);
 

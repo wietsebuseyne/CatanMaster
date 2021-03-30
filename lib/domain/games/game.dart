@@ -17,28 +17,28 @@ class Game extends Equatable {
   bool get hasExpansion => expansions.isNotEmpty;
 
   Game._({
-    @required this.date,
-    @required List<Player> players,
-    @required this.winner,
-    Map<Player, int> scores,
+    required this.date,
+    required this.winner,
+    required List<Player> players,
+    Map<Player, int> scores = const {},
     List<CatanExpansion> expansions = const [],
   })
-      : assert(date != null),
-        assert(winner != null),
-        assert(expansions != null),
+      : assert(scores.isNotEmpty || players.isNotEmpty),
+        assert(scores.isEmpty || players.isEmpty),
         this.players = List.unmodifiable(players..sort((p1, p2) => p1.name.compareTo(p2.name))),
-        this.expansions = List.unmodifiable(expansions ?? const []),
-        this.scores = Map.unmodifiable(scores ?? {});
+        this.expansions = List.unmodifiable(expansions),
+        this.scores = Map.unmodifiable(scores);
 
   factory Game.noScores({
-    @required DateTime date,
-    @required List<Player> players,
-    @required Player winner,
+    required DateTime? date,
+    required List<Player>? players,
+    required Player? winner,
     List<CatanExpansion> expansions = const [],
   }) {
     if (date == null) throw DomainException("Date must not be null", "date");
     if (winner == null) throw DomainException("Winner must not be empty", "winner");
-    if (expansions == null) throw DomainException("expansions cannot be null", "expansions");
+    if (players == null) throw DomainException("Players cannot be null", "players");
+    if (players.isEmpty) throw DomainException("Players cannot be empty", "players");
     if (!players.any((p) => p == winner)) {
       throw DomainException("Winner must be one of the players", "winner");
     }
@@ -52,12 +52,11 @@ class Game extends Equatable {
   }
 
   factory Game.withScores({
-    @required DateTime date,
-    Map<Player, int> scores,
-    List<CatanExpansion> expansions = const []
+    required DateTime? date,
+    required Map<Player, int> scores,
+    List<CatanExpansion>? expansions = const []
   }) {
     if (date == null) throw DomainException("Date must not be null", "date");
-    if (scores.containsKey(null)) throw DomainException("Null player in scores map", "scores");
     if (expansions == null) throw DomainException("expansions cannot be null", "expansions");
 
     List<Player> players = scores.keys.toList();
@@ -65,12 +64,12 @@ class Game extends Equatable {
       var player = players.firstWhere((p) => !_isValidScore(scores[p]));
       throw DomainException("Invalid score '${scores[player]}' provided for player '$player'", "scores");
     }
-    Player winner;
+    Player? winner;
     bool multiple = false;
-    for (Player p in players) {
+    for (Player? p in players) {
       if (winner == null) {
         winner = p;
-      } else if (scores[p] > scores[winner]) {
+      } else if (scores[p]! > scores[winner]!) {
         multiple = false;
         winner = p;
       } else if (scores[p] == scores[winner]) {
@@ -85,12 +84,12 @@ class Game extends Equatable {
       date: date,
       scores: Map.unmodifiable(scores),
       players: players,
-      winner: winner,
+      winner: winner!,
       expansions: expansions,
     );
   }
 
-  static bool _isValidScore(int score) {
+  static bool _isValidScore(int? score) {
     return score != null && score > 0;
   }
 
@@ -112,11 +111,12 @@ class Games {
     return games.where((g) => g.players.contains(player)).toList();
   }
 
-  Games filterExpansion(Set<CatanExpansion> expansions) {
+  Games filterExpansion(Set<CatanExpansion?> expansions) {
     if (expansions.isEmpty) return this;
     return Games(games.where((g) {
       // Base game or any expansion in provided set
-      return g.expansions.isEmpty && expansions.contains(null) || g.expansions.any((e) => expansions.contains(e));
+      return (g.expansions.isEmpty && expansions.contains(null))
+          || g.expansions.any((e) => expansions.contains(e));
     }).toList());
   }
 
@@ -127,7 +127,7 @@ class Games {
   List<Player> getRanking() {
     Map<Player, int> gamesWon = {};
     games.expand((g) => g.players).forEach((p) => gamesWon[p] = 0);
-    games.forEach((g) => gamesWon[g.winner] = gamesWon[g.winner] + 1);
+    games.forEach((g) => gamesWon[g.winner] = gamesWon[g.winner]! + 1);
     var entries = gamesWon.entries.toList();
     entries.sort((e1, e2) => e2.value.compareTo(e1.value));
     return entries.map((e) => e.key).toList();
@@ -135,7 +135,7 @@ class Games {
 
   Games add(Game newGame) => Games(List.from(games)..add(newGame));
 
-  Games delete(Game game) => Games(List.of(games)..remove(game));
+  Games delete(Game? game) => Games(List.of(games)..remove(game));
 
   bool get isEmpty => games.isEmpty;
 
@@ -150,7 +150,7 @@ class Games {
 }
 
 
-
+//TODO concept of "Base game" == no expansions
 enum CatanExpansion {
 
   cities_and_knights, seafarers, explorers_and_pirates, traders_and_barbarians, legend_of_the_conquerers

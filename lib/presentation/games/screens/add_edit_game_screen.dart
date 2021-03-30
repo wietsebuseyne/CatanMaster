@@ -10,13 +10,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class AddEditGameScreen extends StatelessWidget {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final Game game;
+  final Game? game;
   final GameFormData formData;
   final bool edit;
 
   AddEditGameScreen.add() : formData = GameFormData(), edit = false, game = null;
 
-  AddEditGameScreen.edit(this.game) :
+  AddEditGameScreen.edit(Game this.game) :
         formData = GameFormData.fromGame(game),
         edit = true;
 
@@ -42,27 +42,28 @@ class AddEditGameScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 24.0),
                 ),
                 onPressed: () {
-                  if (_formKey.currentState.validate()) {
-                    _formKey.currentState.save();
+                  FormState? formState = _formKey.currentState;
+                  if (formState != null && formState.validate()) {
+                    formState.save();
 
                     bool withScores = formData.withScores;
                     List<CatanExpansion> expansions = formData.expansions;
-                    Map<Player, int> scores = formData.scores;
-                    DateTime date = formData.date;
+                    Map<Player, int>? scores = formData.scores;
+                    DateTime? date = formData.date;
                     List<Player> players = formData.players;
-                    Player winner = formData.winner;
+                    Player? winner = formData.winner;
 
                     if (withScores) {
                       BlocProvider.of<GamesBloc>(context).add(AddEditGameEvent.withScores(
                         oldGame: game,
-                        time: date,
-                        scores: scores,
+                        time: date!,
+                        scores: scores!,
                         expansions: expansions,
                       ));
                     } else {
                       BlocProvider.of<GamesBloc>(context).add(AddEditGameEvent.noScores(
                         oldGame: game,
-                        time: date,
+                        time: date!,
                         players: players,
                         winner: winner,
                         expansions: expansions,

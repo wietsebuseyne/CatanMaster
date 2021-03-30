@@ -8,8 +8,8 @@ class PolygonPathDrawer {
   final PolygonPathSpecs specs;
 
   PolygonPathDrawer({
-    @required this.size,
-    @required this.specs,
+    required this.size,
+    required this.specs,
   }) : path = Path();
 
   Path draw() {
@@ -82,8 +82,8 @@ class PolygonPathSpecs {
   final double halfBorderRadiusAngle;
 
   PolygonPathSpecs({
-    @required this.sides,
-    @required this.rotate,
-    @required this.borderRadiusAngle,
+    required this.sides,
+    required this.rotate,
+    required this.borderRadiusAngle,
   }) : halfBorderRadiusAngle = borderRadiusAngle / 2;
 }

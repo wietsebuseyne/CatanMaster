@@ -9,7 +9,7 @@ class PlayerListTile extends StatelessWidget {
   final PlayerStatistics statistics;
   Player get player => statistics.player;
 
-  PlayerListTile(this.statistics, {Key key}) : super(key: key);
+  PlayerListTile(this.statistics, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class PlayerListTile extends StatelessWidget {
         color: player.color,
         child: Center(child: Text(
           statistics.rank.toString(),
-          style: Theme.of(context).textTheme.subtitle1.copyWith(color: player.onColor, fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.subtitle1!.copyWith(color: player.onColor, fontWeight: FontWeight.bold),
         )),
       ),
       title: Text(player.name, style: Theme.of(context).textTheme.headline6, ),

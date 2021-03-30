@@ -4,7 +4,7 @@ import 'package:catan_master/presentation/core/widgets/hexagon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-extension CatanExpansionUi on CatanExpansion {
+extension CatanExpansionUi on CatanExpansion? {
 
   Widget get iconWidget {
     if (this == null) return Padding(
@@ -14,8 +14,10 @@ extension CatanExpansionUi on CatanExpansion {
     return Icon(icon);
   }
 
-  IconData get icon {
+  IconData? get icon {
     switch (this) {
+      case null:
+        return null;
       case CatanExpansion.cities_and_knights:
         return CatanIcons.shield;
       case CatanExpansion.seafarers:
@@ -27,11 +29,12 @@ extension CatanExpansionUi on CatanExpansion {
       case CatanExpansion.legend_of_the_conquerers:
         return CatanIcons.crossed_swords;
     }
-    return null;
   }
 
-  IconData get iconOutline {
+  IconData? get iconOutline {
     switch (this) {
+      case null:
+        return null;
       case CatanExpansion.cities_and_knights:
         return CatanIcons.shield;
       case CatanExpansion.seafarers:
@@ -43,12 +46,13 @@ extension CatanExpansionUi on CatanExpansion {
       case CatanExpansion.legend_of_the_conquerers:
         return CatanIcons.crossed_swords;
     }
-    return null;
   }
 
-  String get name {
+  String? get name {
     if (this == null) return "Regular";
     switch(this) {
+      case null:
+        return null;
       case CatanExpansion.cities_and_knights:
         return "Cities & Knights";
       case CatanExpansion.seafarers:
@@ -60,7 +64,6 @@ extension CatanExpansionUi on CatanExpansion {
       case CatanExpansion.legend_of_the_conquerers:
         return "Legend of the conquerers";
     }
-    return null;
   }
 
 }
