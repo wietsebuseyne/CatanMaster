@@ -20,14 +20,14 @@ class CatanMasterLocalRepositoryProvider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: Future.wait([Hive.openBox<PlayerDto>("players"), Hive.openBox<GameDto>("games")]),
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          //TODO show error for reporting
+    return FutureBuilder<List<Box>>(
+        future: Future.wait<Box>([Hive.openBox<PlayerDto>("players"), Hive.openBox<GameDto>("games")]),
+        builder: (BuildContext context, AsyncSnapshot<List<Box>> snapshot) {
           if (snapshot.hasError) return MaterialApp(home: Scaffold(body: Center(child: Text("Fatal error occured"))));
-          if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
-          Box<PlayerDto> playerBox = snapshot.data[0];
-          Box<GameDto> gameBox = snapshot.data[1];
+          var data = snapshot.data;
+          if (data == null) return Center(child: CircularProgressIndicator());
+          Box<PlayerDto> playerBox = data[0] as Box<PlayerDto>;
+          Box<GameDto> gameBox = data[1] as Box<GameDto>;
           return MultiProvider(
               providers: [
                 Provider<PlayerRepository>(
