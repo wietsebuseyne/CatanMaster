@@ -39,6 +39,8 @@ class PlayerStatistics extends Equatable {
 
   final Player player;
   final List<Game> games;
+  final int nbGamesWon;
+  final int percentGamesWon;
   final Player? bestBuddy;
   //TODO include 'Base' as an option here
   final CatanExpansion? mostPlayedExpansion;
@@ -49,6 +51,8 @@ class PlayerStatistics extends Equatable {
   PlayerStatistics._({
     required this.player,
     required this.games,
+    required this.nbGamesWon,
+    required this.percentGamesWon,
     required this.bestBuddy,
     required this.mostPlayedExpansion,
     required this.mostWonExpansion,
@@ -77,6 +81,9 @@ class PlayerStatistics extends Equatable {
         }
       }
     });
+    int nbGamesWon = gamesWon[player] ?? 0;
+    int nbGamesPlayed = gamesPlayed[player] ?? 0;
+    int percentGamesWon = nbGamesPlayed == 0 ? 0 : ((nbGamesWon / nbGamesPlayed) * 100.0).round();
     //Cannot be own best buddy
     gamesPlayed.remove(player);
     List<Prize> achievements = [];
@@ -86,13 +93,15 @@ class PlayerStatistics extends Equatable {
       achievements.add(Prize(PrizeType.on_a_roll, nbWinsFive));
     }
     return PlayerStatistics._(
-        player: player,
-        games: games,
-        rank: allGames.getRanking().indexOf(player)+1,
-        bestBuddy: gamesPlayed.highestValue,
-        mostPlayedExpansion: expansionsPlayed.highestValue,
-        mostWonExpansion: expansionsWon.highestValue, //TODO procentueel
-        prizes: achievements,
+      player: player,
+      games: games,
+      rank: allGames.getRanking().indexOf(player)+1,
+      bestBuddy: gamesPlayed.highestValue,
+      mostPlayedExpansion: expansionsPlayed.highestValue,
+      mostWonExpansion: expansionsWon.highestValue, //TODO procentueel
+      prizes: achievements,
+      nbGamesWon: nbGamesWon,
+      percentGamesWon: percentGamesWon
     );
   }
 

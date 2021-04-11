@@ -99,6 +99,11 @@ class PlayerStatsPage extends StatelessWidget {
                 end: Text(statistics.games.length.toString()),
               ),
               HorizontalInfoTile(
+                leading: Icon(Icons.tag),
+                start: Text("Games won"),
+                end: Text("${statistics.nbGamesWon} (${statistics.percentGamesWon}%)"),
+              ),
+              HorizontalInfoTile(
                 leading: Icon(Icons.history),
                 start: Text("Last Game"),
                 end: Text(statistics.lastGame == null ? "TBD" : DateFormat.yMd().format(statistics.lastGame!.date)),
