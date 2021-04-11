@@ -26,6 +26,10 @@ class CatanMasterApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.blue, //TODO color of last win
           ),
+          darkTheme: ThemeData(
+            brightness: Brightness.dark,
+            primarySwatch: Colors.blue, //TODO color of last win
+          ),
           home: CatanMasterHomeScreen(tab: state.page),
           initialRoute: '/',
           onGenerateRoute: (RouteSettings settings) {
