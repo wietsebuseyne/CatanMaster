@@ -1,18 +1,22 @@
 part of 'main_bloc.dart';
 
 @immutable
-class MainState {
+class MainState extends Equatable {
 
   final HomePageTab page;
 
-  MainState(this.page);
+  MainState({
+    required this.page,
+  });
+
+  MainState copyWith({HomePageTab? page}) {
+    return MainState(
+        page: page ?? this.page,
+    );
+  }
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) || other is MainState && runtimeType == other.runtimeType && page == other.page;
-
-  @override
-  int get hashCode => page.hashCode;
+  List<Object?> get props => [page];
 }
 
 enum HomePageTab {
