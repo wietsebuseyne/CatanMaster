@@ -4,6 +4,7 @@ import 'package:catan_master/application/players/players_bloc.dart';
 import 'package:catan_master/domain/games/game.dart';
 import 'package:catan_master/domain/players/player.dart';
 import 'package:catan_master/presentation/core/catan_expansion_ui.dart';
+import 'package:catan_master/presentation/core/color.dart';
 import 'package:catan_master/presentation/core/widgets/catan_input_decorator.dart';
 import 'package:catan_master/presentation/games/pages/players_with_scores_input.dart';
 import 'package:catan_master/presentation/games/pages/players_with_winner_input.dart';
@@ -21,8 +22,9 @@ class AddEditGamePage extends StatelessWidget {
 
   final GlobalKey<FormState> _formKey;
   final GameFormData formData;
+  final VoidCallback? onFormChanged;
 
-  AddEditGamePage(this._formKey, {required this.formData});
+  AddEditGamePage(this._formKey, {required this.formData, this.onFormChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +45,7 @@ class AddEditGamePage extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 48.0, top: 16.0, right: 16.0, left: 16.0),
       child: Form(
         key: _formKey,
+        onChanged: onFormChanged,
         autovalidateMode: AutovalidateMode.always,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -142,6 +145,8 @@ class AddEditGamePage extends StatelessWidget {
                 PlayersFormState formState = state.value ?? PlayersFormState();
 
                 Map<Player, int> scores = formState.scores;
+                var color = formState.winner?.color ?? Colors.blue;
+                var light = isLight(color);
                 return Column(
                   children: [
                     Center(
@@ -157,12 +162,18 @@ class AddEditGamePage extends StatelessWidget {
                           )
                         ],
                         constraints: BoxConstraints(minHeight: 32),
-                        borderColor: Colors.blue.withOpacity(0.3),
-                        selectedBorderColor: Colors.blue,
+                        selectedBorderColor: color == Colors.white ? Colors.black : color,
+                        selectedColor: light ? Colors.black : color,
+                        fillColor: color.withOpacity(0.1),
                         isSelected: [!formState.withScores, formState.withScores],
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         onPressed: (i) {
                           formState.withScores = i == 1;
+                          if (formState.withScores) {
+                            formState.winner = formState.scores
+                                .entries
+                                .reduce((max, e) => e.value > max.value ? e : max).key;
+                          }
                           state.didChange(formState);
                           _formKey.currentState?.validate();
                         },
@@ -175,6 +186,13 @@ class AddEditGamePage extends StatelessWidget {
                         players: players,
                         onChanged: (scores) {
                           formState.scores = scores;
+                          if (scores.entries.isEmpty) {
+                            formState.winner = null;
+                          } else {
+                            formState.winner = scores.entries
+                                .reduce((max, e) => e.value > max.value ? e : max)
+                                .key;
+                          }
                           state.didChange(formState);
                         }
                       ),

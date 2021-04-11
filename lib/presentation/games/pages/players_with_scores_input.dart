@@ -16,10 +16,14 @@ class PlayersWithScoresInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Column(
-      children: players.map((p) => CheckboxListTile(
-          activeColor: p.color,
-          checkColor: useWhiteForeground(p.color) ? Colors.white : Colors.black,
+      children: players.map((p) {
+        var color = p.color;
+        var light = isLight(color);
+        return CheckboxListTile(
+          activeColor: color,
+          checkColor: light ? Colors.black : Colors.white,
           value: scores[p] != null,
           controlAffinity: ListTileControlAffinity.leading,
           contentPadding: const EdgeInsets.only(),
@@ -32,9 +36,16 @@ class PlayersWithScoresInput extends StatelessWidget {
                   children: [
                     if (scores[p] != null) SizedBox(width: 16.0,),
                     if (scores[p] != null) Chip(label: Text(scores[p].toString()),),
-                    Slider(
+                    SliderTheme(
+                      data: SliderThemeData(
+                        activeTrackColor: color,
+                        inactiveTickMarkColor: color == Colors.white ? Colors.grey : color,
+                        activeTickMarkColor: color.withOpacity(0.1),
+                        inactiveTrackColor: color.withOpacity(0.1),
+                        thumbColor: color,
+                      ),
+                      child: Slider(
                         label: scores[p]?.toString(),
-                        activeColor: p.color,
                         min: 0,
                         max: 20,
                         divisions: 20,
@@ -48,7 +59,9 @@ class PlayersWithScoresInput extends StatelessWidget {
                             newScores[p] = score;
                           }
                           onChanged(newScores);
-                        }),
+                        }
+                      ),
+                    ),
                   ],
                 ),
               ]
@@ -62,7 +75,8 @@ class PlayersWithScoresInput extends StatelessWidget {
             }
             onChanged(newScores);
           }
-      )).toList(),
+        );
+      }).toList(),
     );
   }
 }

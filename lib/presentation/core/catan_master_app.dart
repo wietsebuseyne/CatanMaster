@@ -5,6 +5,7 @@ import 'package:catan_master/domain/games/game.dart';
 import 'package:catan_master/domain/players/player.dart';
 import 'package:catan_master/presentation/core/catan_icons.dart';
 import 'package:catan_master/presentation/core/catan_page_route_builder.dart';
+import 'package:catan_master/presentation/core/color.dart';
 import 'package:catan_master/presentation/games/screens/game_detail_screen.dart';
 import 'package:flutter_polygon/flutter_polygon.dart';
 import 'package:catan_master/presentation/feedback/show_feedback.dart';
@@ -23,67 +24,85 @@ class CatanMasterApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<MainBloc, MainState>(
       builder: (context, state) {
-        return MaterialApp(
-          title: 'Catan Master',
-          theme: ThemeData(
-            primarySwatch: Colors.blue, //TODO color of last win
-          ),
-          darkTheme: ThemeData(
-            brightness: Brightness.dark,
-            primarySwatch: Colors.blue, //TODO color of last win
-          ),
-          home: CatanMasterHomeScreen(tab: state.page),
-          initialRoute: '/',
-          onGenerateRoute: (RouteSettings settings) {
-            if (settings.name == '/players/add') {
-              return CatanPageRouteBuilder(page: AddEditPlayerScreen.add(), fullscreenDialog: true);
-            } else if (settings.name == '/players/edit') {
-              return MaterialPageRoute(
-                  builder: (context) {
-                    var player = (settings.arguments as Map)["player"];
-                    if (player == null) {
-                      return Text("Error: no player provided");
-                    }
-                    return AddEditPlayerScreen.edit(player);
-                  },
-                  fullscreenDialog: true,
-              );
-            } else if (settings.name == '/players/detail') {
-              return MaterialPageRoute(
-                  builder: (context) {
-                    var player = (settings.arguments as Map)["player"] as Player?;
-                    if (player == null) {
-                      return Text("Error: no player provided");
-                    }
-                    return PlayerDetailScreen(player.username);
-                  }
-              );
-            } else if (settings.name == '/games/add') {
-              return CatanPageRouteBuilder(page: AddEditGameScreen.add(), fullscreenDialog: true);
-            } else if (settings.name == '/games/edit') {
-              return MaterialPageRoute(
-                  builder: (context) {
-                    var game = (settings.arguments as Map)["game"];
-                    if (game == null) {
-                      return Text("Error: no game provided");
-                    }
-                    return AddEditGameScreen.edit(game);
-                  },
-                  fullscreenDialog: true
-              );
-            } else if (settings.name == '/games/detail') {
-              return MaterialPageRoute(
-                  builder: (context) {
-                    var game = (settings.arguments as Map)["game"] as Game?;
-                    if (game == null) {
-                      return Text("Error: no game provided");
-                    }
-                    return GameDetailScreen(game.date);
-                  }
-              );
-            }
-            return MaterialPageRoute(
-                builder: (context) => Text("unknown route"),
+        return GamesPage(
+          childBuilder: (context, gamesState) {
+            //TODO keep list of possible colors and which are too light for primaryswatch
+            Color color = gamesState.games.getCatanMaster()?.color ?? Colors.blue;
+            MaterialColor? mc = colorToMaterialColor(color);
+            var light = isLight(color);
+            var brightness = light ? Brightness.light : Brightness.dark;
+            return MaterialApp(
+              title: 'Catan Master',
+              theme: ThemeData(
+                primaryColor: color,
+                primarySwatch: mc,
+                appBarTheme: AppBarTheme(
+                  color: color,
+                  brightness: brightness,
+                ),
+                bottomNavigationBarTheme: BottomNavigationBarThemeData(
+                  selectedItemColor: light ? (mc?.shade900 ?? Colors.black) : color,
+                )
+              ),
+              darkTheme: ThemeData(
+                brightness: Brightness.dark,
+                primarySwatch: mc,
+                primaryColor: color,
+              ),
+              home: CatanMasterHomeScreen(tab: state.page),
+              initialRoute: '/',
+              onGenerateRoute: (RouteSettings settings) {
+                if (settings.name == '/players/add') {
+                  return CatanPageRouteBuilder(page: AddEditPlayerScreen.add(), fullscreenDialog: true);
+                } else if (settings.name == '/players/edit') {
+                  return MaterialPageRoute(
+                      builder: (context) {
+                        var player = (settings.arguments as Map)["player"];
+                        if (player == null) {
+                          return Text("Error: no player provided");
+                        }
+                        return AddEditPlayerScreen.edit(player);
+                      },
+                      fullscreenDialog: true,
+                  );
+                } else if (settings.name == '/players/detail') {
+                  return MaterialPageRoute(
+                      builder: (context) {
+                        var player = (settings.arguments as Map)["player"] as Player?;
+                        if (player == null) {
+                          return Text("Error: no player provided");
+                        }
+                        return PlayerDetailScreen(player.username);
+                      }
+                  );
+                } else if (settings.name == '/games/add') {
+                  return CatanPageRouteBuilder(page: AddEditGameScreen.add(), fullscreenDialog: true);
+                } else if (settings.name == '/games/edit') {
+                  return MaterialPageRoute(
+                      builder: (context) {
+                        var game = (settings.arguments as Map)["game"];
+                        if (game == null) {
+                          return Text("Error: no game provided");
+                        }
+                        return AddEditGameScreen.edit(game);
+                      },
+                      fullscreenDialog: true
+                  );
+                } else if (settings.name == '/games/detail') {
+                  return MaterialPageRoute(
+                      builder: (context) {
+                        var game = (settings.arguments as Map)["game"] as Game?;
+                        if (game == null) {
+                          return Text("Error: no game provided");
+                        }
+                        return GameDetailScreen(game.date);
+                      }
+                  );
+                }
+                return MaterialPageRoute(
+                    builder: (context) => Text("unknown route"),
+                );
+              },
             );
           },
         );

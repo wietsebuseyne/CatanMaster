@@ -1,36 +1,57 @@
 import 'package:catan_master/application/games/games_bloc.dart';
 import 'package:catan_master/domain/games/game.dart';
 import 'package:catan_master/domain/players/player.dart';
+import 'package:catan_master/presentation/core/color.dart';
 import 'package:catan_master/presentation/feedback/user_feedback.dart';
 import 'package:catan_master/presentation/games/pages/add_edit_game_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AddEditGameScreen extends StatelessWidget {
+class AddEditGameScreen extends StatefulWidget {
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Game? game;
-  final GameFormData formData;
   final bool edit;
 
-  AddEditGameScreen.add() : formData = GameFormData(), edit = false, game = null;
+  AddEditGameScreen.add() : edit = false, game = null;
 
   AddEditGameScreen.edit(Game this.game) :
-        formData = GameFormData.fromGame(game),
         edit = true;
 
   @override
+  _AddEditGameScreenState createState() => _AddEditGameScreenState(
+      edit ? GameFormData.fromGame(game!) : GameFormData()
+  );
+}
+
+class _AddEditGameScreenState extends State<AddEditGameScreen> {
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GameFormData formData;
+
+  _AddEditGameScreenState(this.formData);
+
+  @override
   Widget build(BuildContext context) {
+    var color = formData.winner?.color ?? Colors.blue;
+    print(color);
+    var light = isLight(color);
+    var brightness = light ? Brightness.light : Brightness.dark;
     return BlocListener<GamesBloc, GamesState>(
       listener: (context, state) {
-        if ((!edit && state is GameAdded) || (edit && state is GameEdited)) {
+        if ((!widget.edit && state is GameAdded) || (widget.edit && state is GameEdited)) {
           Navigator.of(context).pop();
         }
       },
       child: Scaffold(
           appBar: AppBar(
-            title: Text(edit ? "Edit Game" : "Add Game"),
+            backgroundColor: color,
+            title: Text(
+              widget.edit ? "Edit Game" : "Add Game",
+              style: ThemeData(brightness: brightness).textTheme.headline6,
+            ),
+            brightness: brightness,
+            iconTheme: ThemeData(brightness: brightness).iconTheme,
             actions: [
               TextButton.icon(
                 icon: Icon(Icons.save),
@@ -55,14 +76,14 @@ class AddEditGameScreen extends StatelessWidget {
 
                     if (withScores) {
                       BlocProvider.of<GamesBloc>(context).add(AddEditGameEvent.withScores(
-                        oldGame: game,
+                        oldGame: widget.game,
                         time: date!,
                         scores: scores!,
                         expansions: expansions,
                       ));
                     } else {
                       BlocProvider.of<GamesBloc>(context).add(AddEditGameEvent.noScores(
-                        oldGame: game,
+                        oldGame: widget.game,
                         time: date!,
                         players: players,
                         winner: winner,
@@ -74,7 +95,14 @@ class AddEditGameScreen extends StatelessWidget {
               )
             ],
           ),
-          body: UserFeedback(child: AddEditGamePage(_formKey, formData: formData))
+          body: UserFeedback(child: AddEditGamePage(
+            _formKey,
+            formData: formData,
+            onFormChanged: () {
+              _formKey.currentState?.save();
+              setState(() {});
+            },
+          ))
       ),
     );
   }

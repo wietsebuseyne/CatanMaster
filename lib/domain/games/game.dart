@@ -115,6 +115,8 @@ class Games {
 
   Games(List<Game> games) : this.games = List.unmodifiable(games..sort((g1, g2) => g2.date.compareTo(g1.date)));
 
+  Player? getCatanMaster() => getRanking().firstOrNull;
+
   Game? getGame(DateTime date) {
     return games.firstWhereOrNull((g) => g.date == date);
   }

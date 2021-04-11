@@ -9,8 +9,9 @@ class AddEditPlayerPage extends StatelessWidget {
 
   final GlobalKey<FormState> _formKey;
   final PlayerFormData formData;
+  final VoidCallback? onFormChanged;
 
-  AddEditPlayerPage(this._formKey, {required this.formData});
+  AddEditPlayerPage(this._formKey, {required this.formData, this.onFormChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +21,7 @@ class AddEditPlayerPage extends StatelessWidget {
         child: Form(
           key: _formKey,
           autovalidateMode: AutovalidateMode.onUserInteraction,
+          onChanged: onFormChanged,
           child: Column(
             children: [
               TextFormField(
@@ -90,4 +92,5 @@ class PlayerFormData {
   Gender? gender;
   Color? color;
 
+  PlayerFormData({this.name, this.gender, this.color});
 }

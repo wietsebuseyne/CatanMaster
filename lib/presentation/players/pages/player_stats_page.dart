@@ -3,6 +3,7 @@ import 'package:catan_master/domain/games/game.dart';
 import 'package:catan_master/domain/players/player.dart';
 import 'package:catan_master/presentation/core/catan_expansion_ui.dart';
 import 'package:catan_master/presentation/core/catan_icons.dart';
+import 'package:catan_master/presentation/core/color.dart';
 import 'package:catan_master/presentation/core/widgets/hexagon.dart';
 import 'package:catan_master/presentation/core/widgets/horizontal_info_tile.dart';
 import 'package:catan_master/presentation/games/pages/games_page.dart';
@@ -24,7 +25,8 @@ class PlayerStatsPage extends StatelessWidget {
       var statistics = state.getStatisticsForPlayer(player);
       return NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
-          Brightness brightness = ThemeData.estimateBrightnessForColor(player.color);
+          bool light = isLight(player.color);
+          var brightness = light ? Brightness.light : Brightness.dark;
           var theme = ThemeData(brightness: brightness);
           return <Widget>[
             SliverOverlapAbsorber(
@@ -37,7 +39,10 @@ class PlayerStatsPage extends StatelessWidget {
                 expandedHeight: 100.0,
                 pinned: true,
                 backgroundColor: player.color,
-                iconTheme: brightness == Brightness.light ? IconTheme.of(context).copyWith(color: Colors.black) : null,
+                iconTheme: light
+                    ? IconTheme.of(context).copyWith(color: Colors.black)
+                    : IconTheme.of(context).copyWith(color: Colors.white),
+                brightness: brightness,
                 actions: [
                   IconButton(
                     onPressed: () => Navigator.of(context).pushNamed("/players/edit", arguments: {"player": player}),
