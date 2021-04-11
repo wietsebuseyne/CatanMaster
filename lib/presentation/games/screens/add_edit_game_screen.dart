@@ -57,7 +57,7 @@ class _AddEditGameScreenState extends State<AddEditGameScreen> {
                 icon: Icon(Icons.save),
                 label: Text("Save"),
                 style: TextButton.styleFrom(
-                  primary: Colors.white,
+                  primary: light ? Colors.black : Colors.white,
                   textStyle: TextStyle(fontSize: 16),
                   shape: CircleBorder(side: BorderSide(color: Colors.transparent)),
                   padding: const EdgeInsets.symmetric(horizontal: 24.0),
