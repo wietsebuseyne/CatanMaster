@@ -48,6 +48,8 @@ class PlayerStatistics extends Equatable {
   final int rank;
   final List<Prize> prizes;
 
+  String get rankString => rank == 0 ? "-" : rank.toString();
+
   PlayerStatistics._({
     required this.player,
     required this.games,

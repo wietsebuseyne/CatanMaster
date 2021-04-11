@@ -20,7 +20,11 @@ class PlayersPage extends StatelessWidget {
                 List<PlayerStatistics> statistics = playersState.players.map(
                         (p) => PlayerStatistics.fromGames(p, gamesState.games)
                 ).toList();
-                statistics.sort((s1, s2) => s1.rank.compareTo(s2.rank));
+                statistics.sort((s1, s2) {
+                  var r1 = s1.rank == 0 ? double.maxFinite.toInt() : s1.rank;
+                  var r2 = s2.rank == 0 ? double.maxFinite.toInt() : s2.rank;
+                  return r1.compareTo(r2);
+                });
                 return Center(child: PlayersList(statistics));
               }
               return Center(child: CircularProgressIndicator(),);

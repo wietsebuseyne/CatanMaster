@@ -16,7 +16,7 @@ class PlayerListTile extends StatelessWidget {
     return ListTile(
       leading: TextHexagon(
         color: player.color,
-        text: statistics.rank.toString(),
+        text: statistics.rankString,
       ),
       title: Text(player.name, style: Theme.of(context).textTheme.headline6, ),
       trailing: SizedBox(
