@@ -37,7 +37,11 @@ class GameListTile extends StatelessWidget {
   Iterable<Widget> _playersToWidget() sync* {
     for (var i = 0; i < game.players.length; i++) {
       var player = game.players[i];
-      yield GameListTilePlayer(player, winner: player == game.winner);
+      yield GameListTilePlayer(
+          player,
+          winner: player == game.winner,
+          score: game.scores[player]
+      );
       if (i != game.players.length-1) {
         yield SizedBox(width: 12.0,);
       }
@@ -49,8 +53,9 @@ class GameListTilePlayer extends StatelessWidget {
 
   final Player player;
   final bool winner;
+  final int? score;
 
-  GameListTilePlayer(this.player, {this.winner = false});
+  GameListTilePlayer(this.player, {this.winner = false, this.score});
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +78,7 @@ class GameListTilePlayer extends StatelessWidget {
         SizedBox(
           width: 4.0,
         ),
-        Text(player.name)
+        Text(score == null ? player.name : "${player.name} ($score)")
       ],
     );
   }
