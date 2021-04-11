@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^7.0.0-nullsafety.5
+  flutter_polygon: ^0.2.0
   fluttertoast: ^8.0.1-nullsafety.0
   freezed_annotation: ^0.14.1
   hive: ^1.6.0-nullsafety.2

@@ -4,7 +4,7 @@ import 'package:catan_master/domain/feedback/feedback_message.dart';
 import 'package:catan_master/domain/players/player.dart';
 import 'package:catan_master/presentation/core/catan_icons.dart';
 import 'package:catan_master/presentation/core/catan_page_route_builder.dart';
-import 'package:catan_master/presentation/core/polygon/polygon_border.dart';
+import 'package:flutter_polygon/flutter_polygon.dart';
 import 'package:catan_master/presentation/feedback/show_feedback.dart';
 import 'package:catan_master/presentation/feedback/user_feedback.dart';
 import 'package:catan_master/presentation/games/pages/games_page.dart';

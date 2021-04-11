@@ -1,7 +1,7 @@
 import 'package:catan_master/application/games/games_bloc.dart';
 import 'package:catan_master/domain/games/game.dart';
 import 'package:catan_master/presentation/core/catan_expansion_ui.dart';
-import 'package:catan_master/presentation/core/polygon/polygon_border.dart';
+import 'package:flutter_polygon/flutter_polygon.dart';
 import 'package:catan_master/presentation/core/widgets/empty_list_message.dart';
 import 'package:catan_master/presentation/games/widgets/game_actions.dart';
 import 'package:catan_master/presentation/games/widgets/game_list_tile.dart';

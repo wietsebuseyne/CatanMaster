@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:catan_master/presentation/core/polygon/polygon_border.dart';
+import 'package:flutter_polygon/flutter_polygon.dart';
 import 'package:flutter/material.dart';
 
 /// TODO fix width / height / rotation to tightly match
