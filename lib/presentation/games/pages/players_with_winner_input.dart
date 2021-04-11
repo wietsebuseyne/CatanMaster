@@ -22,11 +22,12 @@ class PlayersWithWinnerInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: players.map((p) => Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          GestureDetector(
-            child: Row(
+      children: players.map((p) => InkWell(
+        onTap: () => _onPlayerSelected(p, !selected.contains(p)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
               children: [
                 Checkbox(
                   value: selected.contains(p),
@@ -37,19 +38,18 @@ class PlayersWithWinnerInput extends StatelessWidget {
                 Text(p.name),
               ],
             ),
-            onTap: () => _onPlayerSelected(p, !selected.contains(p)),
-          ),
-          IconButton(
-            icon: Icon(CatanIcons.trophy),
-            color: winner == p ? const Color.fromARGB(255, 218, 165, 32) : Theme.of(context).disabledColor,
-            onPressed: () {
-              if (!selected.contains(p)) {
-                _onPlayerSelected(p, true);
-              }
-              onWinnerChanged(p);
-            },
-          ),
-        ],
+            IconButton(
+              icon: Icon(CatanIcons.trophy),
+              color: winner == p ? const Color.fromARGB(255, 218, 165, 32) : Theme.of(context).disabledColor,
+              onPressed: () {
+                if (!selected.contains(p)) {
+                  _onPlayerSelected(p, true);
+                }
+                onWinnerChanged(p);
+              },
+            ),
+          ],
+        ),
       )).toList(),
     );
   }

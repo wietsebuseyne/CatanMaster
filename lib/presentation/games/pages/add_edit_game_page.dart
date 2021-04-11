@@ -92,7 +92,7 @@ class AddEditGamePage extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Column(
                       children: CatanExpansion.values.map((expansion) {
-                        return GestureDetector(
+                        return InkWell(
                           onTap: () {
                             if (!currentSelection.contains(expansion)) {
                               currentSelection.add(expansion);
