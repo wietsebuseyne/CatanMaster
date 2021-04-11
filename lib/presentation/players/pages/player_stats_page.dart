@@ -235,23 +235,3 @@ extension PrizeUi on Prize {
 }
 
 }
-
-class DetailLine extends StatelessWidget {
-
-  final IconData? icon;
-  final Widget? child;
-
-  DetailLine({this.icon, this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(icon),
-        SizedBox(width: 16.0,),
-        child!,
-      ],
-    );
-  }
-
-}

@@ -67,35 +67,13 @@ class _GamesListState extends State<GamesList> {
             ListView.builder(
               itemBuilder: (BuildContext context, int index) => GameListTile(
                 filteredGames[index],
-                onTap: () => _showActionsSheet(context, filteredGames[index]),
+                onTap: () => Navigator.of(context).pushNamed("/games/detail", arguments: {"game": filteredGames[index]}),
               ),
               itemCount: filteredGames.length,
               padding: const EdgeInsets.only(bottom: 48.0),
             ),
           )
       ],
-    );
-  }
-
-  _showActionsSheet(BuildContext context, Game game) {
-    showModalBottomSheet(
-        context: context,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), topRight: Radius.circular(10.0)),
-        ),
-        builder: (BuildContext bc) {
-          return GameActions(
-            game: game,
-            onEdit: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pushNamed("/games/edit", arguments: {"game": game});
-            },
-            onDelete: () {
-              BlocProvider.of<GamesBloc>(context).add(RemoveGameEvent(game));
-              Navigator.of(context).pop();
-            },
-          );
-        }
     );
   }
 }

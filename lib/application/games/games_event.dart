@@ -42,22 +42,22 @@ class AddEditGameEvent extends GamesEvent {
   List<Object?> get props => [oldGame, time, players, winner, expansions];
 }
 
-class RemoveGameEvent extends GamesEvent {
+class DeleteGameEvent extends GamesEvent {
 
   final Game game;
 
-  RemoveGameEvent(this.game);
+  DeleteGameEvent(this.game);
 
   @override
   List<Object> get props => [game];
 
 }
 
-class UndoRemoveGameEvent extends GamesEvent {
+class UndoDeleteGameEvent extends GamesEvent {
 
   final Game game;
 
-  UndoRemoveGameEvent(this.game);
+  UndoDeleteGameEvent(this.game);
 
   @override
   List<Object> get props => [game];

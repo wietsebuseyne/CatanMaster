@@ -1,9 +1,11 @@
 import 'package:catan_master/application/main/main_bloc.dart';
 import 'package:catan_master/application/players/players_bloc.dart';
 import 'package:catan_master/domain/feedback/feedback_message.dart';
+import 'package:catan_master/domain/games/game.dart';
 import 'package:catan_master/domain/players/player.dart';
 import 'package:catan_master/presentation/core/catan_icons.dart';
 import 'package:catan_master/presentation/core/catan_page_route_builder.dart';
+import 'package:catan_master/presentation/games/screens/game_detail_screen.dart';
 import 'package:flutter_polygon/flutter_polygon.dart';
 import 'package:catan_master/presentation/feedback/show_feedback.dart';
 import 'package:catan_master/presentation/feedback/user_feedback.dart';
@@ -46,6 +48,16 @@ class CatanMasterApp extends StatelessWidget {
                   },
                   fullscreenDialog: true,
               );
+            } else if (settings.name == '/players/detail') {
+              return MaterialPageRoute(
+                  builder: (context) {
+                    var player = (settings.arguments as Map)["player"] as Player?;
+                    if (player == null) {
+                      return Text("Error: no player provided");
+                    }
+                    return PlayerDetailScreen(player.username);
+                  }
+              );
             } else if (settings.name == '/games/add') {
               return CatanPageRouteBuilder(page: AddEditGameScreen.add(), fullscreenDialog: true);
             } else if (settings.name == '/games/edit') {
@@ -59,16 +71,16 @@ class CatanMasterApp extends StatelessWidget {
                   },
                   fullscreenDialog: true
               );
-            } else if (settings.name == '/players/detail') {
+            } else if (settings.name == '/games/detail') {
               return MaterialPageRoute(
-                builder: (context) {
-                  var player = (settings.arguments as Map)["player"] as Player?;
-                  if (player == null) {
-                    return Text("Error: no player provided");
+                  builder: (context) {
+                    var game = (settings.arguments as Map)["game"] as Game?;
+                    if (game == null) {
+                      return Text("Error: no game provided");
+                    }
+                    return GameDetailScreen(game.date);
                   }
-                  return PlayerDetailScreen(player.username);
-                }
-            );
+              );
             }
             return MaterialPageRoute(
                 builder: (context) => Text("unknown route"),

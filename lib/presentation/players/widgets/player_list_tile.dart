@@ -14,12 +14,9 @@ class PlayerListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Hexagon(
+      leading: TextHexagon(
         color: player.color,
-        child: Center(child: Text(
-          statistics.rank.toString(),
-          style: Theme.of(context).textTheme.subtitle1!.copyWith(color: player.onColor, fontWeight: FontWeight.bold),
-        )),
+        text: statistics.rank.toString(),
       ),
       title: Text(player.name, style: Theme.of(context).textTheme.headline6, ),
       subtitle: Row(
@@ -28,7 +25,7 @@ class PlayerListTile extends StatelessWidget {
             .map((w) => WinLoseHexagon(w, rotate: 0, width: 24,))
             .toList(),
       ),
-      onTap: () => Navigator.of(context).pushNamed('/players/detail', arguments: {"player": player}),
+      onTap: () => Navigator.of(context).pushNamed("/players/detail", arguments: {"player": player}),
     );
   }
 }

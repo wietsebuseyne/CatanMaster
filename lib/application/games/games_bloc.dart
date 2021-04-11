@@ -45,9 +45,9 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
       yield* _loadGames(event);
     } else if (event is AddEditGameEvent) {
       yield* _addEditGame(event);
-    } else if (event is RemoveGameEvent) {
+    } else if (event is DeleteGameEvent) {
       yield* _removeGame(event);
-    } else if (event is UndoRemoveGameEvent) {
+    } else if (event is UndoDeleteGameEvent) {
       yield* _undoRemoveGame(event);
     }
   }
@@ -103,7 +103,7 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
     }
   }
 
-  Stream<GamesState> _removeGame(RemoveGameEvent event) async* {
+  Stream<GamesState> _removeGame(DeleteGameEvent event) async* {
     final GamesState s = state;
     if (s is GamesLoaded) {
       Game game = event.game;
@@ -114,7 +114,7 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
                 FeedbackMessage.snackbar(
                   "Game on '${DateFormat.MMMEd().format(game.date)}' deleted",
                   severity: Severity.warning,
-                  action: FeedbackAction(text: "UNDO", action: () => add(UndoRemoveGameEvent(game)))
+                  action: FeedbackAction(text: "UNDO", action: () => add(UndoDeleteGameEvent(game)))
                 ),
             ));
             return GamesLoaded(s.games.delete(event.game));
@@ -123,7 +123,7 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
     }
   }
 
-  Stream<GamesState> _undoRemoveGame(UndoRemoveGameEvent event) async* {
+  Stream<GamesState> _undoRemoveGame(UndoDeleteGameEvent event) async* {
     final GamesState s = state;
     if (s is GamesLoaded) {
       Game game = event.game;

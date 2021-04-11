@@ -88,6 +88,15 @@ class Game extends Equatable {
     );
   }
 
+  List<Player> getPlayersByScoreOrName() {
+    return hasScores ? getPlayersByScore() : players;
+  }
+
+  List<Player> getPlayersByScore() {
+    if (!hasScores) throw StateError("This game has no scores");
+    return List.of(players)..sort((p1, p2) => scores[p2]!.compareTo(scores[p1]!));
+  }
+
   static bool _isValidScore(int? score) {
     return score != null && score > 0;
   }
@@ -105,6 +114,10 @@ class Games {
   final List<Game> games;
 
   Games(List<Game> games) : this.games = List.unmodifiable(games..sort((g1, g2) => g2.date.compareTo(g1.date)));
+
+  Game? getGame(DateTime date) {
+    return games.firstWhereOrNull((g) => g.date == date);
+  }
 
   List<Game> getGamesForPlayer(Player player) {
     return games.where((g) => g.players.contains(player)).toList();
