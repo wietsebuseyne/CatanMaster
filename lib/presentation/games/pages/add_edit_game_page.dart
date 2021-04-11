@@ -82,7 +82,7 @@ class AddEditGamePage extends StatelessWidget {
             ),
             SizedBox(height: 16.0,),
             FormField<Set<CatanExpansion>>(
-              initialValue: {},
+              initialValue: Set.of(formData.expansions),
               builder: (state) {
                 Set<CatanExpansion> currentSelection = state.value ?? {};
                 return CatanInputDecorator(
