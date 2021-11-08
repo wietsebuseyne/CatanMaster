@@ -29,7 +29,6 @@ abstract class PlayerDto with _$PlayerDto {
 @JsonSerializable(explicitToJson: true)
 @HiveType(typeId: 0)
 class PlayerDto extends HiveObject {
-
   @HiveField(0)
   String? username;
   @HiveField(1)
@@ -41,8 +40,8 @@ class PlayerDto extends HiveObject {
 
   PlayerDto({this.username, this.name, this.gender, this.color});
 
-  PlayerDto.fromDomain(Player player) :
-        this.username = player.username,
+  PlayerDto.fromDomain(Player player)
+      : this.username = player.username,
         this.name = player.name,
         this.gender = EnumUtils.convertToString(player.gender),
         this.color = player.color.value;
@@ -51,11 +50,10 @@ class PlayerDto extends HiveObject {
       username: username!,
       name: name!,
       gender: EnumUtils.fromString(Gender.values, gender)!,
-      color: Color(color!).withAlpha(255)
-  );
+      color: Color(color!).withAlpha(255));
 
-  factory PlayerDto.fromJson(Map<String, dynamic> json) => _$PlayerDtoFromJson(json);
+  factory PlayerDto.fromJson(Map<String, dynamic> json) =>
+      _$PlayerDtoFromJson(json);
 
   Map<String, dynamic> toJson() => _$PlayerDtoToJson(this);
-
 }

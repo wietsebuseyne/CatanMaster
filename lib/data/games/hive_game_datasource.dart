@@ -4,7 +4,6 @@ import 'package:catan_master/data/games/game_dtos.dart';
 import 'package:hive/hive.dart';
 
 class HiveGameDatasource extends GameDatasource {
-
   final Box<GameDto> _box;
 
   HiveGameDatasource(this._box);
@@ -29,13 +28,10 @@ class HiveGameDatasource extends GameDatasource {
     }
     await _box.delete(oldGameTime);
     await _box.put(game.time.toString(), game);
-    return null;
   }
 
   @override
   Future<void> deleteGame(int time) async {
     await _box.delete(time.toString());
-    return null;
   }
-
 }

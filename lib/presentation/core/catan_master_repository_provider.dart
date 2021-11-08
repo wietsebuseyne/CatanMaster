@@ -13,39 +13,50 @@ import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 
 class CatanMasterLocalRepositoryProvider extends StatelessWidget {
-
   final Widget child;
 
-  CatanMasterLocalRepositoryProvider({Key? key, required this.child}) : super(key: key);
+  const CatanMasterLocalRepositoryProvider({Key? key, required this.child})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Box>>(
-        future: Future.wait<Box>([Hive.openBox<PlayerDto>("players"), Hive.openBox<GameDto>("games")]),
+        future: Future.wait<Box>([
+          Hive.openBox<PlayerDto>("players"),
+          Hive.openBox<GameDto>("games")
+        ]),
         builder: (BuildContext context, AsyncSnapshot<List<Box>> snapshot) {
-          if (snapshot.hasError) return MaterialApp(home: Scaffold(body: Center(child: Text("Fatal error occured"))));
+          if (snapshot.hasError) {
+            return const MaterialApp(
+                home:
+                    Scaffold(body: Center(child: Text("Fatal error occured"))));
+          }
           var data = snapshot.data;
-          if (data == null) return Center(child: CircularProgressIndicator());
+          if (data == null)
+            return const Center(child: CircularProgressIndicator());
           Box<PlayerDto> playerBox = data[0] as Box<PlayerDto>;
           Box<GameDto> gameBox = data[1] as Box<GameDto>;
           return MultiProvider(
-              providers: [
-                Provider<PlayerRepository>(
-                  create: (BuildContext context) => CachedPlayerRepository(
-                      HivePlayerDatasource(playerBox),
-                  ),
-                ),
-                ProxyProvider<PlayerRepository, GameRepository>(
-                  update: (context, playerRepo, gameRepo) => CachedGameRepository(
-                      gameDatasource: HiveGameDatasource(gameBox),
-                      playerRepository: playerRepo
-                  )
-                ),
-              ],
-              child: CatanMasterBlocProvider(child: child)
+            providers: [
+              Provider<PlayerRepository>(
+                create: (BuildContext context) {
+                  return CachedPlayerRepository(
+                    HivePlayerDatasource(playerBox),
+                  );
+                },
+              ),
+              ProxyProvider<PlayerRepository, GameRepository>(
+                update: (context, playerRepo, gameRepo) {
+                  return CachedGameRepository(
+                    gameDatasource: HiveGameDatasource(gameBox),
+                    playerRepository: playerRepo,
+                  );
+                },
+              ),
+            ],
+            child: CatanMasterBlocProvider(child: child),
           );
-        }
-    );
+        });
   }
 }
 

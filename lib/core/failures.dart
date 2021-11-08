@@ -2,7 +2,6 @@ import 'package:meta/meta.dart';
 
 @immutable
 class Failure {
-
   final String message;
 
   const Failure(this.message);
@@ -12,18 +11,12 @@ class Failure {
 }
 
 class MapFailure extends Failure {
-
-  MapFailure(String message) : super(message);
-
+  const MapFailure(String message) : super(message);
 }
 
 class DataValidationFailure extends Failure {
-
   final String? part;
 
-  const DataValidationFailure({
-    required String message,
-    this.part
-  }) : super(message);
-
+  const DataValidationFailure({required String message, this.part})
+      : super(message);
 }

@@ -4,7 +4,6 @@ import 'package:catan_master/data/players/player_dtos.dart';
 import 'package:hive/hive.dart';
 
 class HivePlayerDatasource extends PlayerDatasource {
-
   final Box<PlayerDto> _box;
 
   HivePlayerDatasource(this._box);
@@ -27,7 +26,8 @@ class HivePlayerDatasource extends PlayerDatasource {
   @override
   Future<void> createPlayer(PlayerDto player) {
     if (_box.get(player.username) != null) {
-      throw CacheException("Player with username '${player.username}' already exists.");
+      throw CacheException(
+          "Player with username '${player.username}' already exists.");
     }
     return _box.put(player.username, player);
   }
@@ -35,9 +35,9 @@ class HivePlayerDatasource extends PlayerDatasource {
   @override
   Future<void> updatePlayer(PlayerDto player) {
     if (_box.get(player.username) == null) {
-      throw CacheException("No player with username '${player.username}' found.");
+      throw CacheException(
+          "No player with username '${player.username}' found.");
     }
     return _box.put(player.username, player);
   }
-
 }

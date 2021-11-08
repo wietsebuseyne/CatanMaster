@@ -2,16 +2,15 @@ part of 'main_bloc.dart';
 
 @immutable
 class MainState extends Equatable {
-
   final HomePageTab page;
 
-  MainState({
+  const MainState({
     required this.page,
   });
 
   MainState copyWith({HomePageTab? page}) {
     return MainState(
-        page: page ?? this.page,
+      page: page ?? this.page,
     );
   }
 
@@ -19,6 +18,4 @@ class MainState extends Equatable {
   List<Object?> get props => [page];
 }
 
-enum HomePageTab {
-  games, players
-}
+enum HomePageTab { games, players }

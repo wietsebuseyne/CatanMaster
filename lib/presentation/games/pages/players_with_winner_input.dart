@@ -4,14 +4,13 @@ import 'package:catan_master/presentation/players/player_presentation.dart';
 import 'package:flutter/material.dart';
 
 class PlayersWithWinnerInput extends StatelessWidget {
-
   final List<Player> players;
   final Player? winner;
   final Set<Player> selected;
   final ValueChanged<Set<Player>> onSelectionChanged;
   final ValueChanged<Player?> onWinnerChanged;
 
-  PlayersWithWinnerInput({
+  const PlayersWithWinnerInput({
     required this.players,
     required this.selected,
     required this.winner,
@@ -22,35 +21,39 @@ class PlayersWithWinnerInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: players.map((p) => InkWell(
-        onTap: () => _onPlayerSelected(p, !selected.contains(p)),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Checkbox(
-                  value: selected.contains(p),
-                  onChanged: (s) => _onPlayerSelected(p, s!),
-                  activeColor: p.color,
-                  checkColor: p.onColor,
+      children: players
+          .map((p) => InkWell(
+                onTap: () => _onPlayerSelected(p, !selected.contains(p)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: selected.contains(p),
+                          onChanged: (s) => _onPlayerSelected(p, s!),
+                          activeColor: p.color,
+                          checkColor: p.onColor,
+                        ),
+                        Text(p.name),
+                      ],
+                    ),
+                    IconButton(
+                      icon: const Icon(CatanIcons.trophy),
+                      color: winner == p
+                          ? const Color.fromARGB(255, 218, 165, 32)
+                          : Theme.of(context).disabledColor,
+                      onPressed: () {
+                        if (!selected.contains(p)) {
+                          _onPlayerSelected(p, true);
+                        }
+                        onWinnerChanged(p);
+                      },
+                    ),
+                  ],
                 ),
-                Text(p.name),
-              ],
-            ),
-            IconButton(
-              icon: Icon(CatanIcons.trophy),
-              color: winner == p ? const Color.fromARGB(255, 218, 165, 32) : Theme.of(context).disabledColor,
-              onPressed: () {
-                if (!selected.contains(p)) {
-                  _onPlayerSelected(p, true);
-                }
-                onWinnerChanged(p);
-              },
-            ),
-          ],
-        ),
-      )).toList(),
+              ))
+          .toList(),
     );
   }
 
@@ -66,5 +69,4 @@ class PlayersWithWinnerInput extends StatelessWidget {
     }
     onSelectionChanged(newSelected);
   }
-
 }

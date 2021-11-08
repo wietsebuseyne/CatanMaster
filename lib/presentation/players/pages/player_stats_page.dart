@@ -9,12 +9,12 @@ import 'package:catan_master/presentation/core/widgets/horizontal_info_tile.dart
 import 'package:catan_master/presentation/games/pages/games_page.dart';
 import 'package:catan_master/presentation/players/widgets/win_lose_hex.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class PlayerStatsPage extends StatelessWidget {
-  
   final Player player;
 
   const PlayerStatsPage(this.player);
@@ -26,14 +26,19 @@ class PlayerStatsPage extends StatelessWidget {
       return NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           bool light = isLight(player.color);
-          var brightness = light ? Brightness.light : Brightness.dark;
-          var theme = ThemeData(brightness: brightness);
+          final brightness = light ? Brightness.light : Brightness.dark;
+          final overlayStyle =
+              light ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light;
+          final theme = ThemeData(brightness: brightness);
           return <Widget>[
             SliverOverlapAbsorber(
               handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
               sliver: SliverAppBar(
                 centerTitle: true,
-                flexibleSpace: FlexibleSpaceBar(title: Text(player.name, style: theme.textTheme.headline6), centerTitle: true,),
+                flexibleSpace: FlexibleSpaceBar(
+                  title: Text(player.name, style: theme.textTheme.headline6),
+                  centerTitle: true,
+                ),
                 collapsedHeight: kToolbarHeight,
                 toolbarHeight: kToolbarHeight,
                 expandedHeight: 100.0,
@@ -42,26 +47,27 @@ class PlayerStatsPage extends StatelessWidget {
                 iconTheme: light
                     ? IconTheme.of(context).copyWith(color: Colors.black)
                     : IconTheme.of(context).copyWith(color: Colors.white),
-                brightness: brightness,
+                systemOverlayStyle: overlayStyle,
                 actions: [
                   IconButton(
-                    onPressed: () => Navigator.of(context).pushNamed("/players/edit", arguments: {"player": player}),
-                    icon: Icon(Icons.edit),
+                    onPressed: () => Navigator.of(context).pushNamed(
+                        "/players/edit",
+                        arguments: {"player": player}),
+                    icon: const Icon(Icons.edit),
                   ),
                   IconButton(
-                    onPressed: () => BlocProvider.of<PlayersBloc>(context).add(DeletePlayerEvent(player)),
-                    icon: Icon(Icons.delete),
+                    onPressed: () => BlocProvider.of<PlayersBloc>(context)
+                        .add(DeletePlayerEvent(player)),
+                    icon: const Icon(Icons.delete),
                   )
                 ],
               ),
             )
           ];
         },
-        body: Builder(
-          builder: (context) {
-            return _stats(context, statistics);
-          }
-        ),
+        body: Builder(builder: (context) {
+          return _stats(context, statistics);
+        }),
       );
     });
   }
@@ -78,14 +84,20 @@ class PlayerStatsPage extends StatelessWidget {
               PlayerRank(player, statistics.rank),
 
               //Last Games
-              Divider(indent: 32.0, endIndent: 32.0,),
-              Center(child: WinLoseHexagonPath(
-                wins: statistics.getWinOrLose(13),
-                width: MediaQuery.of(context).size.width,
-              )), //TODO calc nb based on width
+              const Divider(
+                indent: 32.0,
+                endIndent: 32.0,
+              ),
+              Center(
+                child: WinLoseHexagonPath(
+                  wins: statistics.getWinOrLose(13),
+                  width: MediaQuery.of(context).size.width,
+                ),
+              ), //TODO calc nb based on width
 
               //Prizes
-              if (statistics.prizes.isNotEmpty) Divider(indent: 32.0, endIndent: 32.0,),
+              if (statistics.prizes.isNotEmpty)
+                const Divider(indent: 32.0, endIndent: 32.0),
               ...statistics.prizes.map((a) => AchievementLine(a)),
 
               //Achievements
@@ -97,35 +109,41 @@ class PlayerStatsPage extends StatelessWidget {
 //            ),
 
               //Stats
-              Divider(indent: 32.0, endIndent: 32.0,),
+              const Divider(
+                indent: 32.0,
+                endIndent: 32.0,
+              ),
               HorizontalInfoTile(
-                leading: Icon(Icons.format_list_numbered),
-                start: Text("Games played"),
+                leading: const Icon(Icons.format_list_numbered),
+                start: const Text("Games played"),
                 end: Text(statistics.games.length.toString()),
               ),
               HorizontalInfoTile(
-                leading: Icon(Icons.tag),
-                start: Text("Games won"),
-                end: Text("${statistics.nbGamesWon} (${statistics.percentGamesWon}%)"),
+                leading: const Icon(Icons.tag),
+                start: const Text("Games won"),
+                end: Text(
+                    "${statistics.nbGamesWon} (${statistics.percentGamesWon}%)"),
               ),
               HorizontalInfoTile(
-                leading: Icon(Icons.history),
-                start: Text("Last Game"),
-                end: Text(statistics.lastGame == null ? "TBD" : DateFormat.yMd().format(statistics.lastGame!.date)),
+                leading: const Icon(Icons.history),
+                start: const Text("Last Game"),
+                end: Text(statistics.lastGame == null
+                    ? "TBD"
+                    : DateFormat.yMd().format(statistics.lastGame!.date)),
               ),
               HorizontalInfoTile(
                 leading: statistics.mostPlayedExpansion.iconWidget,
-                start: Text("Most Played"),
-                end: Text(statistics.mostPlayedExpansion.name! ),
+                start: const Text("Most Played"),
+                end: Text(statistics.mostPlayedExpansion.name!),
               ),
               HorizontalInfoTile(
                 leading: statistics.mostWonExpansion.iconWidget,
-                start: Text("Most Won"),
+                start: const Text("Most Won"),
                 end: Text(statistics.mostWonExpansion.name!),
               ),
               HorizontalInfoTile(
-                leading: Icon(Icons.favorite_outline),
-                start: Text("Best Catan Buddy"),
+                leading: const Icon(Icons.favorite_outline),
+                start: const Text("Best Catan Buddy"),
                 end: Text(statistics.bestBuddy?.name ?? "TBD"),
               ),
             ],
@@ -134,15 +152,13 @@ class PlayerStatsPage extends StatelessWidget {
       ],
     );
   }
-
 }
 
 class PlayerRank extends StatelessWidget {
-
   final Player player;
   final int rank;
 
-  PlayerRank(this.player, this.rank);
+  const PlayerRank(this.player, this.rank);
 
   @override
   Widget build(BuildContext context) {
@@ -159,10 +175,27 @@ class PlayerRank extends StatelessWidget {
   }
 
   Widget get _rankIcon {
-    if (rank == 1) return Icon(CatanIcons.trophy, size: 32, color: const Color.fromARGB(255, 218, 165, 32),);
-    if (rank == 2) return Icon(CatanIcons.medal, size: 32, color: const Color.fromARGB(255, 150, 150, 150),);
-    if (rank == 3) return Icon(CatanIcons.medal, size: 32, color: const Color.fromARGB(255, 176, 141, 87),);
-    return Hexagon(color: player.color,);
+    if (rank == 1)
+      return const Icon(
+        CatanIcons.trophy,
+        size: 32,
+        color: Color.fromARGB(255, 218, 165, 32),
+      );
+    if (rank == 2)
+      return const Icon(
+        CatanIcons.medal,
+        size: 32,
+        color: Color.fromARGB(255, 150, 150, 150),
+      );
+    if (rank == 3)
+      return const Icon(
+        CatanIcons.medal,
+        size: 32,
+        color: Color.fromARGB(255, 176, 141, 87),
+      );
+    return Hexagon(
+      color: player.color,
+    );
   }
 
   String get _rankTitle {
@@ -181,50 +214,47 @@ class PlayerRank extends StatelessWidget {
     if (rank == 3) return "On the way to the top.";
     return "Practice your negotation skills."; //"Needs some more practice";
   }
-
 }
 
 class AchievementLine extends StatelessWidget {
-
   final Prize achievement;
 
-  AchievementLine(this.achievement);
+  const AchievementLine(this.achievement);
 
   @override
   Widget build(BuildContext context) {
     return HorizontalInfoTile(
-        leading: achievement.leadingWidget,
-        start: Text(achievement.title),
-        end: Text(achievement.valueString),
+      leading: achievement.leadingWidget,
+      start: Text(achievement.title),
+      end: Text(achievement.valueString),
     );
   }
 }
 
 extension PrizeUi on Prize {
-
   IconData? get icon {
-      switch (this.type) {
-        case PrizeType.expansion_master:
-          return (value as CatanExpansion).icon;
-        case PrizeType.on_a_roll:
-          return CatanIcons.dice;
-        //TODO add more icons
-        case PrizeType.catan_addict:
-        case PrizeType.newbie:
-        case PrizeType.loser:
-      }
-      return null;
+    switch (this.type) {
+      case PrizeType.expansionMaster:
+        return (value as CatanExpansion).icon;
+      case PrizeType.onARoll:
+        return CatanIcons.dice;
+      //TODO add more icons
+      case PrizeType.catanAddict:
+      case PrizeType.newbie:
+      case PrizeType.loser:
+    }
+    return null;
   }
 
-  Widget get leadingWidget => icon == null ? Hexagon() : Icon(icon);
+  Widget get leadingWidget => icon == null ? const Hexagon() : Icon(icon);
 
   String get title {
     switch (this.type) {
-      case PrizeType.expansion_master:
+      case PrizeType.expansionMaster:
         return "$value Champion";
-      case PrizeType.on_a_roll:
+      case PrizeType.onARoll:
         return "On a roll";
-      case PrizeType.catan_addict:
+      case PrizeType.catanAddict:
       case PrizeType.newbie:
       case PrizeType.loser:
     }
@@ -233,15 +263,14 @@ extension PrizeUi on Prize {
 
   String get valueString {
     switch (this.type) {
-      case PrizeType.expansion_master:
+      case PrizeType.expansionMaster:
         return "Won $value games";
-      case PrizeType.on_a_roll:
+      case PrizeType.onARoll:
         return "Won $value out of 5 last games";
-      case PrizeType.catan_addict:
+      case PrizeType.catanAddict:
       case PrizeType.newbie:
       case PrizeType.loser:
     }
     return "?";
-}
-
+  }
 }

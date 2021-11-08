@@ -7,16 +7,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PlayerDetailScreen extends StatelessWidget {
-
   //We use username here and listen to player changes
   final String username;
 
-  PlayerDetailScreen(this.username);
+  const PlayerDetailScreen(this.username);
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<PlayersBloc, PlayerState>(
-      listenWhen: (s1, s2) => s2 is PlayersLoaded && !s2.players.any((p) => p.username == username),
+      listenWhen: (s1, s2) =>
+          s2 is PlayersLoaded && !s2.players.any((p) => p.username == username),
       listener: (s1, s2) => Navigator.of(context).pop(),
       builder: (context, state) {
         if (state is PlayersLoaded) {
@@ -25,15 +25,15 @@ class PlayerDetailScreen extends StatelessWidget {
             return _PlayerDetailScreen(player);
           }
         }
-        return Center(child: CircularProgressIndicator());
+        return const Center(child: CircularProgressIndicator());
       },
     );
   }
 }
 
 class _PlayerDetailScreen extends StatelessWidget {
-
-  const _PlayerDetailScreen(this.player, {
+  const _PlayerDetailScreen(
+    this.player, {
     Key? key,
   }) : super(key: key);
 
@@ -41,8 +41,6 @@ class _PlayerDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: UserFeedback(child: PlayerStatsPage(player))
-    );
+    return Scaffold(body: UserFeedback(child: PlayerStatsPage(player)));
   }
 }

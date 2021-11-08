@@ -7,8 +7,8 @@ import 'package:equatable/equatable.dart';
 part 'feedback_event.dart';
 part 'feedback_state.dart';
 
+//TODO cubit
 class FeedbackBloc extends Bloc<FeedbackEvent, FeedbackState> {
-
   FeedbackBloc() : super(FeedbackState.initial());
 
   @override
@@ -20,13 +20,15 @@ class FeedbackBloc extends Bloc<FeedbackEvent, FeedbackState> {
 
   void feedback(FeedbackMessage feedbackMessage) {
     add(FeedbackEvent(feedbackMessage));
-  }  
-  
-  snackbar(String message, {Severity severity = Severity.message}) {
+  }
+
+  void snackbar(String message, {Severity severity = Severity.message}) {
     add(FeedbackEvent(FeedbackMessage.snackbar(message, severity: severity)));
   }
-  
-  dialog(String message, {required String title, Severity severity = Severity.message}) {
-    add(FeedbackEvent(FeedbackMessage.dialog(message, title: title, severity: severity)));
+
+  void dialog(String message,
+      {required String title, Severity severity = Severity.message}) {
+    add(FeedbackEvent(
+        FeedbackMessage.dialog(message, title: title, severity: severity)));
   }
 }

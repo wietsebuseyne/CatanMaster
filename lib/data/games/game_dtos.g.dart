@@ -61,7 +61,8 @@ GameDto _$GameDtoFromJson(Map<String, dynamic> json) {
     time: json['time'] as int?,
     players: (json['players'] as List?)?.map((e) => e as String)?.toList(),
     winner: json['winner'] as String?,
-    expansions: (json['expansions'] as List?)?.map((e) => e as String)?.toList(),
+    expansions:
+        (json['expansions'] as List?)?.map((e) => e as String)?.toList(),
     scores: (json['scores'] as Map<String, dynamic>?)?.map(
       (k, e) => MapEntry(k, e as int),
     ),

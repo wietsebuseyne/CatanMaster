@@ -30,37 +30,40 @@ const List<Color> _defaultColors = [
 ];
 
 class GridColorPicker extends StatelessWidget {
-
   final Color? selected;
   final ValueChanged<Color>? onSelected;
   final List<Color> availableColors;
   final double maxCircleRadius;
   final double spacing;
 
-  const GridColorPicker({
-    this.selected,
-    this.onSelected,
-    this.availableColors = _defaultColors,
-    this.maxCircleRadius = 50.0,
-    this.spacing = 8.0
-  });
+  const GridColorPicker(
+      {this.selected,
+      this.onSelected,
+      this.availableColors = _defaultColors,
+      this.maxCircleRadius = 50.0,
+      this.spacing = 8.0});
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-        builder: (context, constraints) {
-          final int itemsPerRow = (constraints.maxWidth / (maxCircleRadius + spacing*2)).ceil();
-          return Column(
-            children: _colorRows(itemsPerRow, (constraints.maxWidth / itemsPerRow).floorToDouble() - 2 * spacing).toList(),
-          );
-        }
-    );
+    return LayoutBuilder(builder: (context, constraints) {
+      final int itemsPerRow =
+          (constraints.maxWidth / (maxCircleRadius + spacing * 2)).ceil();
+      return Column(
+        children: _colorRows(
+                itemsPerRow,
+                (constraints.maxWidth / itemsPerRow).floorToDouble() -
+                    2 * spacing)
+            .toList(),
+      );
+    });
   }
 
   Iterable<Widget> _colorRows(int itemsPerRow, double radius) sync* {
-    for (int i = 0; i < availableColors.length; i+= itemsPerRow) {
+    for (int i = 0; i < availableColors.length; i += itemsPerRow) {
       yield Row(
-        children: availableColors.getRange(i, min(i+itemsPerRow, availableColors.length)).map((c) {
+        children: availableColors
+            .getRange(i, min(i + itemsPerRow, availableColors.length))
+            .map((c) {
           return _ColorPickerItem(
             color: c,
             selected: selected == c,
@@ -75,14 +78,13 @@ class GridColorPicker extends StatelessWidget {
 }
 
 class _ColorPickerItem extends StatelessWidget {
-
   final Color color;
   final bool selected;
   final double radius;
   final double spacing;
   final Function onSelected;
 
-  _ColorPickerItem({
+  const _ColorPickerItem({
     required this.color,
     required this.selected,
     required this.onSelected,
@@ -106,15 +108,15 @@ class _ColorPickerItem extends StatelessWidget {
       width: radius,
       height: radius,
       decoration: ShapeDecoration(
-        shape: PolygonBorder(
-            sides: 6,
-            rotate: 30,
+        shape: const PolygonBorder(
+          sides: 6,
+          rotate: 30,
         ),
         color: color,
         shadows: [
           BoxShadow(
             color: shadowColor,
-            offset: Offset(1.0, 2.0),
+            offset: const Offset(1.0, 2.0),
             blurRadius: 3.0,
           ),
         ],
@@ -123,7 +125,7 @@ class _ColorPickerItem extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: onSelected as void Function()?,
-          customBorder: PolygonBorder(sides: 6, rotate: 30),
+          customBorder: const PolygonBorder(sides: 6, rotate: 30),
           child: AnimatedOpacity(
             duration: const Duration(milliseconds: 210),
             opacity: selected ? 1.0 : 0.0,

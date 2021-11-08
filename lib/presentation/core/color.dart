@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -30,7 +29,6 @@ bool isLight(Color c) {
 }
 
 class CatanColors {
-
   static final allColors = <Color>[
     Colors.red,
     Colors.pink,
@@ -101,5 +99,4 @@ class CatanColors {
     Colors.yellow.shade500,
     Colors.lime.shade500,
   };
-
 }

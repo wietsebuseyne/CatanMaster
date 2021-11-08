@@ -1,7 +1,15 @@
+include: package:flutter_lints/flutter.yaml
+
 analyzer:
 #  strong-mode:
 #    implicit-casts: false
 #    implicit-dynamic: false
   exclude:
+    # exclude generated files
     - "**/*.g.dart"
-    - "**/*.freezed.dart"
+
+linter:
+  rules:
+    avoid_renaming_method_parameters: false
+    unnecessary_this: false
+    use_key_in_widget_constructors: false

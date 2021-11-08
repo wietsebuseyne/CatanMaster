@@ -5,12 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 extension CatanExpansionUi on CatanExpansion? {
-
   Widget get iconWidget {
-    if (this == null) return Padding(
-      padding: const EdgeInsets.all(2.0),
-      child: Hexagon(color: Colors.black,),
-    );
+    if (this == null) {
+      return const Padding(
+        padding: EdgeInsets.all(2.0),
+        child: Hexagon(
+          color: Colors.black,
+        ),
+      );
+    }
     return Icon(icon);
   }
 
@@ -18,15 +21,15 @@ extension CatanExpansionUi on CatanExpansion? {
     switch (this) {
       case null:
         return Colors.red;
-      case CatanExpansion.cities_and_knights:
+      case CatanExpansion.citiesAndKnights:
         return Colors.orange;
       case CatanExpansion.seafarers:
         return Colors.blue;
-      case CatanExpansion.explorers_and_pirates:
+      case CatanExpansion.explorersAndPirates:
         return Colors.blue[900]!;
-      case CatanExpansion.traders_and_barbarians:
+      case CatanExpansion.tradersAndBarbarians:
         return Colors.purple;
-      case CatanExpansion.legend_of_the_conquerers:
+      case CatanExpansion.legendOfTheConquerers:
         return Colors.green;
     }
   }
@@ -35,16 +38,16 @@ extension CatanExpansionUi on CatanExpansion? {
     switch (this) {
       case null:
         return null;
-      case CatanExpansion.cities_and_knights:
+      case CatanExpansion.citiesAndKnights:
         return CatanIcons.shield;
       case CatanExpansion.seafarers:
         return CatanIcons.anchor;
-      case CatanExpansion.explorers_and_pirates:
-        return CatanIcons.compass_solid;
-      case CatanExpansion.traders_and_barbarians:
-        return CatanIcons.axe_solid;
-      case CatanExpansion.legend_of_the_conquerers:
-        return CatanIcons.crossed_swords;
+      case CatanExpansion.explorersAndPirates:
+        return CatanIcons.compassSolid;
+      case CatanExpansion.tradersAndBarbarians:
+        return CatanIcons.axeSolid;
+      case CatanExpansion.legendOfTheConquerers:
+        return CatanIcons.crossedSwords;
     }
   }
 
@@ -52,35 +55,34 @@ extension CatanExpansionUi on CatanExpansion? {
     switch (this) {
       case null:
         return null;
-      case CatanExpansion.cities_and_knights:
+      case CatanExpansion.citiesAndKnights:
         return CatanIcons.shield;
       case CatanExpansion.seafarers:
         return CatanIcons.anchor;
-      case CatanExpansion.explorers_and_pirates:
+      case CatanExpansion.explorersAndPirates:
         return CatanIcons.compass;
-      case CatanExpansion.traders_and_barbarians:
+      case CatanExpansion.tradersAndBarbarians:
         return CatanIcons.axe;
-      case CatanExpansion.legend_of_the_conquerers:
-        return CatanIcons.crossed_swords;
+      case CatanExpansion.legendOfTheConquerers:
+        return CatanIcons.crossedSwords;
     }
   }
 
   String? get name {
     if (this == null) return "Regular";
-    switch(this) {
+    switch (this) {
       case null:
         return null;
-      case CatanExpansion.cities_and_knights:
+      case CatanExpansion.citiesAndKnights:
         return "Cities & Knights";
       case CatanExpansion.seafarers:
         return "Seafarers";
-      case CatanExpansion.explorers_and_pirates:
+      case CatanExpansion.explorersAndPirates:
         return "Explorers & Pirates";
-      case CatanExpansion.traders_and_barbarians:
+      case CatanExpansion.tradersAndBarbarians:
         return "Traders & Barbarians";
-      case CatanExpansion.legend_of_the_conquerers:
+      case CatanExpansion.legendOfTheConquerers:
         return "Legend of the conquerers";
     }
   }
-
 }

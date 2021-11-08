@@ -4,9 +4,7 @@ part of 'main_bloc.dart';
 abstract class MainEvent {}
 
 class SwitchTabEvent extends MainEvent {
-
   final HomePageTab tab;
 
   SwitchTabEvent(this.tab);
-
 }

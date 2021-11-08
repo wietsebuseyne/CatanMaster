@@ -6,7 +6,6 @@ import 'package:catan_master/domain/players/player_repository.dart';
 import 'package:dartz/dartz.dart';
 
 class CachedPlayerRepository extends PlayerRepository {
-
   final PlayerDatasource localDatasource;
 
   CachedPlayerRepository(this.localDatasource);
@@ -55,8 +54,11 @@ class CachedPlayerRepository extends PlayerRepository {
   Future<Either<Failure, void>> editPlayer(Player player) async {
     try {
       var players = await localDatasource.getPlayers();
-      if (players.any((p) => p.username != player.username && p.name?.toLowerCase() == player.name.toLowerCase())) {
-        return Left(Failure("A player with name '${player.name}' already exists"));
+      if (players.any((p) =>
+          p.username != player.username &&
+          p.name?.toLowerCase() == player.name.toLowerCase())) {
+        return Left(
+            Failure("A player with name '${player.name}' already exists"));
       }
       return Right(localDatasource.updatePlayer(PlayerDto.fromDomain(player)));
     } on Exception catch (e) {
@@ -68,10 +70,9 @@ class CachedPlayerRepository extends PlayerRepository {
   Future<Either<Failure, void>> deletePlayer(Player player) async {
     try {
       await localDatasource.deletePlayer(PlayerDto.fromDomain(player));
-      return Right(null);
+      return const Right(null);
     } on Exception catch (e) {
       return Left(Failure(e.toString()));
     }
   }
-
 }

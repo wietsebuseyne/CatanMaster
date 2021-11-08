@@ -3,12 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:test/test.dart';
 
 void main() {
-
   const Color _defaultColor = Color(0xFFF44336);
 
-  setUp(() {
-
-  });
+  setUp(() {});
 
   Player _createPlayer({
     String name = "name",
@@ -25,7 +22,6 @@ void main() {
   }
 
   group('constructor', () {
-
     test('basic equality', () {
       final Player p1 = Player(
         name: "name",
@@ -45,13 +41,10 @@ void main() {
 
       expect(p1.username, equals("username"));
     });
-
   });
 
   group('equals()', () {
-
     group('equality', () {
-
       test('basic equality', () {
         final Player p1 = _createPlayer();
         final Player p1Copy = _createPlayer();
@@ -79,11 +72,9 @@ void main() {
 
         expect(p1, equals(p2));
       });
-
     });
 
     group('non-equality', () {
-
       test('name', () {
         final Player p1 = _createPlayer(name: "abc");
         final Player p2 = _createPlayer(name: "def");
@@ -120,9 +111,6 @@ void main() {
 
         expect(p1, isNot(equals(p2)));
       });
-
     });
-
   });
-
 }

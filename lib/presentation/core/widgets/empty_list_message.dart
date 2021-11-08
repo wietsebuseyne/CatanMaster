@@ -2,12 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class EmptyListMessage extends StatelessWidget {
-
   final Widget title;
   final Widget? subtitle;
   final Widget? action;
 
-  EmptyListMessage({required this.title, this.subtitle, this.action});
+  const EmptyListMessage({required this.title, this.subtitle, this.action});
 
   @override
   Widget build(BuildContext context) {
@@ -17,18 +16,26 @@ class EmptyListMessage extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          DefaultTextStyle(style: Theme.of(context).textTheme.headline5!, textAlign: TextAlign.center, child: title),
-          if (subtitle != null) SizedBox(height: 8.0,),
-          if (subtitle != null) DefaultTextStyle(
-              style: Theme.of(context).textTheme.bodyText2!,
+          DefaultTextStyle(
+              style: Theme.of(context).textTheme.headline5!,
               textAlign: TextAlign.center,
-              child: subtitle!
-          ),
-          if (action != null) SizedBox(height: 8.0,),
+              child: title),
+          if (subtitle != null)
+            const SizedBox(
+              height: 8.0,
+            ),
+          if (subtitle != null)
+            DefaultTextStyle(
+                style: Theme.of(context).textTheme.bodyText2!,
+                textAlign: TextAlign.center,
+                child: subtitle!),
+          if (action != null)
+            const SizedBox(
+              height: 8.0,
+            ),
           if (action != null) action!,
         ],
       ),
     );
   }
-
 }

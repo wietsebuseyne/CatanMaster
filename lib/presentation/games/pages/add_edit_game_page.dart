@@ -14,35 +14,42 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-const notEnoughPlayersMsgs = ["Moooore players needed", "Players needed", "Not enough players, mi lord"];
+const notEnoughPlayersMsgs = [
+  "Moooore players needed",
+  "Players needed",
+  "Not enough players, mi lord"
+];
 
 notEnoughPlayersMsg() => notEnoughPlayersMsgs[Random().nextInt(3)];
 
 class AddEditGamePage extends StatelessWidget {
-
   final GlobalKey<FormState> _formKey;
   final GameFormData formData;
   final VoidCallback? onFormChanged;
 
-  AddEditGamePage(this._formKey, {required this.formData, this.onFormChanged});
+  const AddEditGamePage(this._formKey,
+      {required this.formData, this.onFormChanged});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PlayersBloc, PlayerState>(
-        builder: (context, state) {
-          if (state is PlayersLoaded) {
-            return _createForm(context, state.players);
-          } else if (state is PlayersLoading) {
-            return Center(child: CircularProgressIndicator(),);
-          }
-          return Center(child: Text("Error while loading players"),); //TODO retry;
-        }
-    );
+    return BlocBuilder<PlayersBloc, PlayerState>(builder: (context, state) {
+      if (state is PlayersLoaded) {
+        return _createForm(context, state.players);
+      } else if (state is PlayersLoading) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+      return const Center(
+        child: Text("Error while loading players"),
+      ); //TODO retry;
+    });
   }
 
   Widget _createForm(BuildContext context, List<Player> players) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.only(bottom: 48.0, top: 16.0, right: 16.0, left: 16.0),
+      padding: const EdgeInsets.only(
+          bottom: 48.0, top: 16.0, right: 16.0, left: 16.0),
       child: Form(
         key: _formKey,
         onChanged: onFormChanged,
@@ -51,12 +58,15 @@ class AddEditGamePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             DateTimeField(
-              format: DateFormat("dd/MM/yyyy HH:mm"), //TODO customize based on device locale
+              format: DateFormat(
+                  "dd/MM/yyyy HH:mm"), //TODO customize based on device locale
               decoration: catanInputDecoration(label: "Date & Time"),
               initialValue: formData.date ?? DateTime.now(),
               validator: (date) {
                 if (date == null) return "Please pick a time, mi lord";
-                if (date.millisecondsSinceEpoch > DateTime.now().millisecondsSinceEpoch) return "Can't timetravel, mi lord";
+                if (date.millisecondsSinceEpoch >
+                    DateTime.now().millisecondsSinceEpoch)
+                  return "Can't timetravel, mi lord";
                 return null;
               },
               onShowPicker: (context, currentValue) async {
@@ -69,7 +79,7 @@ class AddEditGamePage extends StatelessWidget {
                   final time = await showTimePicker(
                     context: context,
                     initialTime:
-                    TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+                        TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
                   );
                   return DateTimeField.combine(date, time);
                 } else {
@@ -80,7 +90,9 @@ class AddEditGamePage extends StatelessWidget {
                 formData.date = date;
               },
             ),
-            SizedBox(height: 16.0,),
+            const SizedBox(
+              height: 16.0,
+            ),
             FormField<Set<CatanExpansion>>(
               initialValue: Set.of(formData.expansions),
               builder: (state) {
@@ -106,20 +118,19 @@ class AddEditGamePage extends StatelessWidget {
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Checkbox(
-                                value: currentSelection.contains(expansion),
-                                activeColor: expansion.color,
-                                onChanged: (selected) {
-                                  if (!currentSelection.contains(expansion)) {
-                                    currentSelection.add(expansion);
-                                    state.didChange(currentSelection);
-                                  } else {
-                                    currentSelection.remove(expansion);
-                                    state.didChange(currentSelection);
-                                  }
-                                }
-                              ),
+                                  value: currentSelection.contains(expansion),
+                                  activeColor: expansion.color,
+                                  onChanged: (selected) {
+                                    if (!currentSelection.contains(expansion)) {
+                                      currentSelection.add(expansion);
+                                      state.didChange(currentSelection);
+                                    } else {
+                                      currentSelection.remove(expansion);
+                                      state.didChange(currentSelection);
+                                    }
+                                  }),
                               Icon(expansion.icon),
-                              SizedBox(width: 8.0),
+                              const SizedBox(width: 8.0),
                               Text(expansion.name!),
                             ],
                           ),
@@ -133,14 +144,15 @@ class AddEditGamePage extends StatelessWidget {
                 formData.expansions = (expansions ?? {}).toList();
               },
             ),
-            SizedBox(height: 16.0,),
+            const SizedBox(
+              height: 16.0,
+            ),
             FormField<PlayersFormState>(
               initialValue: PlayersFormState(
-                players: formData.players.toSet(),
-                winner: formData.winner,
-                withScores: formData.withScores,
-                scores: formData.scores ?? {}
-              ),
+                  players: formData.players.toSet(),
+                  winner: formData.winner,
+                  withScores: formData.withScores,
+                  scores: formData.scores ?? {}),
               builder: (FormFieldState<PlayersFormState> state) {
                 PlayersFormState formState = state.value ?? PlayersFormState();
 
@@ -151,76 +163,87 @@ class AddEditGamePage extends StatelessWidget {
                   children: [
                     Center(
                       child: ToggleButtons(
-                        children: [
+                        children: const [
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: EdgeInsets.all(8.0),
                             child: Text("No scores"),
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: EdgeInsets.all(8.0),
                             child: Text("Scores"),
                           )
                         ],
-                        constraints: BoxConstraints(minHeight: 32),
-                        selectedBorderColor: color == Colors.white ? Colors.black : color,
+                        constraints: const BoxConstraints(minHeight: 32),
+                        selectedBorderColor:
+                            color == Colors.white ? Colors.black : color,
                         selectedColor: light ? Colors.black : color,
                         fillColor: color.withOpacity(0.1),
-                        isSelected: [!formState.withScores, formState.withScores],
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        isSelected: [
+                          !formState.withScores,
+                          formState.withScores
+                        ],
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
                         onPressed: (i) {
                           formState.withScores = i == 1;
                           if (formState.withScores) {
-                            formState.winner = formState.scores
-                                .entries
-                                .reduce((max, e) => e.value > max.value ? e : max).key;
+                            formState.winner = formState.scores.entries
+                                .reduce(
+                                    (max, e) => e.value > max.value ? e : max)
+                                .key;
                           }
                           state.didChange(formState);
                           _formKey.currentState?.validate();
                         },
                       ),
                     ),
-                    SizedBox(height: 8.0,),
-                    if (formState.withScores) CatanInputDecorator(
-                      child: PlayersWithScoresInput(
-                        scores: scores,
-                        players: players,
-                        onChanged: (scores) {
-                          formState.scores = scores;
-                          if (scores.entries.isEmpty) {
-                            formState.winner = null;
-                          } else {
-                            formState.winner = scores.entries
-                                .reduce((max, e) => e.value > max.value ? e : max)
-                                .key;
-                          }
-                          state.didChange(formState);
-                        }
-                      ),
-                      errorText: state.errorText,
+                    const SizedBox(
+                      height: 8.0,
                     ),
-                    if (!formState.withScores) CatanInputDecorator(
-                      child: PlayersWithWinnerInput(
-                        players: players,
-                        selected: formState.players,
-                        winner: formState.winner,
-                        onSelectionChanged: (Set<Player> players) {
-                          formState.players = players;
-                          state.didChange(formState);
-                        },
-                        onWinnerChanged: (Player? winner) {
-                          formState.winner = winner;
-                          state.didChange(formState);
-                        },
+                    if (formState.withScores)
+                      CatanInputDecorator(
+                        child: PlayersWithScoresInput(
+                            scores: scores,
+                            players: players,
+                            onChanged: (scores) {
+                              formState.scores = scores;
+                              if (scores.entries.isEmpty) {
+                                formState.winner = null;
+                              } else {
+                                formState.winner = scores.entries
+                                    .reduce((max, e) =>
+                                        e.value > max.value ? e : max)
+                                    .key;
+                              }
+                              state.didChange(formState);
+                            }),
+                        errorText: state.errorText,
                       ),
-                      errorText: state.errorText,
-                    ),
+                    if (!formState.withScores)
+                      CatanInputDecorator(
+                        child: PlayersWithWinnerInput(
+                          players: players,
+                          selected: formState.players,
+                          winner: formState.winner,
+                          onSelectionChanged: (Set<Player> players) {
+                            formState.players = players;
+                            state.didChange(formState);
+                          },
+                          onWinnerChanged: (Player? winner) {
+                            formState.winner = winner;
+                            state.didChange(formState);
+                          },
+                        ),
+                        errorText: state.errorText,
+                      ),
                   ],
                 );
               },
               validator: (PlayersFormState? state) {
                 if (state == null) return "Invalid state: <null>";
                 var scores = state.scores;
-                if ((state.withScores ? scores.length : state.players.length) < 2) {
+                if ((state.withScores ? scores.length : state.players.length) <
+                    2) {
                   return notEnoughPlayersMsg();
                 }
                 if (state.withScores) {
@@ -252,7 +275,6 @@ class AddEditGamePage extends StatelessWidget {
       ),
     );
   }
-
 }
 
 class PlayerWithScore {
@@ -267,7 +289,6 @@ class PlayerWithScore {
 }
 
 class PlayersFormState {
-
   bool withScores = true;
   Set<Player> players = {};
   Map<Player, int> scores = {};
@@ -282,7 +303,6 @@ class PlayersFormState {
 }
 
 class GameFormData {
-
   bool withScores = true;
   DateTime? date;
   List<Player> players = [];
@@ -300,5 +320,4 @@ class GameFormData {
     this.expansions = game.expansions;
     this.withScores = game.hasScores;
   }
-
 }

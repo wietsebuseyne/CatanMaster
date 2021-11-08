@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 
 class EnumUtils {
-
   static bool _isEnumItem(enumItem) {
     final splittedEnum = enumItem.toString().split('.');
     return splittedEnum.length > 1 &&
@@ -32,21 +31,24 @@ class EnumUtils {
   /// Example final result = EnumToString.fromString(TestEnum.values, "valueOne")
   /// result == TestEnum.valueOne //true
   ///
-  static T fromString<T>(List<T> enumValues, String? value, {T orElse()?}) {
+  static T fromString<T>(List<T> enumValues, String? value,
+      {T Function()? orElse}) {
     return enumValues.singleWhere(
-      (enumItem) => EnumUtils.convertToString(enumItem)?.toLowerCase() == value?.toLowerCase(),
-      orElse: orElse
-    );
+        (enumItem) =>
+            EnumUtils.convertToString(enumItem)?.toLowerCase() ==
+            value?.toLowerCase(),
+        orElse: orElse);
   }
 
   static T? fromStringOrNull<T>(List<T> enumValues, String? value) {
     if (value == null) return null;
 
     return enumValues.singleWhereOrNull(
-      (enumItem) => EnumUtils.convertToString(enumItem)?.toLowerCase() == value.toLowerCase(),
+      (enumItem) =>
+          EnumUtils.convertToString(enumItem)?.toLowerCase() ==
+          value.toLowerCase(),
     );
   }
-
 }
 
 class NotAnEnumException implements Exception {

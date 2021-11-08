@@ -5,10 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UserFeedback extends StatelessWidget {
-
   final Widget child;
 
-  UserFeedback({required this.child});
+  const UserFeedback({required this.child});
 
   @override
   Widget build(BuildContext context) {

@@ -4,9 +4,8 @@ import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 extension ShowFeedback on FeedbackMessage {
-
   void show(BuildContext context) {
-    switch(type) {
+    switch (type) {
       case FeedbackType.toast:
         Fluttertoast.showToast(msg: message);
         break;
@@ -17,8 +16,7 @@ extension ShowFeedback on FeedbackMessage {
               ? SnackBarAction(
                   textColor: severity == Severity.error ? Colors.red : null,
                   label: action!.text,
-                  onPressed: action!.action
-              )
+                  onPressed: action!.action)
               : null,
         ));
         break;
@@ -26,14 +24,17 @@ extension ShowFeedback on FeedbackMessage {
         showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              title: Text(title!),
-              content: Text(message),
-              actions: [
-                if (!hasAction) TextButton(onPressed: () => Navigator.of(context).pop(), child: Text("OK")),
-                ...actions.map((a) => TextButton(onPressed: a.action, child: Text(a.text)))
-              ],
-            )
-        );
+                  title: Text(title!),
+                  content: Text(message),
+                  actions: [
+                    if (!hasAction)
+                      TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: const Text("OK")),
+                    ...actions.map((a) =>
+                        TextButton(onPressed: a.action, child: Text(a.text)))
+                  ],
+                ));
         break;
     }
   }

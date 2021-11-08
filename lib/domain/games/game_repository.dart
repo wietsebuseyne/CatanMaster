@@ -3,7 +3,6 @@ import 'package:catan_master/domain/games/game.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class GameRepository {
-
   Future<Either<Failure, List<Game>>> getGames();
 
   Future<Either<Failure, List<Game>>> getGamesForPlayer(String username);
@@ -17,5 +16,4 @@ abstract class GameRepository {
   Future<Either<Failure, void>> deleteGame(Game game);
 
   Future<Either<Failure, void>> undoDelete({Game? game});
-
 }

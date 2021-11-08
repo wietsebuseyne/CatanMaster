@@ -9,7 +9,6 @@ class LoadGames extends GamesEvent {
 }
 
 class AddEditGameEvent extends GamesEvent {
-
   final Game? oldGame;
   final DateTime time;
   final List<Player>? players;
@@ -17,21 +16,20 @@ class AddEditGameEvent extends GamesEvent {
   final List<CatanExpansion> expansions;
   final Map<Player, int>? scores;
 
-  AddEditGameEvent.noScores({
-    this.oldGame,
-    required this.time,
-    required this.players,
-    required this.winner,
-    required this.expansions
-  }) : scores = null;
+  AddEditGameEvent.noScores(
+      {this.oldGame,
+      required this.time,
+      required this.players,
+      required this.winner,
+      required this.expansions})
+      : scores = null;
 
-  AddEditGameEvent.withScores({
-    this.oldGame,
-    required this.time,
-    required Map<Player, int> this.scores,
-    required this.expansions
-  }) :
-        assert(scores.isNotEmpty),
+  AddEditGameEvent.withScores(
+      {this.oldGame,
+      required this.time,
+      required Map<Player, int> this.scores,
+      required this.expansions})
+      : assert(scores.isNotEmpty),
         players = null,
         winner = null;
 
@@ -43,23 +41,19 @@ class AddEditGameEvent extends GamesEvent {
 }
 
 class DeleteGameEvent extends GamesEvent {
-
   final Game game;
 
   DeleteGameEvent(this.game);
 
   @override
   List<Object> get props => [game];
-
 }
 
 class UndoDeleteGameEvent extends GamesEvent {
-
   final Game game;
 
   UndoDeleteGameEvent(this.game);
 
   @override
   List<Object> get props => [game];
-
 }

@@ -1,8 +1,6 @@
-
 import 'package:flutter/foundation.dart';
 
 class FeedbackMessage {
-
   final FeedbackType type;
   final Severity severity;
   final String? title;
@@ -18,30 +16,25 @@ class FeedbackMessage {
         title = null,
         type = FeedbackType.toast;
 
-  FeedbackMessage.snackbar(this.message, {FeedbackAction? action, this.severity = Severity.message})
+  FeedbackMessage.snackbar(this.message,
+      {FeedbackAction? action, this.severity = Severity.message})
       : actions = action == null ? const [] : List.unmodifiable([action]),
         title = null,
         type = FeedbackType.snackbar;
 
-  FeedbackMessage.dialog(this.message, {required this.title, this.severity = Severity.message})
+  FeedbackMessage.dialog(this.message,
+      {required this.title, this.severity = Severity.message})
       : actions = const [],
         type = FeedbackType.dialog;
-
 }
 
 class FeedbackAction {
-
   final String text;
   final VoidCallback action;
 
   FeedbackAction({required this.text, required this.action});
-
 }
 
-enum Severity {
-  message, success, warning, error
-}
+enum Severity { message, success, warning, error }
 
-enum FeedbackType {
-  toast, snackbar, dialog
-}
+enum FeedbackType { toast, snackbar, dialog }

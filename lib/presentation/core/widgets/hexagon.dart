@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 
 /// TODO fix width / height / rotation to tightly match
 class Hexagon extends StatelessWidget {
-
   final Color? color;
   final double width;
   final double height;
@@ -14,14 +13,13 @@ class Hexagon extends StatelessWidget {
   final Widget? child;
   final List<BoxShadow> shadows;
 
-  Hexagon({
-    this.color,
-    this.width = 32,
-    this.height = 32,
-    this.rotate = 0,
-    this.shadows = const [],
-    this.child
-  });
+  const Hexagon(
+      {this.color,
+      this.width = 32,
+      this.height = 32,
+      this.rotate = 0,
+      this.shadows = const [],
+      this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -36,27 +34,26 @@ class Hexagon extends StatelessWidget {
       child: child,
     );
   }
-
 }
 
 class TextHexagon extends StatelessWidget {
-
   final Color color;
   final String text;
 
-  TextHexagon({required this.color, required this.text});
+  const TextHexagon({required this.color, required this.text});
 
   @override
   Widget build(BuildContext context) {
     var white = useWhiteForeground(color);
     return Hexagon(
       color: color,
-      child: Center(child: Text(
+      child: Center(
+          child: Text(
         text,
         style: Theme.of(context).textTheme.subtitle1!.copyWith(
-            color: white ? Colors.white : Colors.black,
-            fontWeight: FontWeight.bold,
-        ),
+              color: white ? Colors.white : Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
       )),
     );
   }

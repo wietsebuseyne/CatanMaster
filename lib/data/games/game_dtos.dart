@@ -11,7 +11,6 @@ part 'game_dtos.g.dart';
 @JsonSerializable(explicitToJson: true)
 @HiveType(typeId: 1)
 class GameDto extends HiveObject {
-
   //Primary key
   @HiveField(0)
   int? time;
@@ -26,41 +25,45 @@ class GameDto extends HiveObject {
 
   GameDto({this.time, this.players, this.winner, this.expansions, this.scores});
 
-  GameDto.fromDomain(Game game) :
-        this.time = game.date.millisecondsSinceEpoch,
+  GameDto.fromDomain(Game game)
+      : this.time = game.date.millisecondsSinceEpoch,
         this.players = List.unmodifiable(game.players.map((g) => g.username)),
         this.winner = game.winner.username,
-        this.expansions = List.unmodifiable(game.expansions.map(EnumUtils.convertToString)),
-        this.scores = game.scores.map((player, score) => MapEntry(player.username, score));
+        this.expansions =
+            List.unmodifiable(game.expansions.map(EnumUtils.convertToString)),
+        this.scores = game.scores
+            .map((player, score) => MapEntry(player.username, score));
 
-  factory GameDto.fromJson(Map<String, dynamic> json) => _$GameDtoFromJson(json);
+  factory GameDto.fromJson(Map<String, dynamic> json) =>
+      _$GameDtoFromJson(json);
 
   Map<String, dynamic> toJson() => _$GameDtoToJson(this);
-
 }
 
 class GameMapper {
-
   final Map<String, Player> playerMap;
 
-  GameMapper(Map<String?, Player?> playerMap) : this.playerMap = Map.unmodifiable(playerMap);
+  GameMapper(Map<String?, Player?> playerMap)
+      : this.playerMap = Map.unmodifiable(playerMap);
 
   Either<MapFailure, Game> map(GameDto gameDto) {
     final List<String>? playerStrings = gameDto.players;
     if (playerStrings == null) {
-      return Left(MapFailure("Players should be null"));
+      return const Left(MapFailure("Players should be null"));
     }
     if (!playerStrings.contains(gameDto.winner)) {
-      return Left(MapFailure("Game of ${gameDto.time}: Winner [${gameDto.winner}] should be one of the players [${playerStrings.join(", ")}]"));
+      return Left(MapFailure(
+          "Game of ${gameDto.time}: Winner [${gameDto.winner}] should be one of the players [${playerStrings.join(", ")}]"));
     }
     if (gameDto.time == null) {
-      return Left(MapFailure("Time should not be null"));
+      return const Left(MapFailure("Time should not be null"));
     }
     List<Player> players = <Player>[];
-    for(String playerString in playerStrings) {
+    for (String playerString in playerStrings) {
       Player? player = playerMap[playerString];
       if (player == null) {
-        return Left(MapFailure("Not all players [${playerStrings.join(", ")}] are in the player map!"));
+        return Left(MapFailure(
+            "Not all players [${playerStrings.join(", ")}] are in the player map!"));
       } else {
         players.add(player);
       }
@@ -71,14 +74,11 @@ class GameMapper {
     try {
       if (expStrings != null) {
         for (String exp in expStrings) {
-          expansions.add(EnumUtils.fromString(
-              CatanExpansion.values,
-              exp,
-              orElse: () => throw FormatException("Invalid expansion: $exp")
-          ));
+          expansions.add(EnumUtils.fromString(CatanExpansion.values, exp,
+              orElse: () => throw FormatException("Invalid expansion: $exp")));
         }
       }
-    } on FormatException catch(e) {
+    } on FormatException catch (e) {
       return Left(MapFailure(e.message));
     }
 
@@ -86,21 +86,18 @@ class GameMapper {
     Map<String, int>? scores = gameDto.scores;
     if (scores != null && scores.isNotEmpty) {
       if (players.any((p) => scores[p.username] == null)) {
-        return Left(MapFailure("Score for a player was null"));
+        return const Left(MapFailure("Score for a player was null"));
       }
       return Right(Game.withScores(
-          scores: Map.fromIterable(players, key: (p) => p, value: (p) => scores[p.username]!),
+          scores: {for (var p in players) p: scores[p.username]!},
           date: DateTime.fromMillisecondsSinceEpoch(gameDto.time!),
-          expansions: expansions
-      ));
+          expansions: expansions));
     }
 
     return Right(Game.noScores(
-      players: players,
-      date: DateTime.fromMillisecondsSinceEpoch(gameDto.time!),
-      winner: playerMap[gameDto.winner!],
-      expansions: expansions
-    ));
+        players: players,
+        date: DateTime.fromMillisecondsSinceEpoch(gameDto.time!),
+        winner: playerMap[gameDto.winner!],
+        expansions: expansions));
   }
-
 }

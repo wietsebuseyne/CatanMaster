@@ -1,15 +1,13 @@
 import 'package:catan_master/domain/players/player.dart';
 import 'package:catan_master/presentation/core/widgets/hexagon.dart';
-import 'package:catan_master/presentation/players/player_presentation.dart';
 import 'package:catan_master/presentation/players/widgets/win_lose_hex.dart';
 import 'package:flutter/material.dart';
 
 class PlayerListTile extends StatelessWidget {
-
   final PlayerStatistics statistics;
   Player get player => statistics.player;
 
-  PlayerListTile(this.statistics, {Key? key}) : super(key: key);
+  const PlayerListTile(this.statistics, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +16,12 @@ class PlayerListTile extends StatelessWidget {
         color: player.color,
         text: statistics.rankString,
       ),
-      title: Text(player.name, style: Theme.of(context).textTheme.headline6, ),
+      title: Text(
+        player.name,
+        style: Theme.of(context).textTheme.headline6,
+      ),
       trailing: SizedBox(
-        width: 24*5,
+        width: 24 * 5,
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: statistics
@@ -29,7 +30,8 @@ class PlayerListTile extends StatelessWidget {
               .toList(),
         ),
       ),
-      onTap: () => Navigator.of(context).pushNamed("/players/detail", arguments: {"player": player}),
+      onTap: () => Navigator.of(context)
+          .pushNamed("/players/detail", arguments: {"player": player}),
     );
   }
 }
