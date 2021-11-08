@@ -27,12 +27,16 @@ class _AddEditPlayerScreenState extends State<AddEditPlayerScreen> {
 
   late PlayerFormData formData;
 
-  _AddEditPlayerScreenState() {
+  _AddEditPlayerScreenState();
+
+  @override
+  void initState() {
     this.formData = PlayerFormData(
       name: widget.player?.name,
       color: widget.player?.color,
       gender: widget.player?.gender,
     );
+    super.initState();
   }
 
   @override

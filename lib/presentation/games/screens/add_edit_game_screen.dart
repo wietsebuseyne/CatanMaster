@@ -27,9 +27,12 @@ class _AddEditGameScreenState extends State<AddEditGameScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late GameFormData formData;
 
-  _AddEditGameScreenState() {
-    this.formData =
-        widget.edit ? GameFormData.fromGame(widget.game!) : GameFormData();
+  _AddEditGameScreenState();
+
+  @override
+  void initState() {
+    this.formData = widget.edit ? GameFormData.fromGame(widget.game!) : GameFormData();
+    super.initState();
   }
 
   @override
@@ -37,12 +40,10 @@ class _AddEditGameScreenState extends State<AddEditGameScreen> {
     final color = formData.winner?.color ?? Colors.blue;
     final light = isLight(color);
     final brightness = light ? Brightness.light : Brightness.dark;
-    var overlayStyle =
-        light ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light;
+    var overlayStyle = light ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light;
     return BlocListener<GamesBloc, GamesState>(
       listener: (context, state) {
-        if ((!widget.edit && state is GameAdded) ||
-            (widget.edit && state is GameEdited)) {
+        if ((!widget.edit && state is GameAdded) || (widget.edit && state is GameEdited)) {
           Navigator.of(context).pop();
         }
       },
