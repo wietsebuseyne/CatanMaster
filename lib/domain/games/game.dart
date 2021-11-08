@@ -1,7 +1,6 @@
 import 'package:catan_master/core/core.dart';
 import 'package:catan_master/domain/players/player.dart';
 import 'package:equatable/equatable.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:meta/meta.dart';
 
 class Game extends Equatable {
