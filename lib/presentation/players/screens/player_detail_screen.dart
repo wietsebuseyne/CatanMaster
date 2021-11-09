@@ -15,8 +15,7 @@ class PlayerDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<PlayersBloc, PlayerState>(
-      listenWhen: (s1, s2) =>
-          s2 is PlayersLoaded && !s2.players.any((p) => p.username == username),
+      listenWhen: (s1, s2) => s2 is PlayersLoaded && !s2.players.any((p) => p.username == username),
       listener: (s1, s2) => Navigator.of(context).pop(),
       builder: (context, state) {
         if (state is PlayersLoaded) {

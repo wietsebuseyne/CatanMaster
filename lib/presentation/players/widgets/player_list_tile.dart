@@ -24,14 +24,10 @@ class PlayerListTile extends StatelessWidget {
         width: 24 * 5,
         child: Row(
           mainAxisSize: MainAxisSize.min,
-          children: statistics
-              .getWinOrLose(5)
-              .map((w) => WinLoseHexagon(w, rotate: 0, width: 24))
-              .toList(),
+          children: statistics.getWinOrLose(5).map((w) => WinLoseHexagon(w, rotate: 0, width: 24)).toList(),
         ),
       ),
-      onTap: () => Navigator.of(context)
-          .pushNamed("/players/detail", arguments: {"player": player}),
+      onTap: () => Navigator.of(context).pushNamed("/players/detail", arguments: {"player": player}),
     );
   }
 }

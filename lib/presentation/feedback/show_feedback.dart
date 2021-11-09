@@ -29,10 +29,10 @@ extension ShowFeedback on FeedbackMessage {
                   actions: [
                     if (!hasAction)
                       TextButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: const Text("OK")),
-                    ...actions.map((a) =>
-                        TextButton(onPressed: a.action, child: Text(a.text)))
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text("OK"),
+                      ),
+                    ...actions.map((a) => TextButton(onPressed: a.action, child: Text(a.text)))
                   ],
                 ));
         break;

@@ -12,12 +12,12 @@ class Player extends Equatable {
   final Gender gender;
   final Color color;
 
-  Player(
-      {required String username,
-      required this.name,
-      required this.gender,
-      required Color color})
-      : assert(username.isNotEmpty),
+  Player({
+    required String username,
+    required this.name,
+    required this.gender,
+    required Color color,
+  })  : assert(username.isNotEmpty),
         this.username = username.toLowerCase(),
         assert(name.isNotEmpty),
         assert(color.alpha == 255),
@@ -88,8 +88,7 @@ class PlayerStatistics extends Equatable {
     }
     int nbGamesWon = gamesWon[player] ?? 0;
     int nbGamesPlayed = gamesPlayed[player] ?? 0;
-    int percentGamesWon =
-        nbGamesPlayed == 0 ? 0 : ((nbGamesWon / nbGamesPlayed) * 100.0).round();
+    int percentGamesWon = nbGamesPlayed == 0 ? 0 : ((nbGamesWon / nbGamesPlayed) * 100.0).round();
     //Cannot be own best buddy
     gamesPlayed.remove(player);
     List<Prize> achievements = [];
@@ -110,13 +109,11 @@ class PlayerStatistics extends Equatable {
         percentGamesWon: percentGamesWon);
   }
 
-  int getNbWinsOutOfLast(int nb) =>
-      games.take(nb).where((g) => g.winner == player).length;
+  int getNbWinsOutOfLast(int nb) => games.take(nb).where((g) => g.winner == player).length;
 
   Game? get lastGame => games.firstOrNull;
 
-  List<bool> getWinOrLose(int nb) =>
-      games.take(nb).toList().map((g) => g.winner == player).toList();
+  List<bool> getWinOrLose(int nb) => games.take(nb).toList().map((g) => g.winner == player).toList();
 
   @override
   List<Object> get props => [player, games];
@@ -125,10 +122,7 @@ class PlayerStatistics extends Equatable {
 extension HighestValue<K> on Map<K, int> {
   K? get highestValue {
     if (isEmpty) return null;
-    return entries
-        .toList()
-        .reduce((v1, v2) => v1.value >= v2.value ? v1 : v2)
-        .key;
+    return entries.toList().reduce((v1, v2) => v1.value >= v2.value ? v1 : v2).key;
   }
 }
 

@@ -15,8 +15,7 @@ class AddEditPlayerScreen extends StatefulWidget {
 
   factory AddEditPlayerScreen.add() => const AddEditPlayerScreen._();
 
-  factory AddEditPlayerScreen.edit(Player player) =>
-      AddEditPlayerScreen._(player: player);
+  factory AddEditPlayerScreen.edit(Player player) => AddEditPlayerScreen._(player: player);
 
   @override
   _AddEditPlayerScreenState createState() => _AddEditPlayerScreenState();
@@ -44,8 +43,7 @@ class _AddEditPlayerScreenState extends State<AddEditPlayerScreen> {
     final color = formData.color ?? Theme.of(context).primaryColor;
     final light = isLight(color);
     final brightness = light ? Brightness.light : Brightness.dark;
-    final overlayStyle =
-        light ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light;
+    final overlayStyle = light ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light;
     return BlocListener<PlayersBloc, PlayerState>(
       listener: (context, state) {
         if (state is PlayerAdded || state is PlayerEdited) {
@@ -68,8 +66,7 @@ class _AddEditPlayerScreenState extends State<AddEditPlayerScreen> {
               style: TextButton.styleFrom(
                 primary: light ? Colors.black : Colors.white,
                 textStyle: const TextStyle(fontSize: 16),
-                shape: const CircleBorder(
-                    side: BorderSide(color: Colors.transparent)),
+                shape: const CircleBorder(side: BorderSide(color: Colors.transparent)),
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
               ),
               onPressed: () {
@@ -77,10 +74,11 @@ class _AddEditPlayerScreenState extends State<AddEditPlayerScreen> {
                 if (state != null && state.validate()) {
                   state.save();
                   BlocProvider.of<PlayersBloc>(context).add(AddOrUpdatePlayer(
-                      toEdit: widget.player,
-                      name: formData.name!,
-                      gender: formData.gender!,
-                      color: formData.color!));
+                    toEdit: widget.player,
+                    name: formData.name!,
+                    gender: formData.gender!,
+                    color: formData.color!,
+                  ));
                 }
               },
             )

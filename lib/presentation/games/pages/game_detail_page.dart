@@ -25,16 +25,14 @@ class GameDetailPage extends StatelessWidget {
         bool light = isLight(game.winner.color);
         var brightness = light ? Brightness.light : Brightness.dark;
         var theme = ThemeData(brightness: brightness);
-        var overlayStyle =
-            light ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light;
+        var overlayStyle = light ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light;
         return <Widget>[
           SliverOverlapAbsorber(
             handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
             sliver: SliverAppBar(
               centerTitle: true,
               flexibleSpace: FlexibleSpaceBar(
-                title: Text(_df.format(game.date),
-                    style: theme.textTheme.headline6),
+                title: Text(_df.format(game.date), style: theme.textTheme.headline6),
                 centerTitle: true,
               ),
               collapsedHeight: kToolbarHeight,
@@ -48,13 +46,11 @@ class GameDetailPage extends StatelessWidget {
               systemOverlayStyle: overlayStyle,
               actions: [
                 IconButton(
-                  onPressed: () => Navigator.of(context)
-                      .pushNamed("/games/edit", arguments: {"game": game}),
+                  onPressed: () => Navigator.of(context).pushNamed("/games/edit", arguments: {"game": game}),
                   icon: const Icon(Icons.edit),
                 ),
                 IconButton(
-                  onPressed: () => BlocProvider.of<GamesBloc>(context)
-                      .add(DeleteGameEvent(game)),
+                  onPressed: () => BlocProvider.of<GamesBloc>(context).add(DeleteGameEvent(game)),
                   icon: const Icon(Icons.delete),
                 )
               ],
@@ -96,11 +92,9 @@ class GameDetailPage extends StatelessWidget {
               ),
               ...game.getPlayersByScoreOrName().map((p) {
                 return ListTile(
-                  leading: TextHexagon(
-                      text: "${game.scores[p] ?? ""}", color: p.color),
+                  leading: TextHexagon(text: "${game.scores[p] ?? ""}", color: p.color),
                   title: Text(p.name),
-                  onTap: () => Navigator.of(context)
-                      .pushNamed("/players/detail", arguments: {"player": p}),
+                  onTap: () => Navigator.of(context).pushNamed("/players/detail", arguments: {"player": p}),
                 );
               }),
             ],

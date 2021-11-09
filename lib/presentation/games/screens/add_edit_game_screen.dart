@@ -63,8 +63,7 @@ class _AddEditGameScreenState extends State<AddEditGameScreen> {
               style: TextButton.styleFrom(
                 primary: light ? Colors.black : Colors.white,
                 textStyle: const TextStyle(fontSize: 16),
-                shape: const CircleBorder(
-                    side: BorderSide(color: Colors.transparent)),
+                shape: const CircleBorder(side: BorderSide(color: Colors.transparent)),
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
               ),
               onPressed: () {
@@ -80,16 +79,14 @@ class _AddEditGameScreenState extends State<AddEditGameScreen> {
                   Player? winner = formData.winner;
 
                   if (withScores) {
-                    BlocProvider.of<GamesBloc>(context)
-                        .add(AddEditGameEvent.withScores(
+                    BlocProvider.of<GamesBloc>(context).add(AddEditGameEvent.withScores(
                       oldGame: widget.game,
                       time: date!,
                       scores: scores!,
                       expansions: expansions,
                     ));
                   } else {
-                    BlocProvider.of<GamesBloc>(context)
-                        .add(AddEditGameEvent.noScores(
+                    BlocProvider.of<GamesBloc>(context).add(AddEditGameEvent.noScores(
                       oldGame: widget.game,
                       time: date!,
                       players: players,

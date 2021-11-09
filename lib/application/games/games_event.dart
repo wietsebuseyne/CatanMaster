@@ -16,20 +16,20 @@ class AddEditGameEvent extends GamesEvent {
   final List<CatanExpansion> expansions;
   final Map<Player, int>? scores;
 
-  AddEditGameEvent.noScores(
-      {this.oldGame,
-      required this.time,
-      required this.players,
-      required this.winner,
-      required this.expansions})
-      : scores = null;
+  AddEditGameEvent.noScores({
+    this.oldGame,
+    required this.time,
+    required this.players,
+    required this.winner,
+    required this.expansions,
+  }) : scores = null;
 
-  AddEditGameEvent.withScores(
-      {this.oldGame,
-      required this.time,
-      required Map<Player, int> this.scores,
-      required this.expansions})
-      : assert(scores.isNotEmpty),
+  AddEditGameEvent.withScores({
+    this.oldGame,
+    required this.time,
+    required Map<Player, int> this.scores,
+    required this.expansions,
+  })  : assert(scores.isNotEmpty),
         players = null,
         winner = null;
 

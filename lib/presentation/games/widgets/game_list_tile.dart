@@ -35,8 +35,7 @@ class GameListTile extends StatelessWidget {
   Iterable<Widget> _playersToWidget() sync* {
     for (var i = 0; i < game.players.length; i++) {
       var player = game.players[i];
-      yield GameListTilePlayer(player,
-          winner: player == game.winner, score: game.scores[player]);
+      yield GameListTilePlayer(player, winner: player == game.winner, score: game.scores[player]);
       if (i != game.players.length - 1) {
         yield const SizedBox(
           width: 12.0,

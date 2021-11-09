@@ -46,14 +46,9 @@ class GridColorPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      final int itemsPerRow =
-          (constraints.maxWidth / (maxCircleRadius + spacing * 2)).ceil();
+      final int itemsPerRow = (constraints.maxWidth / (maxCircleRadius + spacing * 2)).ceil();
       return Column(
-        children: _colorRows(
-                itemsPerRow,
-                (constraints.maxWidth / itemsPerRow).floorToDouble() -
-                    2 * spacing)
-            .toList(),
+        children: _colorRows(itemsPerRow, (constraints.maxWidth / itemsPerRow).floorToDouble() - 2 * spacing).toList(),
       );
     });
   }
@@ -61,9 +56,7 @@ class GridColorPicker extends StatelessWidget {
   Iterable<Widget> _colorRows(int itemsPerRow, double radius) sync* {
     for (int i = 0; i < availableColors.length; i += itemsPerRow) {
       yield Row(
-        children: availableColors
-            .getRange(i, min(i + itemsPerRow, availableColors.length))
-            .map((c) {
+        children: availableColors.getRange(i, min(i + itemsPerRow, availableColors.length)).map((c) {
           return _ColorPickerItem(
             color: c,
             selected: selected == c,

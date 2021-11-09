@@ -45,8 +45,7 @@ class HorizontalInfoTile extends StatelessWidget {
                 children: <Widget>[
                   Padding(
                       child: SizedBox(width: 24, height: 24, child: leading),
-                      padding: EdgeInsets.only(
-                          left: padding.horizontal, right: internalSpace)),
+                      padding: EdgeInsets.only(left: padding.horizontal, right: internalSpace)),
                 ],
               ),
               Expanded(
@@ -55,7 +54,7 @@ class HorizontalInfoTile extends StatelessWidget {
                     child: Row(
                       children: <Widget>[
                         if (start != null) _start(Theme.of(context)),
-                        if (end != null) _end(context)
+                        if (end != null) _end(context),
                       ],
                     )),
               ),
@@ -79,8 +78,7 @@ class HorizontalInfoTile extends StatelessWidget {
     return SizedBox(
         width: MediaQuery.of(context).size.width * 0.25,
         child: DefaultTextStyle(
-          style:
-              Theme.of(context).textTheme.bodyText2!.apply(fontSizeDelta: -1),
+          style: Theme.of(context).textTheme.bodyText2!.apply(fontSizeDelta: -1),
           textAlign: TextAlign.end,
           child: end!,
         ));

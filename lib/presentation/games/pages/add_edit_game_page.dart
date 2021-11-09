@@ -17,7 +17,7 @@ import 'package:intl/intl.dart';
 const notEnoughPlayersMsgs = [
   "Moooore players needed",
   "Players needed",
-  "Not enough players, mi lord"
+  "Not enough players, mi lord",
 ];
 
 notEnoughPlayersMsg() => notEnoughPlayersMsgs[Random().nextInt(3)];
@@ -27,8 +27,11 @@ class AddEditGamePage extends StatelessWidget {
   final GameFormData formData;
   final VoidCallback? onFormChanged;
 
-  const AddEditGamePage(this._formKey,
-      {required this.formData, this.onFormChanged});
+  const AddEditGamePage(
+    this._formKey, {
+    required this.formData,
+    this.onFormChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -48,8 +51,7 @@ class AddEditGamePage extends StatelessWidget {
 
   Widget _createForm(BuildContext context, List<Player> players) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.only(
-          bottom: 48.0, top: 16.0, right: 16.0, left: 16.0),
+      padding: const EdgeInsets.only(bottom: 48.0, top: 16.0, right: 16.0, left: 16.0),
       child: Form(
         key: _formKey,
         onChanged: onFormChanged,
@@ -58,15 +60,15 @@ class AddEditGamePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             DateTimeField(
-              format: DateFormat(
-                  "dd/MM/yyyy HH:mm"), //TODO customize based on device locale
+              format: DateFormat("dd/MM/yyyy HH:mm"),
+              //TODO customize based on device locale
               decoration: catanInputDecoration(label: "Date & Time"),
               initialValue: formData.date ?? DateTime.now(),
               validator: (date) {
                 if (date == null) return "Please pick a time, mi lord";
-                if (date.millisecondsSinceEpoch >
-                    DateTime.now().millisecondsSinceEpoch)
+                if (date.millisecondsSinceEpoch > DateTime.now().millisecondsSinceEpoch) {
                   return "Can't timetravel, mi lord";
+                }
                 return null;
               },
               onShowPicker: (context, currentValue) async {
@@ -78,8 +80,7 @@ class AddEditGamePage extends StatelessWidget {
                 if (date != null) {
                   final time = await showTimePicker(
                     context: context,
-                    initialTime:
-                        TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+                    initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
                   );
                   return DateTimeField.combine(date, time);
                 } else {
@@ -174,23 +175,16 @@ class AddEditGamePage extends StatelessWidget {
                           )
                         ],
                         constraints: const BoxConstraints(minHeight: 32),
-                        selectedBorderColor:
-                            color == Colors.white ? Colors.black : color,
+                        selectedBorderColor: color == Colors.white ? Colors.black : color,
                         selectedColor: light ? Colors.black : color,
                         fillColor: color.withOpacity(0.1),
-                        isSelected: [
-                          !formState.withScores,
-                          formState.withScores
-                        ],
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
+                        isSelected: [!formState.withScores, formState.withScores],
+                        borderRadius: const BorderRadius.all(Radius.circular(10)),
                         onPressed: (i) {
                           formState.withScores = i == 1;
                           if (formState.withScores) {
-                            formState.winner = formState.scores.entries
-                                .reduce(
-                                    (max, e) => e.value > max.value ? e : max)
-                                .key;
+                            formState.winner =
+                                formState.scores.entries.reduce((max, e) => e.value > max.value ? e : max).key;
                           }
                           state.didChange(formState);
                           _formKey.currentState?.validate();
@@ -210,10 +204,7 @@ class AddEditGamePage extends StatelessWidget {
                               if (scores.entries.isEmpty) {
                                 formState.winner = null;
                               } else {
-                                formState.winner = scores.entries
-                                    .reduce((max, e) =>
-                                        e.value > max.value ? e : max)
-                                    .key;
+                                formState.winner = scores.entries.reduce((max, e) => e.value > max.value ? e : max).key;
                               }
                               state.didChange(formState);
                             }),
@@ -242,8 +233,7 @@ class AddEditGamePage extends StatelessWidget {
               validator: (PlayersFormState? state) {
                 if (state == null) return "Invalid state: <null>";
                 var scores = state.scores;
-                if ((state.withScores ? scores.length : state.players.length) <
-                    2) {
+                if ((state.withScores ? scores.length : state.players.length) < 2) {
                   return notEnoughPlayersMsg();
                 }
                 if (state.withScores) {

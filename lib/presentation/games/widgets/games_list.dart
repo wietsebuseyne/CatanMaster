@@ -48,8 +48,7 @@ class _GamesListState extends State<GamesList> {
                   ? null
                   : OutlinedButton.icon(
                       icon: const Icon(Icons.clear),
-                      style: OutlinedButton.styleFrom(
-                          primary: Theme.of(context).colorScheme.onSurface),
+                      style: OutlinedButton.styleFrom(primary: Theme.of(context).colorScheme.onSurface),
                       onPressed: () {
                         setState(() {
                           selectedExpansions.clear();
@@ -64,8 +63,9 @@ class _GamesListState extends State<GamesList> {
             child: ListView.builder(
               itemBuilder: (BuildContext context, int index) => GameListTile(
                 filteredGames[index],
-                onTap: () => Navigator.of(context).pushNamed("/games/detail",
-                    arguments: {"game": filteredGames[index]}),
+                onTap: () {
+                  Navigator.of(context).pushNamed("/games/detail", arguments: {"game": filteredGames[index]});
+                },
               ),
               itemCount: filteredGames.length,
               padding: const EdgeInsets.only(bottom: 48.0),
@@ -137,10 +137,7 @@ class ExpansionFilter extends StatelessWidget {
   final bool selected;
   final ValueChanged<bool> onSelected;
 
-  const ExpansionFilter(
-      {required this.expansion,
-      required this.selected,
-      required this.onSelected});
+  const ExpansionFilter({required this.expansion, required this.selected, required this.onSelected});
 
   @override
   Widget build(BuildContext context) {

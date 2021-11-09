@@ -14,24 +14,22 @@ class CachedGameRepository extends GameRepository {
   final PlayerRepository playerRepository;
   final ListQueue<Game> deletedGames = ListQueue();
 
-  CachedGameRepository(
-      {required this.gameDatasource, required this.playerRepository});
+  CachedGameRepository({required this.gameDatasource, required this.playerRepository});
 
   @override
   Future<Either<Failure, List<Game>>> getGamesForPlayer(String username) async {
     return (await getGames()).fold(
-        (failure) => Left(failure),
-        (games) => Right(games
-            .where((g) => g.players.map((p) => p.username).contains(username))
-            .toList()));
+      (failure) => Left(failure),
+      (games) => Right(games.where((g) => g.players.map((p) => p.username).contains(username)).toList()),
+    );
   }
 
   @override
   Future<Either<Failure, bool>> hasGames(String username) async {
     return (await getGames()).fold(
-        (failure) => Left(failure),
-        (games) => Right(games
-            .any((g) => g.players.map((p) => p.username).contains(username))));
+      (failure) => Left(failure),
+      (games) => Right(games.any((g) => g.players.map((p) => p.username).contains(username))),
+    );
   }
 
   @override
@@ -81,26 +79,29 @@ class CachedGameRepository extends GameRepository {
 
   @override
   Future<Either<Failure, List<Game>>> getGames() async {
-    return (await playerRepository.getPlayers())
-        .fold((l) async => Left(l), (r) async => await _getGamesInternal(r));
+    return (await playerRepository.getPlayers()).fold(
+      (l) async => Left(l),
+      (r) async => await _getGamesInternal(r),
+    );
   }
 
-  Future<Either<Failure, List<Game>>> _getGamesInternal(
-      List<Player> players) async {
+  Future<Either<Failure, List<Game>>> _getGamesInternal(List<Player> players) async {
     try {
       Map<String?, Player?> playerMap = {for (var p in players) p.username: p};
 
       var gamesDtos = await gameDatasource.getGames();
       GameMapper mapper = GameMapper(playerMap);
-      return Right(gamesDtos.map(mapper.map).toList().fold(<Game>[],
-          (List<Game> list, failureOrGame) {
-        return failureOrGame.fold((l) {
-          //TODO save this error to another repository
-          // This repository can then alert the user of these mapping errors
-          // and provide solutions (for example: add Player with name ...)
-          return list;
-        }, (r) => list..add(r));
-      }));
+      return Right(gamesDtos.map(mapper.map).toList().fold(
+        <Game>[],
+        (List<Game> list, failureOrGame) {
+          return failureOrGame.fold((l) {
+            //TODO save this error to another repository
+            // This repository can then alert the user of these mapping errors
+            // and provide solutions (for example: add Player with name ...)
+            return list;
+          }, (r) => list..add(r));
+        },
+      ));
     } on Exception catch (e) {
       return Left(Failure(e.toString()));
     }

@@ -29,13 +29,10 @@ class GameDto extends HiveObject {
       : this.time = game.date.millisecondsSinceEpoch,
         this.players = List.unmodifiable(game.players.map((g) => g.username)),
         this.winner = game.winner.username,
-        this.expansions =
-            List.unmodifiable(game.expansions.map(EnumUtils.convertToString)),
-        this.scores = game.scores
-            .map((player, score) => MapEntry(player.username, score));
+        this.expansions = List.unmodifiable(game.expansions.map(EnumUtils.convertToString)),
+        this.scores = game.scores.map((player, score) => MapEntry(player.username, score));
 
-  factory GameDto.fromJson(Map<String, dynamic> json) =>
-      _$GameDtoFromJson(json);
+  factory GameDto.fromJson(Map<String, dynamic> json) => _$GameDtoFromJson(json);
 
   Map<String, dynamic> toJson() => _$GameDtoToJson(this);
 }
@@ -43,8 +40,7 @@ class GameDto extends HiveObject {
 class GameMapper {
   final Map<String, Player> playerMap;
 
-  GameMapper(Map<String?, Player?> playerMap)
-      : this.playerMap = Map.unmodifiable(playerMap);
+  GameMapper(Map<String?, Player?> playerMap) : this.playerMap = Map.unmodifiable(playerMap);
 
   Either<MapFailure, Game> map(GameDto gameDto) {
     final List<String>? playerStrings = gameDto.players;
@@ -62,8 +58,7 @@ class GameMapper {
     for (String playerString in playerStrings) {
       Player? player = playerMap[playerString];
       if (player == null) {
-        return Left(MapFailure(
-            "Not all players [${playerStrings.join(", ")}] are in the player map!"));
+        return Left(MapFailure("Not all players [${playerStrings.join(", ")}] are in the player map!"));
       } else {
         players.add(player);
       }

@@ -16,15 +16,19 @@ class FeedbackMessage {
         title = null,
         type = FeedbackType.toast;
 
-  FeedbackMessage.snackbar(this.message,
-      {FeedbackAction? action, this.severity = Severity.message})
-      : actions = action == null ? const [] : List.unmodifiable([action]),
+  FeedbackMessage.snackbar(
+    this.message, {
+    FeedbackAction? action,
+    this.severity = Severity.message,
+  })  : actions = action == null ? const [] : List.unmodifiable([action]),
         title = null,
         type = FeedbackType.snackbar;
 
-  FeedbackMessage.dialog(this.message,
-      {required this.title, this.severity = Severity.message})
-      : actions = const [],
+  FeedbackMessage.dialog(
+    this.message, {
+    required this.title,
+    this.severity = Severity.message,
+  })  : actions = const [],
         type = FeedbackType.dialog;
 }
 

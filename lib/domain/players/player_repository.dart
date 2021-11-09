@@ -16,6 +16,7 @@ abstract class PlayerRepository {
 class PlayerHasGamesFailure extends Failure {
   const PlayerHasGamesFailure(Player player, {required int nbGames})
       : super(
-            "Player '$player' has $nbGames game(s).\nOnly players with no games can be deleted. "
-            "Either delete all the games or remove '$player' from those games.");
+          "Player '$player' has $nbGames game(s).\nOnly players with no games can be deleted. "
+          "Either delete all the games or remove '$player' from those games.",
+        );
 }

@@ -3,8 +3,7 @@ import 'package:collection/collection.dart';
 class EnumUtils {
   static bool _isEnumItem(enumItem) {
     final splittedEnum = enumItem.toString().split('.');
-    return splittedEnum.length > 1 &&
-        splittedEnum[0] == enumItem.runtimeType.toString();
+    return splittedEnum.length > 1 && splittedEnum[0] == enumItem.runtimeType.toString();
   }
 
   /// Convert an enum to a string
@@ -31,12 +30,9 @@ class EnumUtils {
   /// Example final result = EnumToString.fromString(TestEnum.values, "valueOne")
   /// result == TestEnum.valueOne //true
   ///
-  static T fromString<T>(List<T> enumValues, String? value,
-      {T Function()? orElse}) {
+  static T fromString<T>(List<T> enumValues, String? value, {T Function()? orElse}) {
     return enumValues.singleWhere(
-        (enumItem) =>
-            EnumUtils.convertToString(enumItem)?.toLowerCase() ==
-            value?.toLowerCase(),
+        (enumItem) => EnumUtils.convertToString(enumItem)?.toLowerCase() == value?.toLowerCase(),
         orElse: orElse);
   }
 
@@ -44,9 +40,7 @@ class EnumUtils {
     if (value == null) return null;
 
     return enumValues.singleWhereOrNull(
-      (enumItem) =>
-          EnumUtils.convertToString(enumItem)?.toLowerCase() ==
-          value.toLowerCase(),
+      (enumItem) => EnumUtils.convertToString(enumItem)?.toLowerCase() == value.toLowerCase(),
     );
   }
 }
@@ -57,6 +51,5 @@ class NotAnEnumException implements Exception {
   NotAnEnumException(this.value);
 
   @override
-  String toString() =>
-      '${value.toString()} of type ${value.runtimeType.toString()} is not an enum item.';
+  String toString() => '${value.toString()} of type ${value.runtimeType.toString()} is not an enum item.';
 }

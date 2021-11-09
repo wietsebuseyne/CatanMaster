@@ -27,8 +27,7 @@ class PlayerStatsPage extends StatelessWidget {
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           bool light = isLight(player.color);
           final brightness = light ? Brightness.light : Brightness.dark;
-          final overlayStyle =
-              light ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light;
+          final overlayStyle = light ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light;
           final theme = ThemeData(brightness: brightness);
           return <Widget>[
             SliverOverlapAbsorber(
@@ -50,14 +49,11 @@ class PlayerStatsPage extends StatelessWidget {
                 systemOverlayStyle: overlayStyle,
                 actions: [
                   IconButton(
-                    onPressed: () => Navigator.of(context).pushNamed(
-                        "/players/edit",
-                        arguments: {"player": player}),
+                    onPressed: () => Navigator.of(context).pushNamed("/players/edit", arguments: {"player": player}),
                     icon: const Icon(Icons.edit),
                   ),
                   IconButton(
-                    onPressed: () => BlocProvider.of<PlayersBloc>(context)
-                        .add(DeletePlayerEvent(player)),
+                    onPressed: () => BlocProvider.of<PlayersBloc>(context).add(DeletePlayerEvent(player)),
                     icon: const Icon(Icons.delete),
                   )
                 ],
@@ -96,8 +92,7 @@ class PlayerStatsPage extends StatelessWidget {
               ), //TODO calc nb based on width
 
               //Prizes
-              if (statistics.prizes.isNotEmpty)
-                const Divider(indent: 32.0, endIndent: 32.0),
+              if (statistics.prizes.isNotEmpty) const Divider(indent: 32.0, endIndent: 32.0),
               ...statistics.prizes.map((a) => AchievementLine(a)),
 
               //Achievements
@@ -121,15 +116,12 @@ class PlayerStatsPage extends StatelessWidget {
               HorizontalInfoTile(
                 leading: const Icon(Icons.tag),
                 start: const Text("Games won"),
-                end: Text(
-                    "${statistics.nbGamesWon} (${statistics.percentGamesWon}%)"),
+                end: Text("${statistics.nbGamesWon} (${statistics.percentGamesWon}%)"),
               ),
               HorizontalInfoTile(
                 leading: const Icon(Icons.history),
                 start: const Text("Last Game"),
-                end: Text(statistics.lastGame == null
-                    ? "TBD"
-                    : DateFormat.yMd().format(statistics.lastGame!.date)),
+                end: Text(statistics.lastGame == null ? "TBD" : DateFormat.yMd().format(statistics.lastGame!.date)),
               ),
               HorizontalInfoTile(
                 leading: statistics.mostPlayedExpansion.iconWidget,

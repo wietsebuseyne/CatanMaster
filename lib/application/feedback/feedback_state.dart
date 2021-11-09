@@ -7,12 +7,10 @@ class FeedbackState extends Equatable {
 
   FeedbackState.initial() : feedbackList = [];
 
-  FeedbackState(List<FeedbackMessage> feedbackList)
-      : this.feedbackList = List.unmodifiable(feedbackList);
+  FeedbackState(List<FeedbackMessage> feedbackList) : this.feedbackList = List.unmodifiable(feedbackList);
 
   @override
   List<Object> get props => [feedbackList];
 
-  FeedbackState copyWith(FeedbackMessage feedback) =>
-      FeedbackState(List.of(feedbackList)..add(feedback));
+  FeedbackState copyWith(FeedbackMessage feedback) => FeedbackState(List.of(feedbackList)..add(feedback));
 }

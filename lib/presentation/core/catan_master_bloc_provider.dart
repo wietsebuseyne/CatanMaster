@@ -11,8 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class CatanMasterBlocProvider extends StatelessWidget {
   final Widget child;
 
-  const CatanMasterBlocProvider({Key? key, required this.child})
-      : super(key: key);
+  const CatanMasterBlocProvider({Key? key, required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +24,8 @@ class CatanMasterBlocProvider extends StatelessWidget {
               RepositoryProvider.of<PlayerRepository>(context),
               feedbackBloc: BlocProvider.of<FeedbackBloc>(context),
               deletePlayer: DeletePlayer(
-                  gameRepository:
-                      RepositoryProvider.of<GameRepository>(context),
-                  playerRepository:
-                      RepositoryProvider.of<PlayerRepository>(context)),
+                  gameRepository: RepositoryProvider.of<GameRepository>(context),
+                  playerRepository: RepositoryProvider.of<PlayerRepository>(context)),
             )..add(LoadPlayers()),
           ),
           BlocProvider<GamesBloc>(

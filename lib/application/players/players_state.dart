@@ -36,12 +36,10 @@ class PlayersLoaded extends PlayerState {
 
   @override
   PlayersLoaded copyWith({Player? newPlayer, Message? message}) {
-    return PlayerAdded(players,
-        newPlayer: newPlayer, message: message ?? message);
+    return PlayerAdded(players, newPlayer: newPlayer, message: message ?? message);
   }
 
-  Player? getPlayer(String username) =>
-      players.firstWhereOrNull((p) => p.username == username);
+  Player? getPlayer(String username) => players.firstWhereOrNull((p) => p.username == username);
 }
 
 class PlayerAdded extends PlayersLoaded {
@@ -55,6 +53,5 @@ class PlayerEdited extends PlayersLoaded {
   //TODO move to Players object
   final Player? editedPlayer;
 
-  PlayerEdited(List<Player> players, {this.editedPlayer})
-      : super(List.from(players)..add(editedPlayer));
+  PlayerEdited(List<Player> players, {this.editedPlayer}) : super(List.from(players)..add(editedPlayer));
 }

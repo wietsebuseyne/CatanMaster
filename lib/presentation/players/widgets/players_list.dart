@@ -13,8 +13,7 @@ class PlayersList extends StatelessWidget {
     if (statistics.isEmpty) {
       return const EmptyListMessage(
         title: Text("No players"),
-        subtitle: Text(
-            "To get started, add a player by pressing the \u2795 button below"),
+        subtitle: Text("To get started, add a player by pressing the \u2795 button below"),
       );
     }
     return ListView.builder(

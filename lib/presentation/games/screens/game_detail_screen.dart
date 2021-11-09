@@ -15,8 +15,7 @@ class GameDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<GamesBloc, GamesState>(
-      listenWhen: (s1, s2) =>
-          s2 is GamesLoaded && s2.games.getGame(date) == null,
+      listenWhen: (s1, s2) => s2 is GamesLoaded && s2.games.getGame(date) == null,
       listener: (s1, s2) => Navigator.of(context).pop(),
       builder: (context, state) {
         if (state is GamesLoaded) {

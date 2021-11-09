@@ -33,8 +33,7 @@ class WinLoseHexagonPath extends StatefulWidget {
         bottom.add(value);
       }
     });
-    return WinLoseHexagonPath._(
-        key: key, top: top, bottom: bottom, width: width);
+    return WinLoseHexagonPath._(key: key, top: top, bottom: bottom, width: width);
   }
 
   @override
@@ -43,8 +42,7 @@ class WinLoseHexagonPath extends StatefulWidget {
   int get nbHexagons => top.length + bottom.length;
 }
 
-class _WinLoseHexagonPathState extends State<WinLoseHexagonPath>
-    with SingleTickerProviderStateMixin {
+class _WinLoseHexagonPathState extends State<WinLoseHexagonPath> with SingleTickerProviderStateMixin {
   late AnimationController controller;
   List<Animation<double>> flyInAnimations = [];
   late int total;
@@ -71,8 +69,7 @@ class _WinLoseHexagonPathState extends State<WinLoseHexagonPath>
       flyInAnimations.add(
         Tween(begin: widget.width, end: 0.0).animate(CurvedAnimation(
           parent: controller,
-          curve:
-              Interval(step * i, step * (i + 5), curve: Curves.easeInOutSine),
+          curve: Interval(step * i, step * (i + 5), curve: Curves.easeInOutSine),
         )),
       );
     }
@@ -134,9 +131,7 @@ class _WinLoseHexagonPathState extends State<WinLoseHexagonPath>
   }
 
   Iterable<Widget> _expandWin(bool win, int nb) => [
-        Transform.translate(
-            offset: Offset(flyInAnimations[nb].value, 0),
-            child: WinLoseHexagon(win)),
+        Transform.translate(offset: Offset(flyInAnimations[nb].value, 0), child: WinLoseHexagon(win)),
         const SizedBox(width: 16),
       ];
 }
@@ -147,8 +142,7 @@ class WinLoseHexagon extends StatelessWidget {
   final double height;
   final double rotate;
 
-  const WinLoseHexagon(this.win,
-      {this.rotate = 30, this.width = 32, this.height = 32});
+  const WinLoseHexagon(this.win, {this.rotate = 30, this.width = 32, this.height = 32});
 
   @override
   Widget build(BuildContext context) {

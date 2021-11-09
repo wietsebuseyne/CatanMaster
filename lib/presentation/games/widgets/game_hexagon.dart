@@ -28,10 +28,7 @@ class GameHexagon extends StatelessWidget {
       return Center(
           child: Text(
         game.expansions.length.toString(),
-        style: TextStyle(
-            color: game.winner.onColor,
-            fontWeight: FontWeight.bold,
-            fontSize: 18),
+        style: TextStyle(color: game.winner.onColor, fontWeight: FontWeight.bold, fontSize: 18),
       ));
     }
     return null;

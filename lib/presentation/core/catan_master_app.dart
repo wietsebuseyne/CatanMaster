@@ -28,12 +28,10 @@ class CatanMasterApp extends StatelessWidget {
         return GamesPage(
           childBuilder: (context, gamesState) {
             //TODO keep list of possible colors and which are too light for primaryswatch
-            Color color =
-                gamesState.games.getCatanMaster()?.color ?? Colors.blue;
+            Color color = gamesState.games.getCatanMaster()?.color ?? Colors.blue;
             MaterialColor? mc = colorToMaterialColor(color);
             var light = isLight(color);
-            var overlayStyle =
-                light ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light;
+            var overlayStyle = light ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light;
             return MaterialApp(
               title: 'Catan Master',
               theme: ThemeData(
@@ -44,8 +42,7 @@ class CatanMasterApp extends StatelessWidget {
                     systemOverlayStyle: overlayStyle,
                   ),
                   bottomNavigationBarTheme: BottomNavigationBarThemeData(
-                    selectedItemColor:
-                        light ? (mc?.shade900 ?? Colors.black) : color,
+                    selectedItemColor: light ? (mc?.shade900 ?? Colors.black) : color,
                   )),
               darkTheme: ThemeData(
                 brightness: Brightness.dark,
@@ -56,8 +53,7 @@ class CatanMasterApp extends StatelessWidget {
               initialRoute: '/',
               onGenerateRoute: (RouteSettings settings) {
                 if (settings.name == '/players/add') {
-                  return CatanPageRouteBuilder(
-                      page: AddEditPlayerScreen.add(), fullscreenDialog: true);
+                  return CatanPageRouteBuilder(page: AddEditPlayerScreen.add(), fullscreenDialog: true);
                 } else if (settings.name == '/players/edit') {
                   return MaterialPageRoute(
                     builder: (context) {
@@ -71,17 +67,14 @@ class CatanMasterApp extends StatelessWidget {
                   );
                 } else if (settings.name == '/players/detail') {
                   return MaterialPageRoute(builder: (context) {
-                    var player =
-                        (settings.arguments as Map)["player"] as Player?;
+                    var player = (settings.arguments as Map)["player"] as Player?;
                     if (player == null) {
                       return const Text("Error: no player provided");
                     }
                     return PlayerDetailScreen(player.username);
                   });
                 } else if (settings.name == '/games/add') {
-                  return CatanPageRouteBuilder(
-                      page: const AddEditGameScreen.add(),
-                      fullscreenDialog: true);
+                  return CatanPageRouteBuilder(page: const AddEditGameScreen.add(), fullscreenDialog: true);
                 } else if (settings.name == '/games/edit') {
                   return MaterialPageRoute(
                       builder: (context) {
@@ -133,19 +126,13 @@ class CatanMasterHomeScreen extends StatelessWidget {
         currentIndex: pageToIndex(tab),
         items: [
           BottomNavigationBarItem(
-            icon: Icon(tab == HomePageTab.games
-                ? CatanIcons.diceSolid
-                : CatanIcons.dice),
+            icon: Icon(tab == HomePageTab.games ? CatanIcons.diceSolid : CatanIcons.dice),
             label: 'Games',
           ),
           BottomNavigationBarItem(
-              icon: Icon(tab == HomePageTab.players
-                  ? Icons.people
-                  : Icons.people_outline),
-              label: 'Players'),
+              icon: Icon(tab == HomePageTab.players ? Icons.people : Icons.people_outline), label: 'Players'),
         ],
-        onTap: (newIndex) => BlocProvider.of<MainBloc>(context)
-            .add(SwitchTabEvent(indexToPage(newIndex))),
+        onTap: (newIndex) => BlocProvider.of<MainBloc>(context).add(SwitchTabEvent(indexToPage(newIndex))),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Builder(
@@ -153,8 +140,7 @@ class CatanMasterHomeScreen extends StatelessWidget {
           onPressed: () {
             switch (tab) {
               case HomePageTab.games:
-                PlayerState playersState =
-                    BlocProvider.of<PlayersBloc>(context).state;
+                PlayerState playersState = BlocProvider.of<PlayersBloc>(context).state;
                 if (playersState is PlayersLoaded) {
                   if (playersState.players.length > 1) {
                     Navigator.of(context).pushNamed("/games/add");
@@ -163,29 +149,21 @@ class CatanMasterHomeScreen extends StatelessWidget {
                         context: context,
                         builder: (context) => AlertDialog(
                               title: const Text("Not enough players, my lord"),
-                              content: const Text(
-                                  "You must add at least 2 players before adding a game."),
+                              content: const Text("You must add at least 2 players before adding a game."),
                               actions: [
-                                TextButton(
-                                    onPressed: () =>
-                                        Navigator.of(context).pop(),
-                                    child: const Text("Cancel")),
+                                TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text("Cancel")),
                                 ElevatedButton(
                                     onPressed: () {
-                                      BlocProvider.of<MainBloc>(context).add(
-                                          SwitchTabEvent(HomePageTab.players));
+                                      BlocProvider.of<MainBloc>(context).add(SwitchTabEvent(HomePageTab.players));
                                       Navigator.of(context).pop();
-                                      Navigator.of(context)
-                                          .pushNamed("/players/add");
+                                      Navigator.of(context).pushNamed("/players/add");
                                     },
                                     child: const Text("Add Player")),
                               ],
                             ));
                   }
                 } else {
-                  FeedbackMessage.snackbar(
-                          "Still loading data, please be patient")
-                      .show(context);
+                  FeedbackMessage.snackbar("Still loading data, please be patient").show(context);
                 }
                 break;
               case HomePageTab.players:
@@ -211,12 +189,11 @@ class CatanFloatingActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Hero(
       tag: "catan_fab",
-      flightShuttleBuilder: (flightContext, animation, flightDirection,
-          fromHeroContext, toHeroContext) {
+      flightShuttleBuilder: (flightContext, animation, flightDirection, fromHeroContext, toHeroContext) {
         final Hero toHero = toHeroContext.widget as Hero;
         return RotationTransition(
-          turns: Tween<double>(begin: 0.0, end: 1.0).animate(
-              CurvedAnimation(parent: animation, curve: Curves.easeInOutSine)),
+          turns: Tween<double>(begin: 0.0, end: 1.0)
+              .animate(CurvedAnimation(parent: animation, curve: Curves.easeInOutSine)),
           child: toHero.child,
         );
       },

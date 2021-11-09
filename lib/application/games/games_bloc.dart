@@ -23,9 +23,7 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
   final PlayersBloc playersBloc;
   late StreamSubscription _subscription;
 
-  GamesBloc(this.gameRepository,
-      {required this.playersBloc, required this.feedbackBloc})
-      : super(InitialGamesState()) {
+  GamesBloc(this.gameRepository, {required this.playersBloc, required this.feedbackBloc}) : super(InitialGamesState()) {
     _subscription = playersBloc.stream.listen((state) {
       if (state is PlayersLoaded) {
         add(LoadGames());
@@ -54,8 +52,7 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
 
   Stream<GamesState> _loadGames(LoadGames event) async* {
     yield GamesLoading();
-    yield (await gameRepository.getGames())
-        .fold((l) => _feedbackAndReturn(l), (r) => GamesLoaded(Games(r)));
+    yield (await gameRepository.getGames()).fold((l) => _feedbackAndReturn(l), (r) => GamesLoaded(Games(r)));
   }
 
   Stream<GamesState> _addEditGame(AddEditGameEvent event) async* {
@@ -74,31 +71,23 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
           );
         } else {
           game = Game.noScores(
-              players: event.players,
-              date: event.time,
-              winner: event.winner,
-              expansions: event.expansions);
+              players: event.players, date: event.time, winner: event.winner, expansions: event.expansions);
         }
         //TODO use returned value to ensure equality (to prevent issues like difference in Color and MaterialColor)
         Game? oldGame = event.oldGame;
         if (oldGame != null) {
-          yield (await gameRepository.editGame(
-                  oldGame.date.millisecondsSinceEpoch, game))
-              .fold(
-            (f) =>
-                _feedbackAndReturn(f, message: "Error while editing game: $f"),
+          yield (await gameRepository.editGame(oldGame.date.millisecondsSinceEpoch, game)).fold(
+            (f) => _feedbackAndReturn(f, message: "Error while editing game: $f"),
             (r) => GameEdited(s.games.delete(event.oldGame), editedGame: game),
           );
         } else {
           yield (await gameRepository.addGame(game)).fold(
-            (f) =>
-                _feedbackAndReturn(f, message: "Error while adding game: $f"),
+            (f) => _feedbackAndReturn(f, message: "Error while adding game: $f"),
             (r) => GameAdded(s.games, newGame: game),
           );
         }
       } on DomainException catch (e) {
-        yield _feedbackAndReturn(
-            DataValidationFailure(message: e.message!, part: e.part));
+        yield _feedbackAndReturn(DataValidationFailure(message: e.message!, part: e.part));
       }
     }
   }
@@ -107,15 +96,12 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
     final GamesState s = state;
     if (s is GamesLoaded) {
       Game game = event.game;
-      yield (await gameRepository.deleteGame(game)).fold(
-          (f) => _feedbackAndReturn(f,
-              message: "Error while deleting game: ${f.toString()}"), (r) {
+      yield (await gameRepository.deleteGame(game))
+          .fold((f) => _feedbackAndReturn(f, message: "Error while deleting game: ${f.toString()}"), (r) {
         feedbackBloc.add(FeedbackEvent(
-          FeedbackMessage.snackbar(
-              "Game on '${DateFormat.MMMEd().format(game.date)}' deleted",
+          FeedbackMessage.snackbar("Game on '${DateFormat.MMMEd().format(game.date)}' deleted",
               severity: Severity.warning,
-              action: FeedbackAction(
-                  text: "UNDO", action: () => add(UndoDeleteGameEvent(game)))),
+              action: FeedbackAction(text: "UNDO", action: () => add(UndoDeleteGameEvent(game)))),
         ));
         return GamesLoaded(s.games.delete(event.game));
       });
@@ -127,15 +113,13 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
     if (s is GamesLoaded) {
       Game game = event.game;
       yield (await gameRepository.undoDelete(game: game)).fold(
-          (f) => _feedbackAndReturn(f,
-              message: "Error while undoing remove: ${f.toString()}"),
+          (f) => _feedbackAndReturn(f, message: "Error while undoing remove: ${f.toString()}"),
           (r) => GamesLoaded(s.games.add(game)));
     }
   }
 
   GamesState _feedbackAndReturn(Failure failure, {String? message}) {
-    feedbackBloc
-        .add(FeedbackEvent(FeedbackMessage.toast(message ?? failure.message)));
+    feedbackBloc.add(FeedbackEvent(FeedbackMessage.toast(message ?? failure.message)));
     return state;
   }
 }

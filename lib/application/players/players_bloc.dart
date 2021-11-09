@@ -19,9 +19,11 @@ class PlayersBloc extends Bloc<PlayerEvent, PlayerState> {
   final PlayerRepository _repository;
   final FeedbackBloc feedbackBloc;
 
-  PlayersBloc(this._repository,
-      {required this.feedbackBloc, required this.deletePlayer})
-      : super(const InitialPlayersState());
+  PlayersBloc(
+    this._repository, {
+    required this.feedbackBloc,
+    required this.deletePlayer,
+  }) : super(const InitialPlayersState());
 
   @override
   Stream<PlayerState> mapEventToState(PlayerEvent event) async* {
@@ -60,8 +62,7 @@ class PlayersBloc extends Bloc<PlayerEvent, PlayerState> {
           },
           (r) {
             feedbackBloc.snackbar("Player '$player' successfully edited");
-            return PlayerEdited(List.from(s.players)..remove(event.toEdit),
-                editedPlayer: player);
+            return PlayerEdited(List.from(s.players)..remove(event.toEdit), editedPlayer: player);
           },
         );
       } else {
@@ -95,8 +96,7 @@ class PlayersBloc extends Bloc<PlayerEvent, PlayerState> {
           return s;
         },
         (_) {
-          feedbackBloc
-              .snackbar("Player '${event.player}' successfully deleted");
+          feedbackBloc.snackbar("Player '${event.player}' successfully deleted");
           return PlayersLoaded(List.from(s.players)..remove(event.player));
         },
       );

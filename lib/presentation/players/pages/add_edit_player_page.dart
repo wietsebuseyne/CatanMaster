@@ -10,8 +10,11 @@ class AddEditPlayerPage extends StatelessWidget {
   final PlayerFormData formData;
   final VoidCallback? onFormChanged;
 
-  const AddEditPlayerPage(this._formKey,
-      {required this.formData, this.onFormChanged});
+  const AddEditPlayerPage(
+    this._formKey, {
+    required this.formData,
+    this.onFormChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,14 +30,12 @@ class AddEditPlayerPage extends StatelessWidget {
               TextFormField(
                 initialValue: formData.name ?? "",
                 decoration: const InputDecoration(
-                    labelText: "Name",
-                    contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5.0)))),
+                  labelText: "Name",
+                  contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                ),
                 onSaved: (newValue) => formData.name = newValue,
-                validator: (value) => (value?.length ?? 0) < 2
-                    ? "Not enough letters, mi lord!"
-                    : null,
+                validator: (value) => (value?.length ?? 0) < 2 ? "Not enough letters, mi lord!" : null,
               ),
               const SizedBox(
                 height: 16.0,
@@ -57,9 +58,7 @@ class AddEditPlayerPage extends StatelessWidget {
                               groupValue: state.value,
                               onChanged: (dynamic g) => state.didChange(g)),
                           InkWell(
-                            child: const SizedBox(
-                                height: 48.0,
-                                child: Center(child: Text("Male"))),
+                            child: const SizedBox(height: 48.0, child: Center(child: Text("Male"))),
                             onTap: () => state.didChange(Gender.male),
                           ),
                           Radio(
@@ -67,22 +66,15 @@ class AddEditPlayerPage extends StatelessWidget {
                               groupValue: state.value,
                               onChanged: (dynamic g) => state.didChange(g)),
                           InkWell(
-                            child: const SizedBox(
-                                height: 48.0,
-                                child: Center(child: Text("Female"))),
+                            child: const SizedBox(height: 48.0, child: Center(child: Text("Female"))),
                             onTap: () => state.didChange(Gender.female),
                           ),
-                          Radio(
-                              value: Gender.x,
-                              groupValue: state.value,
-                              onChanged: (dynamic g) => state.didChange(g)),
+                          Radio(value: Gender.x, groupValue: state.value, onChanged: (dynamic g) => state.didChange(g)),
                           InkWell(
                             child: const SizedBox(
                                 height: 48.0,
                                 width: 24,
-                                child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text("X"))),
+                                child: Align(alignment: Alignment.centerLeft, child: Text("X"))),
                             onTap: () => state.didChange(Gender.x),
                           ),
                         ],
@@ -93,8 +85,7 @@ class AddEditPlayerPage extends StatelessWidget {
                 onSaved: (gender) {
                   formData.gender = gender;
                 },
-                validator: (gender) =>
-                    gender == null ? "Please pick a gender" : null,
+                validator: (gender) => gender == null ? "Please pick a gender" : null,
               ),
               const SizedBox(
                 height: 16.0,
@@ -114,8 +105,7 @@ class AddEditPlayerPage extends StatelessWidget {
                       ));
                 },
                 onSaved: (color) => formData.color = color,
-                validator: (color) =>
-                    color == null ? "Please pick a color" : null,
+                validator: (color) => color == null ? "Please pick a color" : null,
               ),
             ],
           ),

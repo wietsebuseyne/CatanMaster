@@ -13,10 +13,10 @@ class DeletePlayer extends UseCase<void, Player> {
 
   @override
   Future<Either<Failure, void>> call(Player player) async {
-    return (await gameRepository.getGamesForPlayer(player.username))
-        .fold((failure) => Left(failure), (games) {
-      if (games.isNotEmpty)
+    return (await gameRepository.getGamesForPlayer(player.username)).fold((failure) => Left(failure), (games) {
+      if (games.isNotEmpty) {
         return Left(PlayerHasGamesFailure(player, nbGames: games.length));
+      }
       return playerRepository.deletePlayer(player);
     });
   }

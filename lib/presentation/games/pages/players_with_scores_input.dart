@@ -27,48 +27,48 @@ class PlayersWithScoresInput extends StatelessWidget {
             contentPadding: const EdgeInsets.only(),
             dense: true,
             title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(child: Text(p.name)),
-                  Row(
-                    children: [
-                      if (scores[p] != null)
-                        const SizedBox(
-                          width: 16.0,
-                        ),
-                      if (scores[p] != null)
-                        Chip(
-                          label: Text(scores[p].toString()),
-                        ),
-                      SliderTheme(
-                        data: SliderThemeData(
-                          activeTrackColor: color,
-                          inactiveTickMarkColor:
-                              color == Colors.white ? Colors.grey : color,
-                          activeTickMarkColor: color.withOpacity(0.1),
-                          inactiveTrackColor: color.withOpacity(0.1),
-                          thumbColor: color,
-                        ),
-                        child: Slider(
-                            label: scores[p]?.toString(),
-                            min: 0,
-                            max: 20,
-                            divisions: 20,
-                            value: (scores[p] ?? 0).toDouble(),
-                            onChanged: (v) {
-                              Map<Player, int> newScores = Map.from(scores);
-                              int score = v.toInt();
-                              if (score == 0) {
-                                newScores.remove(p);
-                              } else {
-                                newScores[p] = score;
-                              }
-                              onChanged(newScores);
-                            }),
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(child: Text(p.name)),
+                Row(
+                  children: [
+                    if (scores[p] != null)
+                      const SizedBox(
+                        width: 16.0,
                       ),
-                    ],
-                  ),
-                ]),
+                    if (scores[p] != null)
+                      Chip(
+                        label: Text(scores[p].toString()),
+                      ),
+                    SliderTheme(
+                      data: SliderThemeData(
+                        activeTrackColor: color,
+                        inactiveTickMarkColor: color == Colors.white ? Colors.grey : color,
+                        activeTickMarkColor: color.withOpacity(0.1),
+                        inactiveTrackColor: color.withOpacity(0.1),
+                        thumbColor: color,
+                      ),
+                      child: Slider(
+                          label: scores[p]?.toString(),
+                          min: 0,
+                          max: 20,
+                          divisions: 20,
+                          value: (scores[p] ?? 0).toDouble(),
+                          onChanged: (v) {
+                            Map<Player, int> newScores = Map.from(scores);
+                            int score = v.toInt();
+                            if (score == 0) {
+                              newScores.remove(p);
+                            } else {
+                              newScores[p] = score;
+                            }
+                            onChanged(newScores);
+                          }),
+                    ),
+                  ],
+                ),
+              ],
+            ),
             onChanged: (selected) {
               Map<Player, int> newScores = Map.from(scores);
               if (selected!) {

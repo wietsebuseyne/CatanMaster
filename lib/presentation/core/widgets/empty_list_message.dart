@@ -17,18 +17,20 @@ class EmptyListMessage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           DefaultTextStyle(
-              style: Theme.of(context).textTheme.headline5!,
-              textAlign: TextAlign.center,
-              child: title),
+            style: Theme.of(context).textTheme.headline5!,
+            textAlign: TextAlign.center,
+            child: title,
+          ),
           if (subtitle != null)
             const SizedBox(
               height: 8.0,
             ),
           if (subtitle != null)
             DefaultTextStyle(
-                style: Theme.of(context).textTheme.bodyText2!,
-                textAlign: TextAlign.center,
-                child: subtitle!),
+              style: Theme.of(context).textTheme.bodyText2!,
+              textAlign: TextAlign.center,
+              child: subtitle!,
+            ),
           if (action != null)
             const SizedBox(
               height: 8.0,

@@ -39,8 +39,7 @@ class CatanPageRouteBuilder extends PageRouteBuilder {
             var end = Offset.zero;
             var curve = Curves.easeOutSine;
 
-            var tween =
-                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
             return SlideTransition(
               position: tween.animate(animation),

@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:catan_master/presentation/core/color.dart';
-import 'package:flutter_polygon/flutter_polygon.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_polygon/flutter_polygon.dart';
 
 /// TODO fix width / height / rotation to tightly match
 class Hexagon extends StatelessWidget {
@@ -13,13 +13,14 @@ class Hexagon extends StatelessWidget {
   final Widget? child;
   final List<BoxShadow> shadows;
 
-  const Hexagon(
-      {this.color,
-      this.width = 32,
-      this.height = 32,
-      this.rotate = 0,
-      this.shadows = const [],
-      this.child});
+  const Hexagon({
+    this.color,
+    this.width = 32,
+    this.height = 32,
+    this.rotate = 0,
+    this.shadows = const [],
+    this.child,
+  });
 
   @override
   Widget build(BuildContext context) {

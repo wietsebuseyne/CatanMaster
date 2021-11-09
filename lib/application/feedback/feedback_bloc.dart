@@ -26,9 +26,7 @@ class FeedbackBloc extends Bloc<FeedbackEvent, FeedbackState> {
     add(FeedbackEvent(FeedbackMessage.snackbar(message, severity: severity)));
   }
 
-  void dialog(String message,
-      {required String title, Severity severity = Severity.message}) {
-    add(FeedbackEvent(
-        FeedbackMessage.dialog(message, title: title, severity: severity)));
+  void dialog(String message, {required String title, Severity severity = Severity.message}) {
+    add(FeedbackEvent(FeedbackMessage.dialog(message, title: title, severity: severity)));
   }
 }

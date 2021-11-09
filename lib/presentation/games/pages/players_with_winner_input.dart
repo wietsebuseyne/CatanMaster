@@ -40,9 +40,7 @@ class PlayersWithWinnerInput extends StatelessWidget {
                     ),
                     IconButton(
                       icon: const Icon(CatanIcons.trophy),
-                      color: winner == p
-                          ? const Color.fromARGB(255, 218, 165, 32)
-                          : Theme.of(context).disabledColor,
+                      color: winner == p ? const Color.fromARGB(255, 218, 165, 32) : Theme.of(context).disabledColor,
                       onPressed: () {
                         if (!selected.contains(p)) {
                           _onPlayerSelected(p, true);

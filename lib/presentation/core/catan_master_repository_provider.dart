@@ -15,25 +15,25 @@ import 'package:provider/provider.dart';
 class CatanMasterLocalRepositoryProvider extends StatelessWidget {
   final Widget child;
 
-  const CatanMasterLocalRepositoryProvider({Key? key, required this.child})
-      : super(key: key);
+  const CatanMasterLocalRepositoryProvider({Key? key, required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Box>>(
         future: Future.wait<Box>([
           Hive.openBox<PlayerDto>("players"),
-          Hive.openBox<GameDto>("games")
+          Hive.openBox<GameDto>("games"),
         ]),
         builder: (BuildContext context, AsyncSnapshot<List<Box>> snapshot) {
           if (snapshot.hasError) {
             return const MaterialApp(
-                home:
-                    Scaffold(body: Center(child: Text("Fatal error occured"))));
+              home: Scaffold(body: Center(child: Text("Fatal error occured"))),
+            );
           }
           var data = snapshot.data;
-          if (data == null)
+          if (data == null) {
             return const Center(child: CircularProgressIndicator());
+          }
           Box<PlayerDto> playerBox = data[0] as Box<PlayerDto>;
           Box<GameDto> gameBox = data[1] as Box<GameDto>;
           return MultiProvider(

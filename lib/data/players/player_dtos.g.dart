@@ -43,10 +43,7 @@ class PlayerDtoAdapter extends TypeAdapter<PlayerDto> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is PlayerDtoAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      identical(this, other) || other is PlayerDtoAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }
 
 // **************************************************************************

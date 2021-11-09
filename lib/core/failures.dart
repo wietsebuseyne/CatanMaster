@@ -17,6 +17,8 @@ class MapFailure extends Failure {
 class DataValidationFailure extends Failure {
   final String? part;
 
-  const DataValidationFailure({required String message, this.part})
-      : super(message);
+  const DataValidationFailure({
+    required String message,
+    this.part,
+  }) : super(message);
 }

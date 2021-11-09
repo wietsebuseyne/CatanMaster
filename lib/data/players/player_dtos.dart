@@ -52,8 +52,7 @@ class PlayerDto extends HiveObject {
       gender: EnumUtils.fromString(Gender.values, gender)!,
       color: Color(color!).withAlpha(255));
 
-  factory PlayerDto.fromJson(Map<String, dynamic> json) =>
-      _$PlayerDtoFromJson(json);
+  factory PlayerDto.fromJson(Map<String, dynamic> json) => _$PlayerDtoFromJson(json);
 
   Map<String, dynamic> toJson() => _$PlayerDtoToJson(this);
 }
