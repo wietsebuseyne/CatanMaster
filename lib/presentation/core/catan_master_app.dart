@@ -6,19 +6,20 @@ import 'package:catan_master/domain/players/player.dart';
 import 'package:catan_master/presentation/core/catan_icons.dart';
 import 'package:catan_master/presentation/core/catan_page_route_builder.dart';
 import 'package:catan_master/presentation/core/color.dart';
-import 'package:catan_master/presentation/games/screens/game_detail_screen.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_polygon/flutter_polygon.dart';
+import 'package:catan_master/feature/export_import/presentation/export_data_dialog.dart';
 import 'package:catan_master/presentation/feedback/show_feedback.dart';
 import 'package:catan_master/presentation/feedback/user_feedback.dart';
 import 'package:catan_master/presentation/games/pages/games_page.dart';
 import 'package:catan_master/presentation/games/screens/add_edit_game_screen.dart';
+import 'package:catan_master/presentation/games/screens/game_detail_screen.dart';
 import 'package:catan_master/presentation/games/widgets/games_list.dart';
 import 'package:catan_master/presentation/players/pages/players_page.dart';
 import 'package:catan_master/presentation/players/screens/add_edit_player_screen.dart';
 import 'package:catan_master/presentation/players/screens/player_detail_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_polygon/flutter_polygon.dart';
 
 class CatanMasterApp extends StatelessWidget {
   @override
@@ -35,15 +36,16 @@ class CatanMasterApp extends StatelessWidget {
             return MaterialApp(
               title: 'Catan Master',
               theme: ThemeData(
-                  primaryColor: color,
-                  primarySwatch: mc,
-                  appBarTheme: AppBarTheme(
-                    color: color,
-                    systemOverlayStyle: overlayStyle,
-                  ),
-                  bottomNavigationBarTheme: BottomNavigationBarThemeData(
-                    selectedItemColor: light ? (mc?.shade900 ?? Colors.black) : color,
-                  )),
+                primaryColor: color,
+                primarySwatch: mc,
+                appBarTheme: AppBarTheme(
+                  color: color,
+                  systemOverlayStyle: overlayStyle,
+                ),
+                bottomNavigationBarTheme: BottomNavigationBarThemeData(
+                  selectedItemColor: light ? (mc?.shade900 ?? Colors.black) : color,
+                ),
+              ),
               darkTheme: ThemeData(
                 brightness: Brightness.dark,
                 primarySwatch: mc,
@@ -117,7 +119,22 @@ class CatanMasterHomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Catan Master"),
-        actions: const [
+        actions: [
+          PopupMenuButton<String>(
+            onSelected: (selection) {
+              switch (selection) {
+                case 'export':
+                  showExportDialog(context);
+                  break;
+              }
+            },
+            itemBuilder: (context) {
+              return [
+                // Text('Import data'),
+                const PopupMenuItem<String>(child: Text('Export data'), value: 'export'),
+              ];
+            },
+          ),
 //          IconButton(icon: Icon(Icons.settings), onPressed: () {}),
         ],
       ),
@@ -173,6 +190,13 @@ class CatanMasterHomeScreen extends StatelessWidget {
           },
         ),
       ),
+    );
+  }
+
+  Future<void> showExportDialog(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (context) => const ExportDataDialog(),
     );
   }
 }
