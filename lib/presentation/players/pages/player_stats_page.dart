@@ -167,27 +167,28 @@ class PlayerRank extends StatelessWidget {
   }
 
   Widget get _rankIcon {
-    if (rank == 1)
-      return const Icon(
-        CatanIcons.trophy,
-        size: 32,
-        color: Color.fromARGB(255, 218, 165, 32),
-      );
-    if (rank == 2)
-      return const Icon(
-        CatanIcons.medal,
-        size: 32,
-        color: Color.fromARGB(255, 150, 150, 150),
-      );
-    if (rank == 3)
-      return const Icon(
-        CatanIcons.medal,
-        size: 32,
-        color: Color.fromARGB(255, 176, 141, 87),
-      );
-    return Hexagon(
-      color: player.color,
-    );
+    switch (rank) {
+      case 1:
+        return const Icon(
+          CatanIcons.trophy,
+          size: 32,
+          color: Color.fromARGB(255, 218, 165, 32),
+        );
+      case 2:
+        return const Icon(
+          CatanIcons.medal,
+          size: 32,
+          color: Color.fromARGB(255, 150, 150, 150),
+        );
+      case 3:
+        return const Icon(
+          CatanIcons.medal,
+          size: 32,
+          color: Color.fromARGB(255, 176, 141, 87),
+        );
+      default:
+        return Hexagon(color: player.color);
+    }
   }
 
   String get _rankTitle {
