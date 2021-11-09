@@ -50,14 +50,12 @@ class PlayerDtoAdapter extends TypeAdapter<PlayerDto> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-PlayerDto _$PlayerDtoFromJson(Map<String, dynamic> json) {
-  return PlayerDto(
-    username: json['username'] as String?,
-    name: json['name'] as String?,
-    gender: json['gender'] as String?,
-    color: json['color'] as int?,
-  );
-}
+PlayerDto _$PlayerDtoFromJson(Map<String, dynamic> json) => PlayerDto(
+      username: json['username'] as String?,
+      name: json['name'] as String?,
+      gender: json['gender'] as String?,
+      color: json['color'] as int?,
+    );
 
 Map<String, dynamic> _$PlayerDtoToJson(PlayerDto instance) => <String, dynamic>{
       'username': instance.username,

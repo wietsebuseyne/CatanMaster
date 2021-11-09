@@ -53,17 +53,15 @@ class GameDtoAdapter extends TypeAdapter<GameDto> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-GameDto _$GameDtoFromJson(Map<String, dynamic> json) {
-  return GameDto(
-    time: json['time'] as int?,
-    players: (json['players'] as List?)?.map((e) => e as String)?.toList(),
-    winner: json['winner'] as String?,
-    expansions: (json['expansions'] as List?)?.map((e) => e as String)?.toList(),
-    scores: (json['scores'] as Map<String, dynamic>?)?.map(
-      (k, e) => MapEntry(k, e as int),
-    ),
-  );
-}
+GameDto _$GameDtoFromJson(Map<String, dynamic> json) => GameDto(
+      time: json['time'] as int?,
+      players: (json['players'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      winner: json['winner'] as String?,
+      expansions: (json['expansions'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      scores: (json['scores'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, e as int),
+      ),
+    );
 
 Map<String, dynamic> _$GameDtoToJson(GameDto instance) => <String, dynamic>{
       'time': instance.time,
