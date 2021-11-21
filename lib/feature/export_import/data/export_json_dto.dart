@@ -5,16 +5,15 @@ import 'package:json_annotation/json_annotation.dart';
 part 'export_json_dto.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class ExportJsonDto {
-
-  int? version;
+class ExportJsonDtoV1 {
+  int get version => 1;
 
   List<GameDto>? games;
   List<PlayerDto>? players;
 
-  ExportJsonDto({this.version, this.games, this.players});
+  ExportJsonDtoV1({this.games, this.players});
 
-  factory ExportJsonDto.fromJson(Map<String, dynamic> json) => _$ExportJsonDtoFromJson(json);
+  factory ExportJsonDtoV1.fromJson(Map<String, dynamic> json) => _$ExportJsonDtoV1FromJson(json);
 
-  Map<String, dynamic> toJson() => _$ExportJsonDtoToJson(this);
+  Map<String, dynamic> toJson() => _$ExportJsonDtoV1ToJson(this);
 }

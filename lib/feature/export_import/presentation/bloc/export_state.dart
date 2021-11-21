@@ -19,3 +19,12 @@ class ExportDataLoaded extends ExportState {
   @override
   List<Object> get props => [data];
 }
+
+class ExportError extends ExportState {
+  final Failure failure;
+
+  const ExportError({required this.failure});
+
+  @override
+  List<Object> get props => [failure];
+}
