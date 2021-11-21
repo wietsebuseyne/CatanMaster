@@ -1,7 +1,9 @@
+import 'package:catan_master/data/games/game_datasource.dart';
 import 'package:catan_master/data/games/game_dtos.dart';
 import 'package:catan_master/data/games/game_repository.dart';
 import 'package:catan_master/data/games/hive_game_datasource.dart';
 import 'package:catan_master/data/players/hive_player_datasource.dart';
+import 'package:catan_master/data/players/player_datasource.dart';
 import 'package:catan_master/data/players/player_dtos.dart';
 import 'package:catan_master/data/players/player_repository.dart';
 import 'package:catan_master/domain/games/game_repository.dart';
@@ -38,17 +40,21 @@ class CatanMasterLocalRepositoryProvider extends StatelessWidget {
           Box<GameDto> gameBox = data[1] as Box<GameDto>;
           return MultiProvider(
             providers: [
+              Provider<PlayerDatasource>(
+                create: (context) => HivePlayerDatasource(playerBox),
+              ),
+              Provider<GameDatasource>(
+                create: (context) => HiveGameDatasource(gameBox),
+              ),
               Provider<PlayerRepository>(
                 create: (BuildContext context) {
-                  return CachedPlayerRepository(
-                    HivePlayerDatasource(playerBox),
-                  );
+                  return CachedPlayerRepository(context.read<PlayerDatasource>());
                 },
               ),
               ProxyProvider<PlayerRepository, GameRepository>(
                 update: (context, playerRepo, gameRepo) {
                   return CachedGameRepository(
-                    gameDatasource: HiveGameDatasource(gameBox),
+                    gameDatasource: context.read<GameDatasource>(),
                     playerRepository: playerRepo,
                   );
                 },

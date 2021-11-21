@@ -4,13 +4,12 @@ abstract class ExportEvent extends Equatable {
   const ExportEvent();
 }
 
-class ExternalExportEvent extends ExportEvent {
-  const ExternalExportEvent();
+class _Init extends ExportEvent {
+  const _Init();
 
   @override
   List<Object?> get props => [];
 }
-
 
 class CopyToClipboardExportEvent extends ExportEvent {
   const CopyToClipboardExportEvent();
