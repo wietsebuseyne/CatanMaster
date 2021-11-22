@@ -60,7 +60,7 @@ class AddEditGamePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             DateTimeField(
-              format: DateFormat("dd/MM/yyyy HH:mm"),
+              format: DateFormat.yMd().add_Hm(),
               //TODO customize based on device locale
               decoration: catanInputDecoration(label: "Date & Time"),
               initialValue: formData.date ?? DateTime.now(),
