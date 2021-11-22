@@ -15,7 +15,7 @@ class HiveGameDatasource extends GameDatasource {
 
   @override
   Future<void> createGame(GameDto game) {
-    if (_box.containsKey(game.time)) {
+    if (_box.containsKey(game.time.toString())) {
       throw CacheException("Already contains a game with time ${game.time}");
     }
     return _box.put(game.time.toString(), game);
@@ -26,7 +26,7 @@ class HiveGameDatasource extends GameDatasource {
     if (!_box.containsKey(oldGameTime.toString())) {
       throw CacheException("No game with time $oldGameTime exists");
     }
-    await _box.delete(oldGameTime);
+    await _box.delete(oldGameTime.toString());
     await _box.put(game.time.toString(), game);
   }
 

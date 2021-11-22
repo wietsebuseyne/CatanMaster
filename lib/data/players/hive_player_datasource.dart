@@ -38,4 +38,9 @@ class HivePlayerDatasource extends PlayerDatasource {
     }
     return _box.put(player.username, player);
   }
+
+  @override
+  Future<bool> exists(String username) async {
+    return _box.containsKey(username);
+  }
 }

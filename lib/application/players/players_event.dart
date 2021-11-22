@@ -1,9 +1,13 @@
 part of 'players_bloc.dart';
 
 @immutable
-abstract class PlayerEvent {}
+abstract class PlayerEvent {
+  const PlayerEvent();
+}
 
-class LoadPlayers extends PlayerEvent {}
+class LoadPlayers extends PlayerEvent {
+  const LoadPlayers();
+}
 
 class AddOrUpdatePlayer extends PlayerEvent {
   final Player? toEdit;
@@ -11,20 +15,20 @@ class AddOrUpdatePlayer extends PlayerEvent {
   final Gender gender;
   final Color color;
 
-  AddOrUpdatePlayer({
+  const AddOrUpdatePlayer({
     this.toEdit,
     required this.name,
     required this.gender,
     required this.color,
   });
 
-  AddOrUpdatePlayer.add({
+  const AddOrUpdatePlayer.add({
     required this.name,
     required this.gender,
     required this.color,
   }) : toEdit = null;
 
-  AddOrUpdatePlayer.edit({
+  const AddOrUpdatePlayer.edit({
     required this.toEdit,
     required this.name,
     required this.gender,
@@ -37,5 +41,5 @@ class AddOrUpdatePlayer extends PlayerEvent {
 class DeletePlayerEvent extends PlayerEvent {
   final Player player;
 
-  DeletePlayerEvent(this.player);
+  const DeletePlayerEvent(this.player);
 }

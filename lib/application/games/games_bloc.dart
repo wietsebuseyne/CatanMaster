@@ -26,7 +26,7 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
   GamesBloc(this.gameRepository, {required this.playersBloc, required this.feedbackBloc}) : super(InitialGamesState()) {
     _subscription = playersBloc.stream.listen((state) {
       if (state is PlayersLoaded) {
-        add(LoadGames());
+        add(const LoadGames());
       }
     });
   }

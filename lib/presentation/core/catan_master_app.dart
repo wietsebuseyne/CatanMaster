@@ -1,12 +1,14 @@
+import 'package:catan_master/application/games/games_bloc.dart';
 import 'package:catan_master/application/main/main_bloc.dart';
 import 'package:catan_master/application/players/players_bloc.dart';
 import 'package:catan_master/domain/feedback/feedback_message.dart';
 import 'package:catan_master/domain/games/game.dart';
 import 'package:catan_master/domain/players/player.dart';
+import 'package:catan_master/feature/export_import/presentation/export_data_dialog.dart';
+import 'package:catan_master/feature/export_import/presentation/import_data_dialog.dart';
 import 'package:catan_master/presentation/core/catan_icons.dart';
 import 'package:catan_master/presentation/core/catan_page_route_builder.dart';
 import 'package:catan_master/presentation/core/color.dart';
-import 'package:catan_master/feature/export_import/presentation/export_data_dialog.dart';
 import 'package:catan_master/presentation/feedback/show_feedback.dart';
 import 'package:catan_master/presentation/feedback/user_feedback.dart';
 import 'package:catan_master/presentation/games/pages/games_page.dart';
@@ -126,16 +128,18 @@ class CatanMasterHomeScreen extends StatelessWidget {
                 case 'export':
                   showExportDialog(context);
                   break;
+                case 'import':
+                  showImportDialog(context);
+                  break;
               }
             },
             itemBuilder: (context) {
               return [
-                // Text('Import data'),
                 const PopupMenuItem<String>(child: Text('Export data'), value: 'export'),
+                const PopupMenuItem<String>(child: Text('Import data'), value: 'import'),
               ];
             },
           ),
-//          IconButton(icon: Icon(Icons.settings), onPressed: () {}),
         ],
       ),
       body: _createPage(tab),
@@ -165,19 +169,19 @@ class CatanMasterHomeScreen extends StatelessWidget {
                     showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
-                              title: const Text("Not enough players, my lord"),
-                              content: const Text("You must add at least 2 players before adding a game."),
-                              actions: [
-                                TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text("Cancel")),
-                                ElevatedButton(
-                                    onPressed: () {
-                                      BlocProvider.of<MainBloc>(context).add(SwitchTabEvent(HomePageTab.players));
-                                      Navigator.of(context).pop();
-                                      Navigator.of(context).pushNamed("/players/add");
-                                    },
-                                    child: const Text("Add Player")),
-                              ],
-                            ));
+                          title: const Text("Not enough players, my lord"),
+                          content: const Text("You must add at least 2 players before adding a game."),
+                          actions: [
+                            TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text("Cancel")),
+                            ElevatedButton(
+                                onPressed: () {
+                                  BlocProvider.of<MainBloc>(context).add(SwitchTabEvent(HomePageTab.players));
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pushNamed("/players/add");
+                                },
+                                child: const Text("Add Player")),
+                          ],
+                        ));
                   }
                 } else {
                   FeedbackMessage.snackbar("Still loading data, please be patient").show(context);
@@ -198,6 +202,17 @@ class CatanMasterHomeScreen extends StatelessWidget {
       context: context,
       builder: (context) => const ExportDataDialog(),
     );
+  }
+
+  Future<void> showImportDialog(BuildContext context) async {
+    final gamesBloc = context.read<GamesBloc>();
+    final playersBloc = context.read<PlayersBloc>();
+    await showDialog<void>(
+      context: context,
+      builder: (context) => const ImportDataDialog(),
+    );
+    playersBloc.add(const LoadPlayers());
+    gamesBloc.add(const LoadGames());
   }
 }
 
