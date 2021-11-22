@@ -10,4 +10,6 @@ abstract class PlayerDatasource {
   Future<PlayerDto> getPlayer(String username);
 
   Future<void> deletePlayer(PlayerDto player);
+
+  Future<bool> exists(String username);
 }

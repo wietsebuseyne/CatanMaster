@@ -21,9 +21,11 @@ class CatanInputDecorator extends StatelessWidget {
   }
 }
 
-InputDecoration catanInputDecoration({String? label, String? errorText}) => InputDecoration(
-      labelText: label,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
-      border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
-      errorText: errorText,
-    );
+InputDecoration catanInputDecoration({String? label, String? errorText, EdgeInsets? contentPadding}) {
+  return InputDecoration(
+    labelText: label,
+    contentPadding: contentPadding ?? const EdgeInsets.symmetric(horizontal: 16.0),
+    border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
+    errorText: errorText,
+  );
+}

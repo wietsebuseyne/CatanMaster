@@ -7,6 +7,7 @@ import 'package:catan_master/feature/export_import/domain/export_repository.dart
 import 'package:catan_master/feature/export_import/presentation/bloc/export_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ExportDataDialog extends StatelessWidget {
@@ -57,7 +58,10 @@ class ExportDataDialog extends StatelessWidget {
               },
             ),
             TextButton(
-              onPressed: () => context.read<ExportBloc>().add(const CopyToClipboardExportEvent()),
+              onPressed: () {
+                context.read<ExportBloc>().add(const CopyToClipboardExportEvent());
+                Fluttertoast.showToast(msg: 'Content copied to clipboard');
+              },
               child: const Text('Copy to clipboard'),
             ),
             TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('OK')),

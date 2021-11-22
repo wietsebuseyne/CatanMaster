@@ -1,9 +1,13 @@
 part of 'games_bloc.dart';
 
 @immutable
-abstract class GamesEvent extends Equatable {}
+abstract class GamesEvent extends Equatable {
+  const GamesEvent();
+}
 
 class LoadGames extends GamesEvent {
+  const LoadGames();
+
   @override
   List<Object> get props => [];
 }
@@ -16,7 +20,7 @@ class AddEditGameEvent extends GamesEvent {
   final List<CatanExpansion> expansions;
   final Map<Player, int>? scores;
 
-  AddEditGameEvent.noScores({
+  const AddEditGameEvent.noScores({
     this.oldGame,
     required this.time,
     required this.players,
@@ -43,7 +47,7 @@ class AddEditGameEvent extends GamesEvent {
 class DeleteGameEvent extends GamesEvent {
   final Game game;
 
-  DeleteGameEvent(this.game);
+  const DeleteGameEvent(this.game);
 
   @override
   List<Object> get props => [game];
@@ -52,7 +56,7 @@ class DeleteGameEvent extends GamesEvent {
 class UndoDeleteGameEvent extends GamesEvent {
   final Game game;
 
-  UndoDeleteGameEvent(this.game);
+  const UndoDeleteGameEvent(this.game);
 
   @override
   List<Object> get props => [game];
