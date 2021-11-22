@@ -47,6 +47,7 @@ class CatanMasterApp extends StatelessWidget {
                 bottomNavigationBarTheme: BottomNavigationBarThemeData(
                   selectedItemColor: light ? (mc?.shade900 ?? Colors.black) : color,
                 ),
+                dividerTheme: const DividerThemeData(indent: 32.0, endIndent: 32.0, thickness: 1.0),
               ),
               darkTheme: ThemeData(
                 brightness: Brightness.dark,

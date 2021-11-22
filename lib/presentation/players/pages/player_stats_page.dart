@@ -80,10 +80,7 @@ class PlayerStatsPage extends StatelessWidget {
               PlayerRank(player, statistics.rank),
 
               //Last Games
-              const Divider(
-                indent: 32.0,
-                endIndent: 32.0,
-              ),
+              const Divider(),
               Center(
                 child: WinLoseHexagonPath(
                   wins: statistics.getWinOrLose(13),
@@ -92,11 +89,11 @@ class PlayerStatsPage extends StatelessWidget {
               ), //TODO calc nb based on width
 
               //Prizes
-              if (statistics.prizes.isNotEmpty) const Divider(indent: 32.0, endIndent: 32.0),
+              if (statistics.prizes.isNotEmpty) const Divider(),
               ...statistics.prizes.map((a) => AchievementLine(a)),
 
               //Achievements
-//            Divider(indent: 32.0, endIndent: 32.0,),
+//            Divider(),
 //            Text("Achievements", style: Theme.of(context).textTheme.headline6),
 //            Padding(
 //              padding: const EdgeInsets.all(8.0),
@@ -104,10 +101,7 @@ class PlayerStatsPage extends StatelessWidget {
 //            ),
 
               //Stats
-              const Divider(
-                indent: 32.0,
-                endIndent: 32.0,
-              ),
+              const Divider(),
               HorizontalInfoTile(
                 leading: const Icon(Icons.format_list_numbered),
                 start: const Text("Games played"),

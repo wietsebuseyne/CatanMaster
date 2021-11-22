@@ -79,10 +79,7 @@ class GameDetailPage extends StatelessWidget {
               if (game.hasExpansion) ..._expansions(),
 
               //Stats
-              const Divider(
-                indent: 32.0,
-                endIndent: 32.0,
-              ),
+              const Divider(),
               const SizedBox(
                 height: 8.0,
               ),
@@ -105,10 +102,7 @@ class GameDetailPage extends StatelessWidget {
   }
 
   Iterable<Widget> _expansions() sync* {
-    yield const Divider(
-      indent: 32.0,
-      endIndent: 32.0,
-    );
+    yield const Divider();
     yield Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: game.expansions.map((e) {
