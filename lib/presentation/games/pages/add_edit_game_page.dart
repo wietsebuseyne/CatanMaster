@@ -183,8 +183,12 @@ class AddEditGamePage extends StatelessWidget {
                         onPressed: (i) {
                           formState.withScores = i == 1;
                           if (formState.withScores) {
-                            formState.winner =
-                                formState.scores.entries.reduce((max, e) => e.value > max.value ? e : max).key;
+                            if (formState.scores.entries.isEmpty) {
+                              formState.winner = null;
+                            } else {
+                              formState.winner =
+                                  formState.scores.entries.reduce((max, e) => e.value > max.value ? e : max).key;
+                            }
                           }
                           state.didChange(formState);
                           _formKey.currentState?.validate();

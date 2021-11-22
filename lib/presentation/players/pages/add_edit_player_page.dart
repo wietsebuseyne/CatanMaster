@@ -29,11 +29,7 @@ class AddEditPlayerPage extends StatelessWidget {
             children: [
               TextFormField(
                 initialValue: formData.name ?? "",
-                decoration: const InputDecoration(
-                  labelText: "Name",
-                  contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                ),
+                decoration: catanInputDecoration(label: "Name"),
                 onSaved: (newValue) => formData.name = newValue,
                 validator: (value) => (value?.length ?? 0) < 2 ? "Not enough letters, mi lord!" : null,
               ),
