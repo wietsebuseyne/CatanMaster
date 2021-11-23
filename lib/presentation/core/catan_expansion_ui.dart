@@ -9,9 +9,7 @@ extension CatanExpansionUi on CatanExpansion? {
     if (this == null) {
       return const Padding(
         padding: EdgeInsets.all(2.0),
-        child: Hexagon(
-          color: Colors.black,
-        ),
+        child: Hexagon(),
       );
     }
     return Icon(icon);

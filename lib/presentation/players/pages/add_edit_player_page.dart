@@ -39,42 +39,38 @@ class AddEditPlayerPage extends StatelessWidget {
               FormField<Gender>(
                 initialValue: formData.gender ?? Gender.x,
                 builder: (state) {
-                  return Theme(
-                    //Hide InkWell ripple
-                    data: ThemeData(
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                    ),
-                    child: CatanInputDecorator(
-                      label: "Gender",
-                      child: Row(
-                        children: [
-                          Radio(
-                              value: Gender.male,
-                              groupValue: state.value,
-                              onChanged: (dynamic g) => state.didChange(g)),
-                          InkWell(
-                            child: const SizedBox(height: 48.0, child: Center(child: Text("Male"))),
-                            onTap: () => state.didChange(Gender.male),
+                  return CatanInputDecorator(
+                    label: "Gender",
+                    child: Row(
+                      children: [
+                        Radio(
+                          value: Gender.male,
+                          groupValue: state.value,
+                          onChanged: (dynamic g) => state.didChange(g)
+                        ),
+                        GestureDetector(
+                          child: const SizedBox(height: 48.0, child: Center(child: Text("Male"))),
+                          onTap: () => state.didChange(Gender.male),
+                        ),
+                        Radio(
+                          value: Gender.female,
+                          groupValue: state.value,
+                          onChanged: (dynamic g) => state.didChange(g),
+                        ),
+                        GestureDetector(
+                          child: const SizedBox(height: 48.0, child: Center(child: Text("Female"))),
+                          onTap: () => state.didChange(Gender.female),
+                        ),
+                        Radio(value: Gender.x, groupValue: state.value, onChanged: (dynamic g) => state.didChange(g)),
+                        GestureDetector(
+                          child: const SizedBox(
+                            height: 48.0,
+                            width: 24.0,
+                            child: Align(alignment: Alignment.centerLeft, child: Text("X")),
                           ),
-                          Radio(
-                              value: Gender.female,
-                              groupValue: state.value,
-                              onChanged: (dynamic g) => state.didChange(g)),
-                          InkWell(
-                            child: const SizedBox(height: 48.0, child: Center(child: Text("Female"))),
-                            onTap: () => state.didChange(Gender.female),
-                          ),
-                          Radio(value: Gender.x, groupValue: state.value, onChanged: (dynamic g) => state.didChange(g)),
-                          InkWell(
-                            child: const SizedBox(
-                                height: 48.0,
-                                width: 24,
-                                child: Align(alignment: Alignment.centerLeft, child: Text("X"))),
-                            onTap: () => state.didChange(Gender.x),
-                          ),
-                        ],
-                      ),
+                          onTap: () => state.didChange(Gender.x),
+                        ),
+                      ],
                     ),
                   );
                 },
