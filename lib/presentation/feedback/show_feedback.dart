@@ -11,6 +11,7 @@ extension ShowFeedback on FeedbackMessage {
         break;
       case FeedbackType.snackbar:
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          behavior: SnackBarBehavior.floating,
           content: Text(message),
           action: hasAction
               ? SnackBarAction(
