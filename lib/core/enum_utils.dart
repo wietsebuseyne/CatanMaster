@@ -32,8 +32,9 @@ class EnumUtils {
   ///
   static T fromString<T>(List<T> enumValues, String? value, {T Function()? orElse}) {
     return enumValues.singleWhere(
-        (enumItem) => EnumUtils.convertToString(enumItem)?.toLowerCase() == value?.toLowerCase(),
-        orElse: orElse);
+      (enumItem) => EnumUtils.convertToString(enumItem)?.replaceAll('_', '').toLowerCase() == value?.toLowerCase(),
+      orElse: orElse,
+    );
   }
 
   static T? fromStringOrNull<T>(List<T> enumValues, String? value) {

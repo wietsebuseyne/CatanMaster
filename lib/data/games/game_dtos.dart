@@ -69,8 +69,11 @@ class GameMapper {
     try {
       if (expStrings != null) {
         for (String exp in expStrings) {
-          expansions.add(EnumUtils.fromString(CatanExpansion.values, exp,
-              orElse: () => throw FormatException("Invalid expansion: $exp")));
+          expansions.add(EnumUtils.fromString(
+            CatanExpansion.values,
+            exp,
+            orElse: () => throw FormatException("Invalid expansion: $exp"),
+          ));
         }
       }
     } on FormatException catch (e) {
