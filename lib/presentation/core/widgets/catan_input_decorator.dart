@@ -24,13 +24,13 @@ InputDecoration catanInputDecoration({String? label, String? errorText, EdgeInse
   return InputDecoration(
     labelText: label,
     contentPadding: contentPadding ?? const EdgeInsets.symmetric(horizontal: 16.0),
-    border: const HexOutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+    border: const OctaOutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
     errorText: errorText,
   );
 }
 
-class HexOutlineInputBorder extends InputBorder {
-  const HexOutlineInputBorder({
+class OctaOutlineInputBorder extends InputBorder {
+  const OctaOutlineInputBorder({
     BorderSide borderSide = const BorderSide(),
     this.borderRadius = const BorderRadius.all(Radius.circular(4.0)),
     this.gapPadding = 4.0,
@@ -50,12 +50,12 @@ class HexOutlineInputBorder extends InputBorder {
   bool get isOutline => true;
 
   @override
-  HexOutlineInputBorder copyWith({
+  OctaOutlineInputBorder copyWith({
     BorderSide? borderSide,
     BorderRadius? borderRadius,
     double? gapPadding,
   }) {
-    return HexOutlineInputBorder(
+    return OctaOutlineInputBorder(
       borderSide: borderSide ?? this.borderSide,
       borderRadius: borderRadius ?? this.borderRadius,
       gapPadding: gapPadding ?? this.gapPadding,
@@ -68,8 +68,8 @@ class HexOutlineInputBorder extends InputBorder {
   }
 
   @override
-  HexOutlineInputBorder scale(double t) {
-    return HexOutlineInputBorder(
+  OctaOutlineInputBorder scale(double t) {
+    return OctaOutlineInputBorder(
       borderSide: borderSide.scale(t),
       borderRadius: borderRadius * t,
       gapPadding: gapPadding * t,
@@ -78,9 +78,9 @@ class HexOutlineInputBorder extends InputBorder {
 
   @override
   ShapeBorder? lerpFrom(ShapeBorder? a, double t) {
-    if (a is HexOutlineInputBorder) {
-      final HexOutlineInputBorder outline = a;
-      return HexOutlineInputBorder(
+    if (a is OctaOutlineInputBorder) {
+      final OctaOutlineInputBorder outline = a;
+      return OctaOutlineInputBorder(
         borderRadius: BorderRadius.lerp(outline.borderRadius, borderRadius, t)!,
         borderSide: BorderSide.lerp(outline.borderSide, borderSide, t),
         gapPadding: outline.gapPadding,
@@ -91,9 +91,9 @@ class HexOutlineInputBorder extends InputBorder {
 
   @override
   ShapeBorder? lerpTo(ShapeBorder? b, double t) {
-    if (b is HexOutlineInputBorder) {
-      final HexOutlineInputBorder outline = b;
-      return HexOutlineInputBorder(
+    if (b is OctaOutlineInputBorder) {
+      final OctaOutlineInputBorder outline = b;
+      return OctaOutlineInputBorder(
         borderRadius: BorderRadius.lerp(borderRadius, outline.borderRadius, t)!,
         borderSide: BorderSide.lerp(borderSide, outline.borderSide, t),
         gapPadding: outline.gapPadding,
