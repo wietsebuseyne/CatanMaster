@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 
 class EnumUtils {
   static bool _isEnumItem(enumItem) {
@@ -19,7 +20,7 @@ class EnumUtils {
     if (!_isEnumItem(enumItem)) {
       throw NotAnEnumException(enumItem);
     }
-    return enumItem.toString().split('.')[1];
+    return describeEnum(enumItem);
   }
 
   /// Given a string, find and return its matching enum value
@@ -32,7 +33,7 @@ class EnumUtils {
   ///
   static T fromString<T>(List<T> enumValues, String? value, {T Function()? orElse}) {
     return enumValues.singleWhere(
-      (enumItem) => EnumUtils.convertToString(enumItem)?.replaceAll('_', '').toLowerCase() == value?.toLowerCase(),
+      (enumItem) => EnumUtils.convertToString(enumItem)?.toLowerCase() == value?.replaceAll('_', '').toLowerCase(),
       orElse: orElse,
     );
   }
@@ -41,7 +42,7 @@ class EnumUtils {
     if (value == null) return null;
 
     return enumValues.singleWhereOrNull(
-      (enumItem) => EnumUtils.convertToString(enumItem)?.toLowerCase() == value.toLowerCase(),
+      (enumItem) => EnumUtils.convertToString(enumItem)?.toLowerCase() == value.replaceAll('_', '').toLowerCase(),
     );
   }
 }
