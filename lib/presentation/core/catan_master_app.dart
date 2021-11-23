@@ -56,6 +56,7 @@ class CatanMasterApp extends StatelessWidget {
                 ),
               ),
               darkTheme: ThemeData(
+                brightness: Brightness.dark,
                 primaryColor: c,
                 primarySwatch: mc,
                 appBarTheme: AppBarTheme(
@@ -68,6 +69,7 @@ class CatanMasterApp extends StatelessWidget {
                   selectedItemColor: !light ? mc.shade200 : mc,
                 ),
                 colorScheme: ColorScheme.fromSwatch(
+                  brightness: Brightness.dark,
                   primarySwatch: mc,
                   accentColor: c,
                 ),
