@@ -48,7 +48,9 @@ class PlayersWithScoresInput extends StatelessWidget {
                         inactiveTrackColor: color.withOpacity(0.1),
                         thumbColor: color,
                       ),
-                      child: Slider(
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width / 2.5,
+                        child: Slider(
                           label: scores[p]?.toString(),
                           min: 0,
                           max: 20,
@@ -63,7 +65,9 @@ class PlayersWithScoresInput extends StatelessWidget {
                               newScores[p] = score;
                             }
                             onChanged(newScores);
-                          }),
+                          },
+                        ),
+                      ),
                     ),
                   ],
                 ),
