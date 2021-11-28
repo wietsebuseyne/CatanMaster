@@ -59,7 +59,7 @@ class GridColorPicker extends StatelessWidget {
         children: availableColors.getRange(i, min(i + itemsPerRow, availableColors.length)).map((c) {
           return _ColorPickerItem(
             color: c,
-            selected: selected == c,
+            selected: selected?.value == c.value,
             onSelected: () => onSelected!(c),
             radius: radius,
             spacing: spacing,
