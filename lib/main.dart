@@ -1,7 +1,7 @@
 import 'package:catan_master/feature/game/data/dto/game_dtos.dart';
 import 'package:catan_master/feature/player/data/dto/player_dtos.dart';
-import 'package:catan_master/presentation/core/catan_master_app.dart';
-import 'package:catan_master/presentation/core/catan_master_repository_provider.dart';
+import 'package:catan_master/feature/home/presentation/catan_master_app.dart';
+import 'package:catan_master/feature/home/presentation/provider/catan_master_repository_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';

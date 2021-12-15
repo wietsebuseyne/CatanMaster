@@ -1,7 +1,5 @@
 import 'package:catan_master/feature/player/data/dto/player_dtos.dart';
 import 'package:catan_master/core/core.dart';
-import 'package:catan_master/feature/player/data/player_datasource.dart';
-import 'package:catan_master/feature/player/data/dto/player_dtos.dart';
 import 'package:hive/hive.dart';
 
 abstract class PlayerDatasource {
