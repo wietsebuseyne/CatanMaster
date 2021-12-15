@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
 class EnumUtils {
-  static bool _isEnumItem(enumItem) {
+  static bool _isEnumItem(dynamic enumItem) {
     final splittedEnum = enumItem.toString().split('.');
     return splittedEnum.length > 1 && splittedEnum[0] == enumItem.runtimeType.toString();
   }
@@ -14,7 +14,7 @@ class EnumUtils {
   ///
   /// If you pass in the option [camelCase]=true it will convert it to words
   /// So TestEnum.valueOne will become Value One
-  static String? convertToString(enumItem) {
+  static String? convertToString(Object? enumItem) {
     if (enumItem == null) return null;
 
     if (!_isEnumItem(enumItem)) {

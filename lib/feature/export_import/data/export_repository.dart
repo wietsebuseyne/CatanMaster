@@ -35,7 +35,7 @@ class DefaultExportRepository extends ExportRepository {
       int nbPlayers = 0;
       int nbGames = 0;
 
-      final json = jsonDecode(data);
+      final json = jsonDecode(data) as Map<String, dynamic>;
       if (json['version'] is! int) {
         return const Left(Failure('No data structure version specified'));
       }

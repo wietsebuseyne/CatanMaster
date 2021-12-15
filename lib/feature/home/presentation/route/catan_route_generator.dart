@@ -15,7 +15,7 @@ class CatanRouteGenerator {
     } else if (settings.name == '/players/edit') {
       return MaterialPageRoute(
         builder: (context) {
-          var player = (settings.arguments as Map)["player"];
+          var player = (settings.arguments as Map)["player"] as Player?;
           if (player == null) {
             return const Text("Error: no player provided");
           }
@@ -36,7 +36,7 @@ class CatanRouteGenerator {
     } else if (settings.name == '/games/edit') {
       return MaterialPageRoute(
           builder: (context) {
-            var game = (settings.arguments as Map)["game"];
+            var game = (settings.arguments as Map)["game"] as Game?;
             if (game == null) {
               return const Text("Error: no game provided");
             }

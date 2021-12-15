@@ -22,7 +22,7 @@ extension ShowFeedback on FeedbackMessage {
         ));
         break;
       case FeedbackType.dialog:
-        showDialog(
+        showDialog<void>(
             context: context,
             builder: (context) => AlertDialog(
                   title: Text(title!),
