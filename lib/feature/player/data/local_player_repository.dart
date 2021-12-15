@@ -1,14 +1,14 @@
 import 'package:catan_master/core/failures.dart';
-import 'package:catan_master/data/players/player_datasource.dart';
-import 'package:catan_master/data/players/player_dtos.dart';
-import 'package:catan_master/domain/players/player.dart';
-import 'package:catan_master/domain/players/player_repository.dart';
+import 'package:catan_master/feature/player/data/player_datasource.dart';
+import 'package:catan_master/feature/player/data/dto/player_dtos.dart';
+import 'package:catan_master/feature/player/domain/player.dart';
+import 'package:catan_master/feature/player/domain/player_repository.dart';
 import 'package:dartz/dartz.dart';
 
-class CachedPlayerRepository extends PlayerRepository {
+class LocalPlayerRepository extends PlayerRepository {
   final PlayerDatasource localDatasource;
 
-  CachedPlayerRepository(this.localDatasource);
+  LocalPlayerRepository(this.localDatasource);
 
   @override
   Future<Either<Failure, List<Player>>> getPlayers() async {

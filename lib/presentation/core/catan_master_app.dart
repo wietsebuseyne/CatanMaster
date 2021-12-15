@@ -1,9 +1,9 @@
-import 'package:catan_master/application/games/games_bloc.dart';
+import 'package:catan_master/feature/game/presentation/bloc/games_bloc.dart';
 import 'package:catan_master/application/main/main_bloc.dart';
-import 'package:catan_master/application/players/players_bloc.dart';
-import 'package:catan_master/domain/feedback/feedback_message.dart';
-import 'package:catan_master/domain/games/game.dart';
-import 'package:catan_master/domain/players/player.dart';
+import 'package:catan_master/feature/player/presentation/bloc/players_bloc.dart';
+import 'package:catan_master/feature/feedback/domain/feedback_message.dart';
+import 'package:catan_master/feature/game/domain/game.dart';
+import 'package:catan_master/feature/player/domain/player.dart';
 import 'package:catan_master/feature/export_import/presentation/export_data_dialog.dart';
 import 'package:catan_master/feature/export_import/presentation/import_data_dialog.dart';
 import 'package:catan_master/presentation/core/catan_icons.dart';
@@ -190,19 +190,19 @@ class CatanMasterHomeScreen extends StatelessWidget {
                     showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
-                          title: const Text("Not enough players, my lord"),
-                          content: const Text("You must add at least 2 players before adding a game."),
-                          actions: [
-                            TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text("Cancel")),
-                            ElevatedButton(
-                                onPressed: () {
-                                  BlocProvider.of<MainBloc>(context).add(SwitchTabEvent(HomePageTab.players));
-                                  Navigator.of(context).pop();
-                                  Navigator.of(context).pushNamed("/players/add");
-                                },
-                                child: const Text("Add Player")),
-                          ],
-                        ));
+                              title: const Text("Not enough players, my lord"),
+                              content: const Text("You must add at least 2 players before adding a game."),
+                              actions: [
+                                TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text("Cancel")),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      BlocProvider.of<MainBloc>(context).add(SwitchTabEvent(HomePageTab.players));
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pushNamed("/players/add");
+                                    },
+                                    child: const Text("Add Player")),
+                              ],
+                            ));
                   }
                 } else {
                   FeedbackMessage.snackbar("Still loading data, please be patient").show(context);

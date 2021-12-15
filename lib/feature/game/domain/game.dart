@@ -1,5 +1,5 @@
 import 'package:catan_master/core/core.dart';
-import 'package:catan_master/domain/players/player.dart';
+import 'package:catan_master/feature/player/domain/player.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 

@@ -1,5 +1,5 @@
 import 'package:catan_master/core/failures.dart';
-import 'package:catan_master/domain/games/game.dart';
+import 'package:catan_master/feature/game/domain/game.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class GameRepository {

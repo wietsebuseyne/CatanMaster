@@ -1,4 +1,4 @@
-import 'package:catan_master/domain/games/game.dart';
+import 'package:catan_master/feature/game/domain/game.dart';
 import 'package:catan_master/presentation/core/catan_icons.dart';
 import 'package:catan_master/presentation/core/widgets/hexagon.dart';
 import 'package:flutter/material.dart';

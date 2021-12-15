@@ -1,5 +1,5 @@
-import 'package:catan_master/data/games/game_dtos.dart';
-import 'package:catan_master/data/players/player_dtos.dart';
+import 'package:catan_master/feature/game/data/dto/game_dtos.dart';
+import 'package:catan_master/feature/player/data/dto/player_dtos.dart';
 import 'package:catan_master/presentation/core/catan_master_app.dart';
 import 'package:catan_master/presentation/core/catan_master_repository_provider.dart';
 import 'package:flutter/material.dart';

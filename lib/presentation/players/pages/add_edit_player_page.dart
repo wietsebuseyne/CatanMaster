@@ -1,4 +1,4 @@
-import 'package:catan_master/domain/players/player.dart';
+import 'package:catan_master/feature/player/domain/player.dart';
 import 'package:catan_master/presentation/core/widgets/catan_input_decorator.dart';
 import 'package:catan_master/presentation/core/widgets/grid_color_picker.dart';
 import 'package:flutter/material.dart';
@@ -44,10 +44,7 @@ class AddEditPlayerPage extends StatelessWidget {
                     child: Row(
                       children: [
                         Radio(
-                          value: Gender.male,
-                          groupValue: state.value,
-                          onChanged: (dynamic g) => state.didChange(g)
-                        ),
+                            value: Gender.male, groupValue: state.value, onChanged: (dynamic g) => state.didChange(g)),
                         GestureDetector(
                           child: const SizedBox(height: 48.0, child: Center(child: Text("Male"))),
                           onTap: () => state.didChange(Gender.male),

@@ -1,6 +1,6 @@
-import 'package:catan_master/application/games/games_bloc.dart';
-import 'package:catan_master/application/players/players_bloc.dart';
-import 'package:catan_master/domain/players/player.dart';
+import 'package:catan_master/feature/game/presentation/bloc/games_bloc.dart';
+import 'package:catan_master/feature/player/presentation/bloc/players_bloc.dart';
+import 'package:catan_master/feature/player/domain/player.dart';
 import 'package:catan_master/presentation/players/widgets/players_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

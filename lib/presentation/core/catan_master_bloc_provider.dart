@@ -1,10 +1,10 @@
-import 'package:catan_master/application/feedback/feedback_bloc.dart';
-import 'package:catan_master/application/games/games_bloc.dart';
+import 'package:catan_master/feature/feedback/presentation/bloc/feedback_bloc.dart';
+import 'package:catan_master/feature/game/presentation/bloc/games_bloc.dart';
 import 'package:catan_master/application/main/main_bloc.dart';
-import 'package:catan_master/application/players/players_bloc.dart';
-import 'package:catan_master/application/players/usecases/delete_player.dart';
-import 'package:catan_master/domain/games/game_repository.dart';
-import 'package:catan_master/domain/players/player_repository.dart';
+import 'package:catan_master/feature/player/presentation/bloc/players_bloc.dart';
+import 'package:catan_master/feature/player/presentation/usecase/delete_player.dart';
+import 'package:catan_master/feature/game/domain/game_repository.dart';
+import 'package:catan_master/feature/player/domain/player_repository.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

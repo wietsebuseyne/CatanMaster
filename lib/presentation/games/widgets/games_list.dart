@@ -1,4 +1,4 @@
-import 'package:catan_master/domain/games/game.dart';
+import 'package:catan_master/feature/game/domain/game.dart';
 import 'package:catan_master/presentation/core/catan_expansion_ui.dart';
 import 'package:catan_master/presentation/core/widgets/empty_list_message.dart';
 import 'package:catan_master/presentation/games/widgets/game_list_tile.dart';

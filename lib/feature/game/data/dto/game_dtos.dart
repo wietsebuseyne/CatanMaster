@@ -1,7 +1,7 @@
 import 'package:catan_master/core/enum_utils.dart';
 import 'package:catan_master/core/failures.dart';
-import 'package:catan_master/domain/games/game.dart';
-import 'package:catan_master/domain/players/player.dart';
+import 'package:catan_master/feature/game/domain/game.dart';
+import 'package:catan_master/feature/player/domain/player.dart';
 import 'package:dartz/dartz.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';

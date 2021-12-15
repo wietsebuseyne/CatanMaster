@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:catan_master/core/core.dart';
-import 'package:catan_master/domain/games/game.dart';
+import 'package:catan_master/feature/game/domain/game.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
