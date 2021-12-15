@@ -1,4 +1,4 @@
-import 'package:catan_master/feature/home/presentation/catan_master_app.dart';
+import 'package:catan_master/core/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
