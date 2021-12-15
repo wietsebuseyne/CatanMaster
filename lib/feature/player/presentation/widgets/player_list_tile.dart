@@ -1,10 +1,11 @@
-import 'package:catan_master/feature/player/domain/player.dart';
 import 'package:catan_master/core/widgets/hexagon.dart';
+import 'package:catan_master/feature/player/domain/player.dart';
 import 'package:catan_master/feature/player/presentation/widgets/win_lose_hex.dart';
 import 'package:flutter/material.dart';
 
 class PlayerListTile extends StatelessWidget {
   final PlayerStatistics statistics;
+
   Player get player => statistics.player;
 
   const PlayerListTile(this.statistics, {Key? key}) : super(key: key);

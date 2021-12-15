@@ -1,7 +1,7 @@
-import 'package:catan_master/feature/player/presentation/bloc/players_bloc.dart';
-import 'package:catan_master/feature/player/domain/player.dart';
 import 'package:catan_master/core/color.dart';
 import 'package:catan_master/feature/feedback/presentation/user_feedback.dart';
+import 'package:catan_master/feature/player/domain/player.dart';
+import 'package:catan_master/feature/player/presentation/bloc/players_bloc.dart';
 import 'package:catan_master/feature/player/presentation/pages/add_edit_player_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

@@ -1,6 +1,6 @@
+import 'package:catan_master/core/widgets/empty_list_message.dart';
 import 'package:catan_master/feature/game/domain/game.dart';
 import 'package:catan_master/feature/game/presentation/catan_expansion_ui.dart';
-import 'package:catan_master/core/widgets/empty_list_message.dart';
 import 'package:catan_master/feature/game/presentation/widgets/game_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';

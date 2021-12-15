@@ -1,5 +1,5 @@
-import 'package:catan_master/feature/player/domain/player.dart';
 import 'package:catan_master/core/catan_icons.dart';
+import 'package:catan_master/feature/player/domain/player.dart';
 import 'package:catan_master/feature/player/presentation/player_presentation.dart';
 import 'package:flutter/material.dart';
 

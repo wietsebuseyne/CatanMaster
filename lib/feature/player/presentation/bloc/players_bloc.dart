@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
-import 'package:catan_master/feature/feedback/presentation/bloc/feedback_bloc.dart';
-import 'package:catan_master/feature/player/presentation/usecase/delete_player.dart';
 import 'package:catan_master/core/message.dart';
+import 'package:catan_master/feature/feedback/presentation/bloc/feedback_bloc.dart';
 import 'package:catan_master/feature/player/domain/player.dart';
 import 'package:catan_master/feature/player/domain/player_repository.dart';
+import 'package:catan_master/feature/player/presentation/usecase/delete_player.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';

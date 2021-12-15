@@ -38,6 +38,7 @@ class AddEditGameEvent extends GamesEvent {
         winner = null;
 
   bool get withScores => scores != null;
+
   bool get isEdit => oldGame != null;
 
   @override
