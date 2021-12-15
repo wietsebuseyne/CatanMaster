@@ -1,6 +1,6 @@
-import 'package:catan_master/feature/player/domain/player.dart';
 import 'package:catan_master/core/widgets/catan_input_decorator.dart';
 import 'package:catan_master/core/widgets/grid_color_picker.dart';
+import 'package:catan_master/feature/player/domain/player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';

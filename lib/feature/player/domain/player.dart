@@ -39,6 +39,7 @@ class PlayerStatistics extends Equatable {
   final int nbGamesWon;
   final int percentGamesWon;
   final Player? bestBuddy;
+
   //TODO include 'Base' as an option here
   final CatanExpansion? mostPlayedExpansion;
   final CatanExpansion? mostWonExpansion;
@@ -103,7 +104,8 @@ class PlayerStatistics extends Equatable {
         rank: allGames.getRanking().indexOf(player) + 1,
         bestBuddy: gamesPlayed.highestValue,
         mostPlayedExpansion: expansionsPlayed.highestValue,
-        mostWonExpansion: expansionsWon.highestValue, //TODO procentueel
+        mostWonExpansion: expansionsWon.highestValue,
+        //TODO procentueel
         prizes: achievements,
         nbGamesWon: nbGamesWon,
         percentGamesWon: percentGamesWon);

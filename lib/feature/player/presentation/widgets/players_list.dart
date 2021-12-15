@@ -1,5 +1,5 @@
-import 'package:catan_master/feature/player/domain/player.dart';
 import 'package:catan_master/core/widgets/empty_list_message.dart';
+import 'package:catan_master/feature/player/domain/player.dart';
 import 'package:catan_master/feature/player/presentation/widgets/player_list_tile.dart';
 import 'package:flutter/material.dart';
 
