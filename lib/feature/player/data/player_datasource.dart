@@ -1,7 +1,22 @@
+import 'package:catan_master/feature/player/data/dto/player_dtos.dart';
 import 'package:catan_master/core/core.dart';
-import 'package:catan_master/data/players/player_datasource.dart';
-import 'package:catan_master/data/players/player_dtos.dart';
+import 'package:catan_master/feature/player/data/player_datasource.dart';
+import 'package:catan_master/feature/player/data/dto/player_dtos.dart';
 import 'package:hive/hive.dart';
+
+abstract class PlayerDatasource {
+  Future<List<PlayerDto>> getPlayers();
+
+  Future<void> createPlayer(PlayerDto player);
+
+  Future<void> updatePlayer(PlayerDto player);
+
+  Future<PlayerDto> getPlayer(String username);
+
+  Future<void> deletePlayer(PlayerDto player);
+
+  Future<bool> exists(String username);
+}
 
 class HivePlayerDatasource extends PlayerDatasource {
   final Box<PlayerDto> _box;

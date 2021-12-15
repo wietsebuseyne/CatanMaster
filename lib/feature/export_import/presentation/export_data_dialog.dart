@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import 'package:catan_master/data/games/game_datasource.dart';
-import 'package:catan_master/data/players/player_datasource.dart';
+import 'package:catan_master/feature/game/data/game_datasource.dart';
+import 'package:catan_master/feature/player/data/player_datasource.dart';
 import 'package:catan_master/feature/export_import/data/export_repository.dart';
 import 'package:catan_master/feature/export_import/domain/export_repository.dart';
 import 'package:catan_master/feature/export_import/presentation/bloc/export_bloc.dart';

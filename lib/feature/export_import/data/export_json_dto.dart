@@ -1,5 +1,5 @@
-import 'package:catan_master/data/games/game_dtos.dart';
-import 'package:catan_master/data/players/player_dtos.dart';
+import 'package:catan_master/feature/game/data/dto/game_dtos.dart';
+import 'package:catan_master/feature/player/data/dto/player_dtos.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'export_json_dto.g.dart';

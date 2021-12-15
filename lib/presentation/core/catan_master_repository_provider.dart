@@ -1,13 +1,11 @@
-import 'package:catan_master/data/games/game_datasource.dart';
-import 'package:catan_master/data/games/game_dtos.dart';
-import 'package:catan_master/data/games/game_repository.dart';
-import 'package:catan_master/data/games/hive_game_datasource.dart';
-import 'package:catan_master/data/players/hive_player_datasource.dart';
-import 'package:catan_master/data/players/player_datasource.dart';
-import 'package:catan_master/data/players/player_dtos.dart';
-import 'package:catan_master/data/players/player_repository.dart';
-import 'package:catan_master/domain/games/game_repository.dart';
-import 'package:catan_master/domain/players/player_repository.dart';
+import 'package:catan_master/feature/game/data/game_datasource.dart';
+import 'package:catan_master/feature/game/data/dto/game_dtos.dart';
+import 'package:catan_master/feature/game/data/local_game_repository.dart';
+import 'package:catan_master/feature/player/data/player_datasource.dart';
+import 'package:catan_master/feature/player/data/local_player_repository.dart';
+import 'package:catan_master/feature/game/domain/game_repository.dart';
+import 'package:catan_master/feature/player/data/dto/player_dtos.dart';
+import 'package:catan_master/feature/player/domain/player_repository.dart';
 import 'package:catan_master/presentation/core/catan_master_bloc_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -48,12 +46,12 @@ class CatanMasterLocalRepositoryProvider extends StatelessWidget {
               ),
               Provider<PlayerRepository>(
                 create: (BuildContext context) {
-                  return CachedPlayerRepository(context.read<PlayerDatasource>());
+                  return LocalPlayerRepository(context.read<PlayerDatasource>());
                 },
               ),
               ProxyProvider<PlayerRepository, GameRepository>(
                 update: (context, playerRepo, gameRepo) {
-                  return CachedGameRepository(
+                  return LocalGameRepository(
                     gameDatasource: context.read<GameDatasource>(),
                     playerRepository: playerRepo,
                   );

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:catan_master/domain/feedback/feedback_message.dart';
+import 'package:catan_master/feature/feedback/domain/feedback_message.dart';
 import 'package:equatable/equatable.dart';
 
 part 'feedback_event.dart';

@@ -1,20 +1,20 @@
 import 'dart:collection';
 
 import 'package:catan_master/core/failures.dart';
-import 'package:catan_master/data/games/game_datasource.dart';
-import 'package:catan_master/data/games/game_dtos.dart';
-import 'package:catan_master/domain/games/game.dart';
-import 'package:catan_master/domain/games/game_repository.dart';
-import 'package:catan_master/domain/players/player.dart';
-import 'package:catan_master/domain/players/player_repository.dart';
+import 'package:catan_master/feature/game/data/game_datasource.dart';
+import 'package:catan_master/feature/game/data/dto/game_dtos.dart';
+import 'package:catan_master/feature/game/domain/game.dart';
+import 'package:catan_master/feature/game/domain/game_repository.dart';
+import 'package:catan_master/feature/player/domain/player.dart';
+import 'package:catan_master/feature/player/domain/player_repository.dart';
 import 'package:dartz/dartz.dart';
 
-class CachedGameRepository extends GameRepository {
+class LocalGameRepository extends GameRepository {
   final GameDatasource gameDatasource;
   final PlayerRepository playerRepository;
   final ListQueue<Game> deletedGames = ListQueue();
 
-  CachedGameRepository({required this.gameDatasource, required this.playerRepository});
+  LocalGameRepository({required this.gameDatasource, required this.playerRepository});
 
   @override
   Future<Either<Failure, List<Game>>> getGamesForPlayer(String username) async {

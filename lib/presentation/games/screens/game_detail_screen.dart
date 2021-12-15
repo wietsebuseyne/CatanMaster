@@ -1,5 +1,5 @@
-import 'package:catan_master/application/games/games_bloc.dart';
-import 'package:catan_master/domain/games/game.dart';
+import 'package:catan_master/feature/game/presentation/bloc/games_bloc.dart';
+import 'package:catan_master/feature/game/domain/game.dart';
 import 'package:catan_master/presentation/feedback/user_feedback.dart';
 import 'package:catan_master/presentation/games/pages/game_detail_page.dart';
 import 'package:flutter/cupertino.dart';

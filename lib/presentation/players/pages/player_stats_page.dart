@@ -1,6 +1,6 @@
-import 'package:catan_master/application/players/players_bloc.dart';
-import 'package:catan_master/domain/games/game.dart';
-import 'package:catan_master/domain/players/player.dart';
+import 'package:catan_master/feature/player/presentation/bloc/players_bloc.dart';
+import 'package:catan_master/feature/game/domain/game.dart';
+import 'package:catan_master/feature/player/domain/player.dart';
 import 'package:catan_master/presentation/core/catan_expansion_ui.dart';
 import 'package:catan_master/presentation/core/catan_icons.dart';
 import 'package:catan_master/presentation/core/color.dart';

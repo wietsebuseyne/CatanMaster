@@ -1,7 +1,16 @@
 import 'package:catan_master/core/exceptions.dart';
-import 'package:catan_master/data/games/game_datasource.dart';
-import 'package:catan_master/data/games/game_dtos.dart';
+import 'package:catan_master/feature/game/data/dto/game_dtos.dart';
 import 'package:hive/hive.dart';
+
+abstract class GameDatasource {
+  Future<List<GameDto>> getGames();
+
+  Future<void> createGame(GameDto game);
+
+  Future<void> updateGame(int oldGameTime, GameDto game);
+
+  Future<void> deleteGame(int time);
+}
 
 class HiveGameDatasource extends GameDatasource {
   final Box<GameDto> _box;

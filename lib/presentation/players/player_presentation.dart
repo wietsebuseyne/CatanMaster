@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:catan_master/domain/players/player.dart';
+import 'package:catan_master/feature/player/domain/player.dart';
 import 'package:catan_master/presentation/core/color.dart';
 import 'package:flutter/material.dart';
 
