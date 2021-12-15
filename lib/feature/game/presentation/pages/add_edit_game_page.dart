@@ -20,7 +20,7 @@ const notEnoughPlayersMsgs = [
   "Not enough players, mi lord",
 ];
 
-notEnoughPlayersMsg() => notEnoughPlayersMsgs[Random().nextInt(3)];
+String notEnoughPlayersMsg() => notEnoughPlayersMsgs[Random().nextInt(3)];
 
 class AddEditGamePage extends StatelessWidget {
   final GlobalKey<FormState> _formKey;

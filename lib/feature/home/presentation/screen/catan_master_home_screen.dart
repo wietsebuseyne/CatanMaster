@@ -98,7 +98,7 @@ class _CatanMasterHomeScreenState extends State<CatanMasterHomeScreen> {
       if (playersState.players.length > 1) {
         Navigator.of(context).pushNamed("/games/add");
       } else {
-        showDialog(
+        showDialog<void>(
           context: context,
           builder: (context) => AlertDialog(
             title: const Text("Not enough players, my lord"),

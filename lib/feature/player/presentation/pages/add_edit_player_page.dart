@@ -43,22 +43,25 @@ class AddEditPlayerPage extends StatelessWidget {
                     label: "Gender",
                     child: Row(
                       children: [
-                        Radio(
-                            value: Gender.male, groupValue: state.value, onChanged: (dynamic g) => state.didChange(g)),
+                        Radio<Gender>(
+                          value: Gender.male,
+                          groupValue: state.value,
+                          onChanged: (g) => state.didChange(g),
+                        ),
                         GestureDetector(
                           child: const SizedBox(height: 48.0, child: Center(child: Text("Male"))),
                           onTap: () => state.didChange(Gender.male),
                         ),
-                        Radio(
+                        Radio<Gender>(
                           value: Gender.female,
                           groupValue: state.value,
-                          onChanged: (dynamic g) => state.didChange(g),
+                          onChanged: (g) => state.didChange(g),
                         ),
                         GestureDetector(
                           child: const SizedBox(height: 48.0, child: Center(child: Text("Female"))),
                           onTap: () => state.didChange(Gender.female),
                         ),
-                        Radio(value: Gender.x, groupValue: state.value, onChanged: (dynamic g) => state.didChange(g)),
+                        Radio<Gender>(value: Gender.x, groupValue: state.value, onChanged: (g) => state.didChange(g)),
                         GestureDetector(
                           child: const SizedBox(
                             height: 48.0,
