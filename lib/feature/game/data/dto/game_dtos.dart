@@ -96,7 +96,7 @@ class GameMapper {
 
     if (scenarios.contains(CatanScenario.legendOfTheConquerers)) {
       if (!expansions.contains(CatanExpansion.citiesAndKnights)) {
-        expansions.add(CatanExpansion.citiesAndKnights);
+        expansions.insert(0, CatanExpansion.citiesAndKnights);
       }
     }
 
