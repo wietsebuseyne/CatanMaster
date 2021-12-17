@@ -3,9 +3,9 @@ import 'dart:math';
 import 'package:catan_master/core/color.dart';
 import 'package:catan_master/core/widgets/catan_input_decorator.dart';
 import 'package:catan_master/feature/game/domain/game.dart';
-import 'package:catan_master/feature/game/presentation/catan_expansion_ui.dart';
 import 'package:catan_master/feature/game/presentation/pages/players_with_scores_input.dart';
 import 'package:catan_master/feature/game/presentation/pages/players_with_winner_input.dart';
+import 'package:catan_master/feature/game/presentation/widgets/expansion_picker.dart';
 import 'package:catan_master/feature/player/domain/player.dart';
 import 'package:catan_master/feature/player/presentation/bloc/players_bloc.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
@@ -94,55 +94,33 @@ class AddEditGamePage extends StatelessWidget {
             const SizedBox(
               height: 16.0,
             ),
-            FormField<Set<CatanExpansion>>(
-              initialValue: Set.of(formData.expansions),
+            FormField<ExpansionSelection>(
+              initialValue: ExpansionSelection(
+                scenarios: formData.scenarios,
+                expansions: formData.expansions,
+              ),
               builder: (state) {
-                Set<CatanExpansion> currentSelection = state.value ?? {};
+                final selections = state.value ?? ExpansionSelection();
                 return CatanInputDecorator(
                   label: "Expansions",
                   errorText: state.errorText,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Column(
-                      children: CatanExpansion.values.map((expansion) {
-                        return InkWell(
-                          onTap: () {
-                            if (!currentSelection.contains(expansion)) {
-                              currentSelection.add(expansion);
-                              state.didChange(currentSelection);
-                            } else {
-                              currentSelection.remove(expansion);
-                              state.didChange(currentSelection);
-                            }
-                          },
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Checkbox(
-                                  value: currentSelection.contains(expansion),
-                                  activeColor: expansion.color,
-                                  onChanged: (selected) {
-                                    if (!currentSelection.contains(expansion)) {
-                                      currentSelection.add(expansion);
-                                      state.didChange(currentSelection);
-                                    } else {
-                                      currentSelection.remove(expansion);
-                                      state.didChange(currentSelection);
-                                    }
-                                  }),
-                              Icon(expansion.icon),
-                              const SizedBox(width: 8.0),
-                              Text(expansion.name!),
-                            ],
-                          ),
-                        );
-                      }).toList(),
+                    child: ExpansionPicker(
+                      selection: ExpansionSelection(
+                        expansions: selections.expansions,
+                        scenarios: selections.scenarios,
+                      ),
+                      onChanged: (selection) {
+                        state.didChange(selection);
+                      },
                     ),
                   ),
                 );
               },
-              onSaved: (Set<CatanExpansion>? expansions) {
-                formData.expansions = (expansions ?? {}).toList();
+              onSaved: (ExpansionSelection? selection) {
+                formData.expansions = List.of(selection?.expansions ?? {});
+                formData.scenarios = List.of(selection?.scenarios ?? {});
               },
             ),
             const SizedBox(
@@ -150,10 +128,11 @@ class AddEditGamePage extends StatelessWidget {
             ),
             FormField<PlayersFormState>(
               initialValue: PlayersFormState(
-                  players: formData.players.toSet(),
-                  winner: formData.winner,
-                  withScores: formData.withScores,
-                  scores: formData.scores ?? {}),
+                players: formData.players.toSet(),
+                winner: formData.winner,
+                withScores: formData.withScores,
+                scores: formData.scores ?? {},
+              ),
               builder: (FormFieldState<PlayersFormState> state) {
                 PlayersFormState formState = state.value ?? PlayersFormState();
 
@@ -303,6 +282,7 @@ class GameFormData {
   Map<Player, int>? scores;
   Player? winner;
   List<CatanExpansion> expansions = [];
+  List<CatanScenario> scenarios = [];
 
   GameFormData();
 
@@ -312,6 +292,7 @@ class GameFormData {
     this.scores = game.scores;
     this.winner = game.winner;
     this.expansions = game.expansions;
+    this.scenarios = game.scenarios;
     this.withScores = game.hasScores;
   }
 }

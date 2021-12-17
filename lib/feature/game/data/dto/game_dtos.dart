@@ -3,6 +3,7 @@ import 'package:catan_master/core/failures.dart';
 import 'package:catan_master/feature/game/domain/game.dart';
 import 'package:catan_master/feature/player/domain/player.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -20,16 +21,19 @@ class GameDto extends HiveObject {
   String? winner;
   @HiveField(3)
   List<String>? expansions;
+  @HiveField(5)
+  List<String>? scenarios;
   @HiveField(4)
   Map<String, int>? scores;
 
-  GameDto({this.time, this.players, this.winner, this.expansions, this.scores});
+  GameDto({this.time, this.players, this.winner, this.expansions, this.scenarios, this.scores});
 
   GameDto.fromDomain(Game game)
       : this.time = game.date.millisecondsSinceEpoch,
         this.players = List.unmodifiable(game.players.map((g) => g.username)),
         this.winner = game.winner.username,
         this.expansions = List.unmodifiable(game.expansions.map(EnumUtils.convertToString)),
+        this.scenarios = List.unmodifiable(game.scenarios.map(EnumUtils.convertToString)),
         this.scores = game.scores.map((player, score) => MapEntry(player.username, score));
 
   factory GameDto.fromJson(Map<String, dynamic> json) => _$GameDtoFromJson(json);
@@ -65,19 +69,35 @@ class GameMapper {
     }
 
     List<CatanExpansion> expansions = <CatanExpansion>[];
+    List<CatanScenario> scenarios = <CatanScenario>[];
+
     List<String>? expStrings = gameDto.expansions;
-    try {
-      if (expStrings != null) {
-        for (String exp in expStrings) {
-          expansions.add(EnumUtils.fromString(
-            CatanExpansion.values,
-            exp,
-            orElse: () => throw FormatException("Invalid expansion: $exp"),
-          ));
+    if (expStrings != null) {
+      for (String exp in expStrings) {
+        final expansion = EnumUtils.fromStringOrNull(CatanExpansion.values, exp);
+        if (expansion != null) {
+          expansions.add(expansion);
+        }
+        if (exp == describeEnum(CatanScenario.legendOfTheConquerers)) {
+          scenarios.add(CatanScenario.legendOfTheConquerers);
         }
       }
-    } on FormatException catch (e) {
-      return Left(MapFailure(e.message));
+    }
+
+    List<String>? sceStrings = gameDto.scenarios;
+    if (sceStrings != null) {
+      for (String sce in sceStrings) {
+        final scenario = EnumUtils.fromStringOrNull(CatanScenario.values, sce);
+        if (scenario != null) {
+          scenarios.add(scenario);
+        }
+      }
+    }
+
+    if (scenarios.contains(CatanScenario.legendOfTheConquerers)) {
+      if (!expansions.contains(CatanExpansion.citiesAndKnights)) {
+        expansions.add(CatanExpansion.citiesAndKnights);
+      }
     }
 
     //TODO catch DomainExceptions
@@ -87,15 +107,20 @@ class GameMapper {
         return const Left(MapFailure("Score for a player was null"));
       }
       return Right(Game.withScores(
-          scores: {for (var p in players) p: scores[p.username]!},
-          date: DateTime.fromMillisecondsSinceEpoch(gameDto.time!),
-          expansions: expansions));
+        scores: {for (var p in players) p: scores[p.username]!},
+        date: DateTime.fromMillisecondsSinceEpoch(gameDto.time!),
+        expansions: expansions,
+      ));
     }
 
-    return Right(Game.noScores(
+    return Right(
+      Game.noScores(
         players: players,
         date: DateTime.fromMillisecondsSinceEpoch(gameDto.time!),
         winner: playerMap[gameDto.winner!],
-        expansions: expansions));
+        expansions: expansions,
+        scenarios: scenarios,
+      ),
+    );
   }
 }

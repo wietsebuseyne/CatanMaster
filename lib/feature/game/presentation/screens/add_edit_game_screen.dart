@@ -73,6 +73,7 @@ class _AddEditGameScreenState extends State<AddEditGameScreen> {
 
                   bool withScores = formData.withScores;
                   List<CatanExpansion> expansions = formData.expansions;
+                  List<CatanScenario> scenarios = formData.scenarios;
                   Map<Player, int>? scores = formData.scores;
                   DateTime? date = formData.date;
                   List<Player> players = formData.players;
@@ -84,6 +85,7 @@ class _AddEditGameScreenState extends State<AddEditGameScreen> {
                       time: date!,
                       scores: scores!,
                       expansions: expansions,
+                      scenarios: scenarios,
                     ));
                   } else {
                     BlocProvider.of<GamesBloc>(context).add(AddEditGameEvent.noScores(
@@ -92,6 +94,7 @@ class _AddEditGameScreenState extends State<AddEditGameScreen> {
                       players: players,
                       winner: winner,
                       expansions: expansions,
+                      scenarios: scenarios,
                     ));
                   }
                 }

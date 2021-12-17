@@ -84,3 +84,44 @@ extension CatanExpansionUi on CatanExpansion? {
     }
   }
 }
+
+extension CatanScenarioUi on CatanScenario {
+  Color get color {
+    switch (this) {
+      case CatanScenario.legendOfTheConquerers:
+        return Colors.green;
+      default:
+        return this.expansions.first.color;
+    }
+  }
+
+  IconData? get icon {
+    switch (this) {
+      case CatanScenario.legendOfTheConquerers:
+        return CatanIcons.crossedSwords;
+      default:
+        return null;
+    }
+  }
+
+  String get name {
+    switch (this) {
+      case CatanScenario.legendOfTheConquerers:
+        return "Legend of the Conquerers";
+      case CatanScenario.fishermenOfCatan:
+        return "Fishermen of Catan";
+      case CatanScenario.riversOfCatan:
+        return "The Rivers of Catan";
+      case CatanScenario.caravans:
+        return "Caravans";
+      case CatanScenario.barbarianAttack:
+        return "Barbarian Attack";
+      case CatanScenario.tradersAndBarbarians:
+        return "Traders and Barbarians";
+      case CatanScenario.treasuresDragonsAndAdventurers:
+        return "Treasures, Dragons & Adventurers";
+      case CatanScenario.legendOfTheSeaRobbers:
+        return "Legend of the Sea Robbers";
+    }
+  }
+}

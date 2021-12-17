@@ -9,6 +9,7 @@ class Game extends Equatable {
   final Player winner;
   final Map<Player, int> scores;
   final List<CatanExpansion> expansions;
+  final List<CatanScenario> scenarios;
 
   bool get hasScores => scores.isNotEmpty;
 
@@ -20,9 +21,11 @@ class Game extends Equatable {
     required List<Player> players,
     Map<Player, int> scores = const {},
     List<CatanExpansion> expansions = const [],
+    List<CatanScenario> scenarios = const [],
   })  : assert(players.isNotEmpty),
         this.players = List.unmodifiable(players..sort((p1, p2) => p1.name.compareTo(p2.name))),
         this.expansions = List.unmodifiable(expansions),
+        this.scenarios = List.unmodifiable(scenarios),
         this.scores = Map.unmodifiable(scores);
 
   factory Game.noScores({
@@ -30,6 +33,7 @@ class Game extends Equatable {
     required List<Player>? players,
     required Player? winner,
     List<CatanExpansion> expansions = const [],
+    List<CatanScenario> scenarios = const [],
   }) {
     if (date == null) {
       throw const DomainException("Date must not be null", "date");
@@ -52,16 +56,24 @@ class Game extends Equatable {
       winner: winner,
       players: players,
       expansions: expansions,
+      scenarios: scenarios,
     );
   }
 
-  factory Game.withScores(
-      {required DateTime? date, required Map<Player, int> scores, List<CatanExpansion>? expansions = const []}) {
+  factory Game.withScores({
+    required DateTime? date,
+    required Map<Player, int> scores,
+    List<CatanExpansion>? expansions = const [],
+    List<CatanScenario>? scenarios = const [],
+  }) {
     if (date == null) {
       throw const DomainException("Date must not be null", "date");
     }
     if (expansions == null) {
       throw const DomainException("expansions cannot be null", "expansions");
+    }
+    if (scenarios == null) {
+      throw const DomainException("scenarios cannot be null", "expansions");
     }
     List<Player> players = scores.keys.toList();
     if (players.any((p) => !_isValidScore(scores[p]))) {
@@ -90,6 +102,7 @@ class Game extends Equatable {
       players: players,
       winner: winner!,
       expansions: expansions,
+      scenarios: scenarios,
     );
   }
 
@@ -169,4 +182,70 @@ class Games {
 }
 
 //TODO concept of "Base game" == no expansions
-enum CatanExpansion { citiesAndKnights, seafarers, explorersAndPirates, tradersAndBarbarians, legendOfTheConquerers }
+enum CatanExpansion {
+  citiesAndKnights,
+  seafarers,
+  explorersAndPirates,
+  tradersAndBarbarians,
+  legendOfTheConquerers,
+}
+
+extension CatanScenarios on CatanExpansion {
+  List<CatanScenario> get scenarios {
+    switch (this) {
+      case CatanExpansion.tradersAndBarbarians:
+        return [
+          CatanScenario.fishermenOfCatan,
+          CatanScenario.riversOfCatan,
+          CatanScenario.caravans,
+          CatanScenario.barbarianAttack,
+          CatanScenario.tradersAndBarbarians,
+        ];
+      case CatanExpansion.seafarers:
+        return [
+          CatanScenario.legendOfTheSeaRobbers,
+          CatanScenario.treasuresDragonsAndAdventurers,
+        ];
+      case CatanExpansion.citiesAndKnights:
+        return [
+          CatanScenario.legendOfTheConquerers,
+          CatanScenario.treasuresDragonsAndAdventurers,
+        ];
+      default:
+        return [];
+    }
+  }
+}
+
+enum CatanScenario {
+  legendOfTheConquerers,
+  treasuresDragonsAndAdventurers,
+  legendOfTheSeaRobbers,
+  fishermenOfCatan,
+  riversOfCatan,
+  caravans,
+  barbarianAttack,
+  tradersAndBarbarians
+}
+
+extension CatanExpansions on CatanScenario {
+  List<CatanExpansion> get expansions {
+    switch (this) {
+      case CatanScenario.treasuresDragonsAndAdventurers:
+        return [
+          CatanExpansion.seafarers,
+          CatanExpansion.citiesAndKnights,
+        ];
+      case CatanScenario.legendOfTheConquerers:
+        return [CatanExpansion.citiesAndKnights];
+      case CatanScenario.legendOfTheSeaRobbers:
+        return [CatanExpansion.seafarers];
+      case CatanScenario.fishermenOfCatan:
+      case CatanScenario.riversOfCatan:
+      case CatanScenario.caravans:
+      case CatanScenario.barbarianAttack:
+      case CatanScenario.tradersAndBarbarians:
+        return [CatanExpansion.tradersAndBarbarians];
+    }
+  }
+}

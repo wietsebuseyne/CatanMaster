@@ -18,6 +18,7 @@ class AddEditGameEvent extends GamesEvent {
   final List<Player>? players;
   final Player? winner;
   final List<CatanExpansion> expansions;
+  final List<CatanScenario> scenarios;
   final Map<Player, int>? scores;
 
   const AddEditGameEvent.noScores({
@@ -26,6 +27,7 @@ class AddEditGameEvent extends GamesEvent {
     required this.players,
     required this.winner,
     required this.expansions,
+    required this.scenarios,
   }) : scores = null;
 
   AddEditGameEvent.withScores({
@@ -33,6 +35,7 @@ class AddEditGameEvent extends GamesEvent {
     required this.time,
     required Map<Player, int> this.scores,
     required this.expansions,
+    required this.scenarios,
   })  : assert(scores.isNotEmpty),
         players = null,
         winner = null;
