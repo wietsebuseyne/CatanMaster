@@ -1,5 +1,4 @@
 import 'package:catan_master/core/widgets.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 //TODO Fix without Hero animation
@@ -95,7 +94,6 @@ class CatanPageRouteBuilder extends PageRouteBuilder {
 Version 1 (double FAB)
 import 'package:catan_master/presentation/core/catan_master_app.dart';
 import 'package:catan_master/presentation/games/screens/add_edit_game_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CatanPageRouteBuilder extends PageRouteBuilder {

@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:catan_master/core/widgets/hexagon.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 const hexSide = 16.0;
 const hexWidth = hexSide * 2;

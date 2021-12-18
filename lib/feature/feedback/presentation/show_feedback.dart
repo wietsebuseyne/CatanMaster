@@ -1,6 +1,5 @@
 import 'package:catan_master/feature/feedback/domain/feedback_message.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 extension ShowFeedback on FeedbackMessage {

@@ -3,7 +3,6 @@ import 'package:catan_master/feature/game/domain/game.dart';
 import 'package:catan_master/feature/game/presentation/catan_expansion_ui.dart';
 import 'package:catan_master/feature/game/presentation/widgets/game_list_tile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_polygon/flutter_polygon.dart';
 
 //TODO save expansion filters in Bloc and keep them between both main pages

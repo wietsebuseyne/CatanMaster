@@ -6,7 +6,6 @@ import 'package:catan_master/feature/player/domain/player.dart';
 import 'package:catan_master/feature/player/presentation/screens/add_edit_player_screen.dart';
 import 'package:catan_master/feature/player/presentation/screens/player_detail_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class CatanRouteGenerator {
   static Route<dynamic>? generateRoute(RouteSettings settings) {

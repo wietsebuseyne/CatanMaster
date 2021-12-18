@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:catan_master/core/color.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polygon/flutter_polygon.dart';
 
