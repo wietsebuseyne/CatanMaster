@@ -1,4 +1,4 @@
-part of 'feedback_bloc.dart';
+part of 'feedback_cubit.dart';
 
 class FeedbackState extends Equatable {
   final List<FeedbackMessage> feedbackList;

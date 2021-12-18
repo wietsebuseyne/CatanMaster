@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:catan_master/core/core.dart';
 import 'package:catan_master/core/failures.dart';
 import 'package:catan_master/feature/feedback/domain/feedback_message.dart';
-import 'package:catan_master/feature/feedback/presentation/bloc/feedback_bloc.dart';
+import 'package:catan_master/feature/feedback/presentation/bloc/feedback_cubit.dart';
 import 'package:catan_master/feature/game/domain/game.dart';
 import 'package:catan_master/feature/game/domain/game_repository.dart';
 import 'package:catan_master/feature/player/domain/player.dart';
@@ -18,12 +18,13 @@ part 'games_event.dart';
 part 'games_state.dart';
 
 class GamesBloc extends Bloc<GamesEvent, GamesState> {
-  final FeedbackBloc feedbackBloc;
+  final FeedbackCubit feedbackCubit;
   final GameRepository gameRepository;
   final PlayersBloc playersBloc;
   late StreamSubscription _subscription;
 
-  GamesBloc(this.gameRepository, {required this.playersBloc, required this.feedbackBloc}) : super(InitialGamesState()) {
+  GamesBloc(this.gameRepository, {required this.playersBloc, required this.feedbackCubit})
+      : super(InitialGamesState()) {
     _subscription = playersBloc.stream.listen((state) {
       if (state is PlayersLoaded) {
         add(const LoadGames());
@@ -107,11 +108,11 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
       Game game = event.game;
       yield (await gameRepository.deleteGame(game))
           .fold((f) => _feedbackAndReturn(f, message: "Error while deleting game: ${f.toString()}"), (r) {
-        feedbackBloc.add(FeedbackEvent(
+        feedbackCubit.feedback(
           FeedbackMessage.snackbar("Game on '${DateFormat.MMMEd().format(game.date)}' deleted",
               severity: Severity.warning,
               action: FeedbackAction(text: "UNDO", action: () => add(UndoDeleteGameEvent(game)))),
-        ));
+        );
         return GamesLoaded(s.games.delete(event.game));
       });
     }
@@ -128,7 +129,7 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
   }
 
   GamesState _feedbackAndReturn(Failure failure, {String? message}) {
-    feedbackBloc.add(FeedbackEvent(FeedbackMessage.toast(message ?? failure.message)));
+    feedbackCubit.toast(message ?? failure.message);
     return state;
   }
 }

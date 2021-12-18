@@ -2,8 +2,7 @@ import 'package:catan_master/core/catan_icons.dart';
 import 'package:catan_master/core/widgets.dart';
 import 'package:catan_master/feature/export_import/presentation/export_data_dialog.dart';
 import 'package:catan_master/feature/export_import/presentation/import_data_dialog.dart';
-import 'package:catan_master/feature/feedback/domain/feedback_message.dart';
-import 'package:catan_master/feature/feedback/presentation/bloc/feedback_bloc.dart';
+import 'package:catan_master/feature/feedback/presentation/bloc/feedback_cubit.dart';
 import 'package:catan_master/feature/feedback/presentation/user_feedback.dart';
 import 'package:catan_master/feature/game/presentation/bloc/games_bloc.dart';
 import 'package:catan_master/feature/game/presentation/pages/games_page.dart';
@@ -117,9 +116,7 @@ class _CatanMasterHomeScreenState extends State<CatanMasterHomeScreen> {
         );
       }
     } else {
-      BlocProvider.of<FeedbackBloc>(context).add(
-        FeedbackEvent(FeedbackMessage.snackbar("Still loading data, please be patient")),
-      );
+      BlocProvider.of<FeedbackCubit>(context).snackbar("Still loading data, please be patient");
     }
   }
 
