@@ -123,6 +123,7 @@ class ExpansionFiltersHeader extends StatelessWidget {
 
   Widget _filter(CatanExpansion? e) {
     return ExpansionFilter(
+      key: ValueKey(e.name),
       expansion: e,
       selected: selection.contains(e),
       onSelected: (selected) {
@@ -137,10 +138,16 @@ class ExpansionFilter extends StatelessWidget {
   final bool selected;
   final ValueChanged<bool> onSelected;
 
-  const ExpansionFilter({required this.expansion, required this.selected, required this.onSelected});
+  const ExpansionFilter({
+    Key? key,
+    required this.expansion,
+    required this.selected,
+    required this.onSelected,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    //TODO elevation is clipped by parent
     return ActionChip(
       avatar: Icon(
         expansion.icon,
@@ -155,7 +162,8 @@ class ExpansionFilter extends StatelessWidget {
       backgroundColor: selected ? IconTheme.of(context).color : null,
       tooltip: expansion.name,
       padding: const EdgeInsets.all(8.0),
-      elevation: selected ? 8.0 : 0.0,
+      elevation: selected ? 4.0 : 0.0,
+      pressElevation: 6.0,
     );
   }
 }
