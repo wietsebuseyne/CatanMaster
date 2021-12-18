@@ -6,7 +6,7 @@ import 'package:hive/hive.dart';
 abstract class GameDatasource {
   Future<List<GameDto>> getGames();
 
-  Stream<List<GameDto>> watchGames();
+  Stream<List<GameDto>> watchGames({bool seeded = true});
 
   Future<void> createGame(GameDto game);
 
@@ -26,8 +26,9 @@ class HiveGameDatasource extends GameDatasource {
   }
 
   @override
-  Stream<List<GameDto>> watchGames() {
-    return _box.watch().map((_) => _box.values.toList());
+  Stream<List<GameDto>> watchGames({bool seeded = true}) async* {
+    if (seeded) yield await getGames();
+    yield* _box.watch().map((_) => _box.values.toList());
   }
 
   @override

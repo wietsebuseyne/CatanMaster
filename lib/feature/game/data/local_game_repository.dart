@@ -88,11 +88,8 @@ class LocalGameRepository extends GameRepository {
 
   @override
   Stream<Either<Failure, List<Game>>> watchGames({bool seeded = true}) async* {
-    if (seeded) {
-      yield await getGames();
-    }
     yield* playerRepository.watchPlayers(seeded: true).combineLatest<List<GameDto>, Either<Failure, List<Game>>>(
-      gameDatasource.watchGames(),
+      gameDatasource.watchGames(seeded: seeded),
       (players, games) {
         //TODO no getOrElse but use datasource!
         return _mapGames(players.getOrElse(() => []), games);
