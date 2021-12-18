@@ -78,7 +78,7 @@ class GameMapper {
         if (expansion != null && !expansions.contains(expansion)) {
           expansions.add(expansion);
         }
-        if (exp == describeEnum(CatanScenario.legendOfTheConquerers)) {
+        if (exp.replaceAll('_', '').toLowerCase() == describeEnum(CatanScenario.legendOfTheConquerers).toLowerCase()) {
           scenarios.add(CatanScenario.legendOfTheConquerers);
         }
       }
