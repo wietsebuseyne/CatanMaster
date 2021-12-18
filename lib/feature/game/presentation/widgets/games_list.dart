@@ -113,10 +113,6 @@ class ExpansionFiltersHeader extends StatelessWidget {
         const SizedBox(
           width: 8.0,
         ),
-        _filter(CatanExpansion.legendOfTheConquerers),
-        const SizedBox(
-          width: 8.0,
-        ),
       ],
     );
   }

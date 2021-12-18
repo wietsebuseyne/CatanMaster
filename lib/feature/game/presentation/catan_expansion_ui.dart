@@ -27,8 +27,6 @@ extension CatanExpansionUi on CatanExpansion? {
         return Colors.blue[900]!;
       case CatanExpansion.tradersAndBarbarians:
         return Colors.purple;
-      case CatanExpansion.legendOfTheConquerers:
-        return Colors.green;
     }
   }
 
@@ -44,8 +42,6 @@ extension CatanExpansionUi on CatanExpansion? {
         return CatanIcons.compassSolid;
       case CatanExpansion.tradersAndBarbarians:
         return CatanIcons.axeSolid;
-      case CatanExpansion.legendOfTheConquerers:
-        return CatanIcons.crossedSwords;
     }
   }
 
@@ -61,8 +57,6 @@ extension CatanExpansionUi on CatanExpansion? {
         return CatanIcons.compass;
       case CatanExpansion.tradersAndBarbarians:
         return CatanIcons.axe;
-      case CatanExpansion.legendOfTheConquerers:
-        return CatanIcons.crossedSwords;
     }
   }
 
@@ -79,8 +73,6 @@ extension CatanExpansionUi on CatanExpansion? {
         return "Explorers & Pirates";
       case CatanExpansion.tradersAndBarbarians:
         return "Traders & Barbarians";
-      case CatanExpansion.legendOfTheConquerers:
-        return "Legend of the conquerers";
     }
   }
 }

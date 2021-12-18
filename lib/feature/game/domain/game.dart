@@ -189,7 +189,6 @@ enum CatanExpansion {
   seafarers,
   explorersAndPirates,
   tradersAndBarbarians,
-  legendOfTheConquerers,
 }
 
 extension CatanScenarios on CatanExpansion {
