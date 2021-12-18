@@ -11,24 +11,41 @@ import 'package:intl/intl.dart';
 class GameListTile extends StatelessWidget {
   final Game game;
   final DateFormat _dateFormat = DateFormat("EE dd MMM yyyy, HH:mm");
-  final Function? onTap;
+  final VoidCallback? onTap;
 
   GameListTile(this.game, {this.onTap, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: GameHexagon(game),
-      title: Text(
-        _dateFormat.format(game.date),
-      ),
-      subtitle: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Wrap(
-          crossAxisAlignment: WrapCrossAlignment.center,
-          children: _playersToWidget().toList(),
+    return Material(
+      child: InkWell(
+        onTap: onTap,
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: GameHexagon(game),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(4, 16, 16, 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(_dateFormat.format(game.date), style: Theme.of(context).textTheme.subtitle1),
+                    const SizedBox(height: 4),
+                    Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      runSpacing: 4,
+                      children: _playersToWidget().toList(),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
-      ]),
-      onTap: onTap as void Function()?,
+      ),
     );
   }
 
@@ -37,9 +54,7 @@ class GameListTile extends StatelessWidget {
       var player = game.players[i];
       yield GameListTilePlayer(player, winner: player == game.winner, score: game.scores[player]);
       if (i != game.players.length - 1) {
-        yield const SizedBox(
-          width: 12.0,
-        );
+        yield const SizedBox(width: 12.0);
       }
     }
   }
@@ -54,15 +69,19 @@ class GameListTilePlayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).textTheme;
     return Wrap(
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         if (winner)
           Icon(CatanIcons.trophySolid, color: player.foregroundColor, size: 12)
         else
-          Hexagon(color: player.color, width: 8),
+          Hexagon(color: player.color, width: 8, height: 12),
         const SizedBox(width: 4.0),
-        Text(score == null ? player.name : "${player.name} ($score)")
+        Text(
+          score == null ? player.name : "${player.name} ($score)",
+          style: theme.bodyText2!.copyWith(color: theme.caption!.color),
+        )
       ],
     );
   }
