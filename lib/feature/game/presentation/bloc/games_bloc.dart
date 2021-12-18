@@ -60,7 +60,6 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
               action: FeedbackAction(text: "UNDO", action: (pop) async => add(UndoDeleteGameEvent(game))),
             ),
           );
-          emit(GamesLoaded(s.games.delete(event.game)));
         },
       );
     }
@@ -71,8 +70,9 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
     if (s is GamesLoaded) {
       Game game = event.game;
       (await gameRepository.undoDelete(game: game)).fold(
-          (f) => _toast(f, message: "Error while undoing remove: ${f.toString()}"),
-          (r) => GamesLoaded(s.games.add(game)));
+        (f) => _toast(f, message: "Error while undoing remove: ${f.toString()}"),
+        (r) => GamesLoaded(s.games.add(game)),
+      );
     }
   }
 

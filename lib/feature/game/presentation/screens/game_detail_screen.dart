@@ -7,16 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GameDetailScreen extends StatelessWidget {
-  //We use username here and listen to player changes
   final DateTime date;
 
   const GameDetailScreen(this.date);
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<GamesBloc, GamesState>(
-      listenWhen: (s1, s2) => s2 is GamesLoaded && s2.games.getGame(date) == null,
-      listener: (s1, s2) => Navigator.of(context).pop(),
+    return BlocBuilder<GamesBloc, GamesState>(
       builder: (context, state) {
         if (state is GamesLoaded) {
           var game = state.games.getGame(date);

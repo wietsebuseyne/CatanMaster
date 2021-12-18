@@ -19,7 +19,7 @@ class AddEditGameScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<AddEditGameBloc>(
-      create: (context) => AddEditGameBloc(gameRepository: context.read(), feedbackCubit: context.read()),
+      create: (context) => AddEditGameBloc(toEdit: game, gameRepository: context.read(), feedbackCubit: context.read()),
       child: _AddEditGameScreen(game: game),
     );
   }
@@ -55,7 +55,9 @@ class _AddEditGameScreenState extends State<_AddEditGameScreen> {
     final brightness = light ? Brightness.light : Brightness.dark;
     var overlayStyle = light ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light;
     return BlocListener<AddEditGameBloc, AddEditGameState>(
-      listener: (context, state) => Navigator.of(context).pop(),
+      listener: (context, state) => Navigator.of(context)
+        ..pop()
+        ..pop(),
       listenWhen: (s1, s2) => s2 is AddEditGameSuccess,
       child: Scaffold(
         appBar: AppBar(

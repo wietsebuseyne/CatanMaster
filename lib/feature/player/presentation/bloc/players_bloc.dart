@@ -97,7 +97,6 @@ class PlayersBloc extends Bloc<PlayerEvent, PlayerState> {
         },
         (_) {
           feedbackCubit.snackbar("Player '${event.player}' successfully deleted");
-          emit(PlayersLoaded(List.from(s.players)..remove(event.player)));
         },
       );
     } else {

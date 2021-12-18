@@ -2,6 +2,7 @@ import 'package:catan_master/core/exceptions.dart';
 import 'package:catan_master/feature/game/data/dto/game_dtos.dart';
 import 'package:hive/hive.dart';
 
+//TODO use a different ID in Game that stays consistent over edits
 abstract class GameDatasource {
   Future<List<GameDto>> getGames();
 
