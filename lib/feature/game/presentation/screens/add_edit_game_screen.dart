@@ -54,9 +54,11 @@ class _AddEditGameScreenState extends State<_AddEditGameScreen> {
     final brightness = light ? Brightness.light : Brightness.dark;
     var overlayStyle = light ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light;
     return BlocListener<AddEditGameBloc, AddEditGameState>(
-      listener: (context, state) => Navigator.of(context)
-        ..pop()
-        ..pop(),
+      listener: (context, state) {
+        Navigator.of(context).pop();
+        //TODO refactor: for now we pop twice to also exit the detail screen (which does not work if the date was edited)
+        if (widget.edit) Navigator.of(context).pop();
+      },
       listenWhen: (s1, s2) => s2 is AddEditGameSuccess,
       child: Scaffold(
         appBar: AppBar(
