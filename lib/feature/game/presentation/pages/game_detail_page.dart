@@ -50,7 +50,11 @@ class GameDetailPage extends StatelessWidget {
                   icon: const Icon(Icons.edit),
                 ),
                 IconButton(
-                  onPressed: () => BlocProvider.of<GamesBloc>(context).add(DeleteGameEvent(game)),
+                  onPressed: () {
+                    //TODO separate Detail bloc, pop based on BlocListener
+                    BlocProvider.of<GamesBloc>(context).add(DeleteGameEvent(game));
+                    Navigator.of(context).pop();
+                  },
                   icon: const Icon(Icons.delete),
                 )
               ],
