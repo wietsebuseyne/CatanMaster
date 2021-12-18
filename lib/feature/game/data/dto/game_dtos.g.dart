@@ -21,6 +21,7 @@ class GameDtoAdapter extends TypeAdapter<GameDto> {
       players: (fields[1] as List?)?.cast<String>(),
       winner: fields[2] as String?,
       expansions: (fields[3] as List?)?.cast<String>(),
+      scenarios: (fields[5] as List?)?.cast<String>(),
       scores: (fields[4] as Map?)?.cast<String, int>(),
     );
   }
@@ -28,7 +29,7 @@ class GameDtoAdapter extends TypeAdapter<GameDto> {
   @override
   void write(BinaryWriter writer, GameDto obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.time)
       ..writeByte(1)
@@ -37,6 +38,8 @@ class GameDtoAdapter extends TypeAdapter<GameDto> {
       ..write(obj.winner)
       ..writeByte(3)
       ..write(obj.expansions)
+      ..writeByte(5)
+      ..write(obj.scenarios)
       ..writeByte(4)
       ..write(obj.scores);
   }
@@ -54,19 +57,22 @@ class GameDtoAdapter extends TypeAdapter<GameDto> {
 // **************************************************************************
 
 GameDto _$GameDtoFromJson(Map<String, dynamic> json) => GameDto(
-      time: json['time'] as int?,
+  time: json['time'] as int?,
       players: (json['players'] as List<dynamic>?)?.map((e) => e as String).toList(),
       winner: json['winner'] as String?,
       expansions: (json['expansions'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      scenarios: (json['scenarios'] as List<dynamic>?)?.map((e) => e as String).toList(),
       scores: (json['scores'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(k, e as int),
       ),
     );
 
-Map<String, dynamic> _$GameDtoToJson(GameDto instance) => <String, dynamic>{
+Map<String, dynamic> _$GameDtoToJson(GameDto instance) =>
+    <String, dynamic>{
       'time': instance.time,
       'players': instance.players,
       'winner': instance.winner,
       'expansions': instance.expansions,
+      'scenarios': instance.scenarios,
       'scores': instance.scores,
     };
