@@ -1,5 +1,5 @@
 name: catan_master
-version: 0.0.4+4
+version: 0.1.0+5
 description: "A clean & simple Catan player & game data manager"
 
 dependencies:
