@@ -15,13 +15,15 @@ class Game extends Equatable {
 
   bool get hasExpansion => expansions.isNotEmpty;
 
+  bool get hasScenario => scenarios.isNotEmpty;
+
   Game._({
     required this.date,
     required this.winner,
     required List<Player> players,
     Map<Player, int> scores = const {},
-    List<CatanExpansion> expansions = const [],
-    List<CatanScenario> scenarios = const [],
+    required List<CatanExpansion> expansions,
+    required List<CatanScenario> scenarios,
   })  : assert(players.isNotEmpty),
         this.players = List.unmodifiable(players..sort((p1, p2) => p1.name.compareTo(p2.name))),
         this.expansions = List.unmodifiable(expansions),
@@ -32,8 +34,8 @@ class Game extends Equatable {
     required DateTime? date,
     required List<Player>? players,
     required Player? winner,
-    List<CatanExpansion> expansions = const [],
-    List<CatanScenario> scenarios = const [],
+    required List<CatanExpansion> expansions,
+    required List<CatanScenario> scenarios,
   }) {
     if (date == null) {
       throw const DomainException("Date must not be null", "date");
@@ -63,8 +65,8 @@ class Game extends Equatable {
   factory Game.withScores({
     required DateTime? date,
     required Map<Player, int> scores,
-    List<CatanExpansion>? expansions = const [],
-    List<CatanScenario>? scenarios = const [],
+    required List<CatanExpansion>? expansions,
+    required List<CatanScenario>? scenarios,
   }) {
     if (date == null) {
       throw const DomainException("Date must not be null", "date");

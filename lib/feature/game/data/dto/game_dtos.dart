@@ -110,6 +110,7 @@ class GameMapper {
         scores: {for (var p in players) p: scores[p.username]!},
         date: DateTime.fromMillisecondsSinceEpoch(gameDto.time!),
         expansions: expansions,
+        scenarios: scenarios,
       ));
     }
 

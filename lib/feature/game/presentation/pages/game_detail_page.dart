@@ -74,10 +74,8 @@ class GameDetailPage extends StatelessWidget {
           child: Column(
             children: [
               GameWinner(game.winner),
-
-              //Last Games
               if (game.hasExpansion) ..._expansions(),
-
+              if (game.hasScenario) ..._scenarios(),
               //Stats
               const Divider(),
               const SizedBox(
@@ -115,6 +113,15 @@ class GameDetailPage extends StatelessWidget {
         );
       }).toList(),
     );
+  }
+
+  Iterable<Widget> _scenarios() sync* {
+    for (final scenario in game.scenarios) {
+      yield Padding(
+        padding: const EdgeInsets.all(2.0),
+        child: Text(scenario.name),
+      );
+    }
   }
 }
 

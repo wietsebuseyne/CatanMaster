@@ -57,7 +57,7 @@ class GameDtoAdapter extends TypeAdapter<GameDto> {
 // **************************************************************************
 
 GameDto _$GameDtoFromJson(Map<String, dynamic> json) => GameDto(
-  time: json['time'] as int?,
+      time: json['time'] as int?,
       players: (json['players'] as List<dynamic>?)?.map((e) => e as String).toList(),
       winner: json['winner'] as String?,
       expansions: (json['expansions'] as List<dynamic>?)?.map((e) => e as String).toList(),
@@ -67,8 +67,7 @@ GameDto _$GameDtoFromJson(Map<String, dynamic> json) => GameDto(
       ),
     );
 
-Map<String, dynamic> _$GameDtoToJson(GameDto instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$GameDtoToJson(GameDto instance) => <String, dynamic>{
       'time': instance.time,
       'players': instance.players,
       'winner': instance.winner,

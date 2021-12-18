@@ -52,7 +52,10 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
 
   Stream<GamesState> _loadGames(LoadGames event) async* {
     yield GamesLoading();
-    yield (await gameRepository.getGames()).fold((l) => _feedbackAndReturn(l), (r) => GamesLoaded(Games(r)));
+    yield (await gameRepository.getGames()).fold(
+      (l) => _feedbackAndReturn(l),
+      (r) => GamesLoaded(Games(r)),
+    );
   }
 
   Stream<GamesState> _addEditGame(AddEditGameEvent event) async* {
@@ -68,10 +71,16 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
             date: event.time,
             scores: event.scores!,
             expansions: event.expansions,
+            scenarios: event.scenarios,
           );
         } else {
           game = Game.noScores(
-              players: event.players, date: event.time, winner: event.winner, expansions: event.expansions);
+            players: event.players,
+            date: event.time,
+            winner: event.winner,
+            expansions: event.expansions,
+            scenarios: event.scenarios,
+          );
         }
         //TODO use returned value to ensure equality (to prevent issues like difference in Color and MaterialColor)
         Game? oldGame = event.oldGame;
