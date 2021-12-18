@@ -75,7 +75,7 @@ class GameDetailPage extends StatelessWidget {
             children: [
               GameWinner(game.winner),
               if (game.hasExpansion) ..._expansions(),
-              if (game.hasScenario) ..._scenarios(),
+              if (game.hasScenario) ..._scenarios(context),
               //Stats
               const Divider(),
               const SizedBox(
@@ -115,11 +115,11 @@ class GameDetailPage extends StatelessWidget {
     );
   }
 
-  Iterable<Widget> _scenarios() sync* {
+  Iterable<Widget> _scenarios(BuildContext context) sync* {
     for (final scenario in game.scenarios) {
       yield Padding(
         padding: const EdgeInsets.all(2.0),
-        child: Text(scenario.name),
+        child: Text(scenario.name, style: Theme.of(context).textTheme.caption?.copyWith(fontSize: 14)),
       );
     }
   }
