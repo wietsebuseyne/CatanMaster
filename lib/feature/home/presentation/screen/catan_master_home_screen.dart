@@ -4,7 +4,6 @@ import 'package:catan_master/feature/export_import/presentation/export_data_dial
 import 'package:catan_master/feature/export_import/presentation/import_data_dialog.dart';
 import 'package:catan_master/feature/feedback/presentation/bloc/feedback_cubit.dart';
 import 'package:catan_master/feature/feedback/presentation/user_feedback.dart';
-import 'package:catan_master/feature/game/presentation/bloc/games_bloc.dart';
 import 'package:catan_master/feature/game/presentation/pages/games_page.dart';
 import 'package:catan_master/feature/game/presentation/widgets/games_list.dart';
 import 'package:catan_master/feature/player/presentation/bloc/players_bloc.dart';
@@ -128,14 +127,10 @@ class _CatanMasterHomeScreenState extends State<CatanMasterHomeScreen> {
   }
 
   Future<void> showImportDialog(BuildContext context) async {
-    final gamesBloc = context.read<GamesBloc>();
-    final playersBloc = context.read<PlayersBloc>();
     await showDialog<void>(
       context: context,
       builder: (context) => const ImportDataDialog(),
     );
-    playersBloc.add(const LoadPlayers());
-    gamesBloc.add(const LoadGames());
   }
 
   HomeScreenTab indexToPage(int index) {

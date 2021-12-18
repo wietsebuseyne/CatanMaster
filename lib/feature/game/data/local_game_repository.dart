@@ -8,6 +8,7 @@ import 'package:catan_master/feature/game/domain/game_repository.dart';
 import 'package:catan_master/feature/player/domain/player.dart';
 import 'package:catan_master/feature/player/domain/player_repository.dart';
 import 'package:dartz/dartz.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 class LocalGameRepository extends GameRepository {
   final GameDatasource gameDatasource;
@@ -85,13 +86,33 @@ class LocalGameRepository extends GameRepository {
     );
   }
 
+  @override
+  Stream<Either<Failure, List<Game>>> watchGames({bool seeded = true}) async* {
+    if (seeded) {
+      yield await getGames();
+    }
+    yield* playerRepository.watchPlayers(seeded: true).combineLatest<List<GameDto>, Either<Failure, List<Game>>>(
+      gameDatasource.watchGames(),
+      (players, games) {
+        //TODO no getOrElse but use datasource!
+        return _mapGames(players.getOrElse(() => []), games);
+      },
+    );
+  }
+
   Future<Either<Failure, List<Game>>> _getGamesInternal(List<Player> players) async {
     try {
-      Map<String?, Player?> playerMap = {for (var p in players) p.username: p};
+      return _mapGames(players, await gameDatasource.getGames());
+    } on Exception catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
 
-      var gamesDtos = await gameDatasource.getGames();
+  Either<Failure, List<Game>> _mapGames(List<Player> players, List<GameDto> gameDtos) {
+    try {
+      Map<String?, Player?> playerMap = {for (var p in players) p.username: p};
       GameMapper mapper = GameMapper(playerMap);
-      return Right(gamesDtos.map(mapper.map).toList().fold(
+      return Right(gameDtos.map(mapper.map).toList().fold(
         <Game>[],
         (List<Game> list, failureOrGame) {
           return failureOrGame.fold((l) {

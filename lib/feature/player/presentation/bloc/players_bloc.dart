@@ -8,6 +8,7 @@ import 'package:catan_master/feature/player/domain/player.dart';
 import 'package:catan_master/feature/player/domain/player_repository.dart';
 import 'package:catan_master/feature/player/presentation/usecase/delete_player.dart';
 import 'package:collection/collection.dart' show IterableExtension;
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
@@ -18,23 +19,32 @@ class PlayersBloc extends Bloc<PlayerEvent, PlayerState> {
   final DeletePlayer deletePlayer;
   final PlayerRepository _repository;
   final FeedbackCubit feedbackCubit;
+  StreamSubscription? _subscription;
 
   PlayersBloc(
     this._repository, {
     required this.feedbackCubit,
     required this.deletePlayer,
-  }) : super(const InitialPlayersState()) {
-    on<LoadPlayers>(_loadPlayers);
+  }) : super(const PlayersLoading()) {
+    on<_PlayersUpdated>(_playersUpdated);
     on<AddOrUpdatePlayer>(_addOrUpdatePlayer);
     on<DeletePlayerEvent>(_deletePlayer);
+    _subscription = _repository.watchPlayers(seeded: true).listen((playersOr) {
+      playersOr.fold(
+        (failures) => feedbackCubit.toast(failures.message),
+        (players) => add(_PlayersUpdated(players)),
+      );
+    });
   }
 
-  Future<void> _loadPlayers(LoadPlayers event, Emitter<PlayerState> emit) async {
-    emit(const PlayersLoading());
-    (await _repository.getPlayers()).fold(
-      (failure) => emit(state), //TODO PlayersError
-      (players) => emit(PlayersLoaded(players)),
-    );
+  @override
+  Future<void> close() async {
+    await _subscription?.cancel();
+    return super.close();
+  }
+
+  Future<void> _playersUpdated(_PlayersUpdated event, Emitter<PlayerState> emit) async {
+    emit(PlayersLoaded(event.players));
   }
 
   Future<void> _addOrUpdatePlayer(AddOrUpdatePlayer event, Emitter<PlayerState> emit) async {

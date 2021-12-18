@@ -10,7 +10,7 @@ class PlayersPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PlayersBloc, PlayerState>(builder: (BuildContext context, PlayerState playersState) {
-      if (playersState is PlayersLoading || playersState is InitialPlayersState) {
+      if (playersState is PlayersLoading) {
         return const Center(child: CircularProgressIndicator());
       } else if (playersState is PlayersLoaded) {
         return BlocBuilder<GamesBloc, GamesState>(builder: (BuildContext context, GamesState gamesState) {

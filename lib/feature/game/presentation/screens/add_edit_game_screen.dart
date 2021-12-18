@@ -1,7 +1,7 @@
 import 'package:catan_master/core/color.dart';
 import 'package:catan_master/feature/feedback/presentation/user_feedback.dart';
 import 'package:catan_master/feature/game/domain/game.dart';
-import 'package:catan_master/feature/game/presentation/bloc/games_bloc.dart';
+import 'package:catan_master/feature/game/presentation/bloc/add_edit_game_bloc.dart';
 import 'package:catan_master/feature/game/presentation/pages/add_edit_game_page.dart';
 import 'package:catan_master/feature/player/domain/player.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,21 +9,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AddEditGameScreen extends StatefulWidget {
+class AddEditGameScreen extends StatelessWidget {
   final Game? game;
-  final bool edit;
 
-  const AddEditGameScreen.add()
-      : edit = false,
-        game = null;
+  const AddEditGameScreen.add() : game = null;
 
-  const AddEditGameScreen.edit(Game this.game) : edit = true;
+  const AddEditGameScreen.edit(Game this.game);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<AddEditGameBloc>(
+      create: (context) => AddEditGameBloc(gameRepository: context.read(), feedbackCubit: context.read()),
+      child: _AddEditGameScreen(game: game),
+    );
+  }
+}
+
+class _AddEditGameScreen extends StatefulWidget {
+  final Game? game;
+
+  bool get edit => game != null;
+
+  const _AddEditGameScreen({this.game});
 
   @override
   _AddEditGameScreenState createState() => _AddEditGameScreenState();
 }
 
-class _AddEditGameScreenState extends State<AddEditGameScreen> {
+class _AddEditGameScreenState extends State<_AddEditGameScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late GameFormData formData;
 
@@ -41,12 +54,9 @@ class _AddEditGameScreenState extends State<AddEditGameScreen> {
     final light = isLight(color);
     final brightness = light ? Brightness.light : Brightness.dark;
     var overlayStyle = light ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light;
-    return BlocListener<GamesBloc, GamesState>(
-      listener: (context, state) {
-        if ((!widget.edit && state is GameAdded) || (widget.edit && state is GameEdited)) {
-          Navigator.of(context).pop();
-        }
-      },
+    return BlocListener<AddEditGameBloc, AddEditGameState>(
+      listener: (context, state) => Navigator.of(context).pop(),
+      listenWhen: (s1, s2) => s2 is AddEditGameSuccess,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: color,
@@ -80,16 +90,14 @@ class _AddEditGameScreenState extends State<AddEditGameScreen> {
                   Player? winner = formData.winner;
 
                   if (withScores) {
-                    BlocProvider.of<GamesBloc>(context).add(AddEditGameEvent.withScores(
-                      oldGame: widget.game,
+                    BlocProvider.of<AddEditGameBloc>(context).add(AddEditGameEvent.withScores(
                       time: date!,
                       scores: scores!,
                       expansions: expansions,
                       scenarios: scenarios,
                     ));
                   } else {
-                    BlocProvider.of<GamesBloc>(context).add(AddEditGameEvent.noScores(
-                      oldGame: widget.game,
+                    BlocProvider.of<AddEditGameBloc>(context).add(AddEditGameEvent.noScores(
                       time: date!,
                       players: players,
                       winner: winner,

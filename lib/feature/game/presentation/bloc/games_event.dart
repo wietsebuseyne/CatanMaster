@@ -5,47 +5,12 @@ abstract class GamesEvent extends Equatable {
   const GamesEvent();
 }
 
-class LoadGames extends GamesEvent {
-  const LoadGames();
+class _GamesUpdated extends GamesEvent {
+  final List<Game> games;
+  const _GamesUpdated(this.games);
 
   @override
-  List<Object> get props => [];
-}
-
-class AddEditGameEvent extends GamesEvent {
-  final Game? oldGame;
-  final DateTime time;
-  final List<Player>? players;
-  final Player? winner;
-  final List<CatanExpansion> expansions;
-  final List<CatanScenario> scenarios;
-  final Map<Player, int>? scores;
-
-  const AddEditGameEvent.noScores({
-    this.oldGame,
-    required this.time,
-    required this.players,
-    required this.winner,
-    required this.expansions,
-    required this.scenarios,
-  }) : scores = null;
-
-  AddEditGameEvent.withScores({
-    this.oldGame,
-    required this.time,
-    required Map<Player, int> this.scores,
-    required this.expansions,
-    required this.scenarios,
-  })  : assert(scores.isNotEmpty),
-        players = null,
-        winner = null;
-
-  bool get withScores => scores != null;
-
-  bool get isEdit => oldGame != null;
-
-  @override
-  List<Object?> get props => [oldGame, time, players, winner, expansions];
+  List<Object> get props => [games];
 }
 
 class DeleteGameEvent extends GamesEvent {

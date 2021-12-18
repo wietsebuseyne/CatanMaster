@@ -5,6 +5,8 @@ import 'package:hive/hive.dart';
 abstract class GameDatasource {
   Future<List<GameDto>> getGames();
 
+  Stream<List<GameDto>> watchGames();
+
   Future<void> createGame(GameDto game);
 
   Future<void> updateGame(int oldGameTime, GameDto game);
@@ -20,6 +22,11 @@ class HiveGameDatasource extends GameDatasource {
   @override
   Future<List<GameDto>> getGames() async {
     return _box.values.toList();
+  }
+
+  @override
+  Stream<List<GameDto>> watchGames() {
+    return _box.watch().map((_) => _box.values.toList());
   }
 
   @override

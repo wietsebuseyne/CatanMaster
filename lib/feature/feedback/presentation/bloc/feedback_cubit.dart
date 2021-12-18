@@ -7,7 +7,7 @@ part 'feedback_state.dart';
 class FeedbackCubit extends Cubit<FeedbackState> {
   FeedbackCubit() : super(FeedbackState.initial());
 
-  void feedback(FeedbackMessage feedbackMessage) {
+  void showFeedback(FeedbackMessage feedbackMessage) {
     emit(state.copyWith(feedbackMessage));
   }
 

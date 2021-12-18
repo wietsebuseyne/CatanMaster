@@ -1,12 +1,16 @@
 part of 'players_bloc.dart';
 
 @immutable
-abstract class PlayerEvent {
+abstract class PlayerEvent extends Equatable {
   const PlayerEvent();
 }
 
-class LoadPlayers extends PlayerEvent {
-  const LoadPlayers();
+class _PlayersUpdated extends PlayerEvent {
+  final List<Player> players;
+  const _PlayersUpdated(this.players);
+
+  @override
+  List<Object?> get props => [players];
 }
 
 class AddOrUpdatePlayer extends PlayerEvent {
@@ -36,10 +40,16 @@ class AddOrUpdatePlayer extends PlayerEvent {
   });
 
   bool get isEdit => toEdit != null;
+
+  @override
+  List<Object?> get props => [toEdit, gender, name, color];
 }
 
 class DeletePlayerEvent extends PlayerEvent {
   final Player player;
 
   const DeletePlayerEvent(this.player);
+
+  @override
+  List<Object?> get props => [player];
 }

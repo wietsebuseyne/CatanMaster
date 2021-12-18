@@ -9,15 +9,6 @@ abstract class PlayerState {
   PlayerState copyWith({Message? message});
 }
 
-class InitialPlayersState extends PlayerState {
-  const InitialPlayersState({Message? message}) : super(message: message);
-
-  @override
-  InitialPlayersState copyWith({Message? message}) {
-    return InitialPlayersState(message: message ?? message);
-  }
-}
-
 class PlayersLoading extends PlayerState {
   const PlayersLoading({Message? message}) : super(message: message);
 

@@ -5,6 +5,8 @@ import 'package:dartz/dartz.dart';
 abstract class PlayerRepository {
   Future<Either<Failure, List<Player>>> getPlayers();
 
+  Stream<Either<Failure, List<Player>>> watchPlayers({bool seeded = true});
+
   Future<Either<Failure, void>> addPlayer(Player player);
 
   Future<Either<Failure, void>> editPlayer(Player player);

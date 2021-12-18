@@ -27,14 +27,14 @@ class CatanMasterBlocProvider extends StatelessWidget {
                   gameRepository: RepositoryProvider.of<GameRepository>(context),
                   playerRepository: RepositoryProvider.of<PlayerRepository>(context),
                 ),
-              )..add(const LoadPlayers()),
+              ),
             ),
             BlocProvider<GamesBloc>(
               create: (BuildContext context) => GamesBloc(
                 RepositoryProvider.of<GameRepository>(context),
                 feedbackCubit: BlocProvider.of<FeedbackCubit>(context),
                 playersBloc: BlocProvider.of<PlayersBloc>(context),
-              )..add(const LoadGames()),
+              ),
             ),
           ],
           child: child,

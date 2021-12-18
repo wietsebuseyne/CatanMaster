@@ -22,6 +22,20 @@ class LocalPlayerRepository extends PlayerRepository {
     }
   }
 
+  @override
+  Stream<Either<Failure, List<Player>>> watchPlayers({bool seeded = true}) async* {
+    if (seeded) {
+      yield await getPlayers();
+    }
+    yield* localDatasource.watchPlayers().map((dtos) {
+      try {
+        return Right(dtos.map((p) => p.toDomain()).toList());
+      } catch (e) {
+        return Left(Failure(e.toString()));
+      }
+    });
+  }
+
   /*
   Future<Either<Failure, List<PlayerWithGames>>> getPlayersWithGames() async {
     try {
