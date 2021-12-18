@@ -8,8 +8,11 @@ import 'package:catan_master/feature/game/presentation/pages/games_page.dart';
 import 'package:catan_master/feature/game/presentation/widgets/games_list.dart';
 import 'package:catan_master/feature/player/presentation/bloc/players_bloc.dart';
 import 'package:catan_master/feature/player/presentation/pages/players_page.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 enum HomeScreenTab { games, players }
 
@@ -40,12 +43,16 @@ class _CatanMasterHomeScreenState extends State<CatanMasterHomeScreen> {
                 case 'import':
                   showImportDialog(context);
                   break;
+                case 'feedback':
+                  launchFeedback();
+                  break;
               }
             },
             itemBuilder: (context) {
               return [
                 const PopupMenuItem<String>(child: Text('Export data'), value: 'export'),
                 const PopupMenuItem<String>(child: Text('Import data'), value: 'import'),
+                const PopupMenuItem<String>(child: Text('Send feedback'), value: 'feedback'),
               ];
             },
           ),
@@ -131,6 +138,19 @@ class _CatanMasterHomeScreenState extends State<CatanMasterHomeScreen> {
       context: context,
       builder: (context) => const ImportDataDialog(),
     );
+  }
+
+  Future<void> launchFeedback() async {
+    final info = await PackageInfo.fromPlatform();
+    final deviceInfo = await DeviceInfoPlugin().androidInfo;
+    await launch('''
+mailto:catanmasterapp@gmail.com?subject=[Feedback] Catan+Master+${info.version}&body=Version: ${info.version}
+Build Number: ${info.buildNumber}
+Phone: ${deviceInfo.brand} ${deviceInfo.model}
+Android: ${deviceInfo.version.release} SDK ${deviceInfo.version.sdkInt}
+Feedback:
+
+''');
   }
 
   HomeScreenTab indexToPage(int index) {
