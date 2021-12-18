@@ -30,6 +30,10 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
         add(const LoadGames());
       }
     });
+    on<LoadGames>(_loadGames);
+    on<AddEditGameEvent>(_addEditGame);
+    on<DeleteGameEvent>(_removeGame);
+    on<UndoDeleteGameEvent>(_undoRemoveGame);
   }
 
   @override
@@ -38,28 +42,15 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
     return super.close();
   }
 
-  @override
-  Stream<GamesState> mapEventToState(GamesEvent event) async* {
-    if (event is LoadGames) {
-      yield* _loadGames(event);
-    } else if (event is AddEditGameEvent) {
-      yield* _addEditGame(event);
-    } else if (event is DeleteGameEvent) {
-      yield* _removeGame(event);
-    } else if (event is UndoDeleteGameEvent) {
-      yield* _undoRemoveGame(event);
-    }
-  }
-
-  Stream<GamesState> _loadGames(LoadGames event) async* {
-    yield GamesLoading();
-    yield (await gameRepository.getGames()).fold(
-      (l) => _feedbackAndReturn(l),
-      (r) => GamesLoaded(Games(r)),
+  Future<void> _loadGames(LoadGames event, Emitter<GamesState> emit) async {
+    emit(GamesLoading());
+    (await gameRepository.getGames()).fold(
+      (l) => _toast(l),
+      (r) => emit(GamesLoaded(Games(r))),
     );
   }
 
-  Stream<GamesState> _addEditGame(AddEditGameEvent event) async* {
+  Future<void> _addEditGame(AddEditGameEvent event, Emitter<GamesState> emit) async {
     final GamesState s = state;
     if (s is GamesLoaded) {
       //TODO validate input
@@ -86,50 +77,51 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
         //TODO use returned value to ensure equality (to prevent issues like difference in Color and MaterialColor)
         Game? oldGame = event.oldGame;
         if (oldGame != null) {
-          yield (await gameRepository.editGame(oldGame.date.millisecondsSinceEpoch, game)).fold(
-            (f) => _feedbackAndReturn(f, message: "Error while editing game: $f"),
-            (r) => GameEdited(s.games.delete(event.oldGame), editedGame: game),
+          (await gameRepository.editGame(oldGame.date.millisecondsSinceEpoch, game)).fold(
+            (f) => _toast(f, message: "Error while editing game: $f"),
+            (r) => emit(GameEdited(s.games.delete(event.oldGame), editedGame: game)),
           );
         } else {
-          yield (await gameRepository.addGame(game)).fold(
-            (f) => _feedbackAndReturn(f, message: "Error while adding game: $f"),
-            (r) => GameAdded(s.games, newGame: game),
+          (await gameRepository.addGame(game)).fold(
+            (f) => _toast(f, message: "Error while adding game: $f"),
+            (r) => emit(GameAdded(s.games, newGame: game)),
           );
         }
       } on DomainException catch (e) {
-        yield _feedbackAndReturn(DataValidationFailure(message: e.message!, part: e.part));
+        _toast(DataValidationFailure(message: e.message!, part: e.part));
       }
     }
   }
 
-  Stream<GamesState> _removeGame(DeleteGameEvent event) async* {
+  Future<void> _removeGame(DeleteGameEvent event, Emitter<GamesState> emit) async {
     final GamesState s = state;
     if (s is GamesLoaded) {
       Game game = event.game;
-      yield (await gameRepository.deleteGame(game))
-          .fold((f) => _feedbackAndReturn(f, message: "Error while deleting game: ${f.toString()}"), (r) {
-        feedbackCubit.feedback(
-          FeedbackMessage.snackbar("Game on '${DateFormat.MMMEd().format(game.date)}' deleted",
-              severity: Severity.warning,
-              action: FeedbackAction(text: "UNDO", action: () => add(UndoDeleteGameEvent(game)))),
-        );
-        return GamesLoaded(s.games.delete(event.game));
-      });
+      (await gameRepository.deleteGame(game)).fold(
+        (f) => _toast(f, message: "Error while deleting game: ${f.toString()}"),
+        (r) {
+          feedbackCubit.feedback(
+            FeedbackMessage.snackbar("Game on '${DateFormat.MMMEd().format(game.date)}' deleted",
+                severity: Severity.warning,
+                action: FeedbackAction(text: "UNDO", action: () => add(UndoDeleteGameEvent(game)))),
+          );
+          emit(GamesLoaded(s.games.delete(event.game)));
+        },
+      );
     }
   }
 
-  Stream<GamesState> _undoRemoveGame(UndoDeleteGameEvent event) async* {
+  Future<void> _undoRemoveGame(UndoDeleteGameEvent event, Emitter<GamesState> emit) async {
     final GamesState s = state;
     if (s is GamesLoaded) {
       Game game = event.game;
-      yield (await gameRepository.undoDelete(game: game)).fold(
-          (f) => _feedbackAndReturn(f, message: "Error while undoing remove: ${f.toString()}"),
+      (await gameRepository.undoDelete(game: game)).fold(
+          (f) => _toast(f, message: "Error while undoing remove: ${f.toString()}"),
           (r) => GamesLoaded(s.games.add(game)));
     }
   }
 
-  GamesState _feedbackAndReturn(Failure failure, {String? message}) {
-    feedbackCubit.toast(message ?? failure.message);
-    return state;
+  void _toast(Failure failure, {String? message}) {
+    feedbackCubit.toast(message ?? failure.message, severity: Severity.error);
   }
 }

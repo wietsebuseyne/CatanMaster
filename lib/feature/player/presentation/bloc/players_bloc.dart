@@ -23,28 +23,21 @@ class PlayersBloc extends Bloc<PlayerEvent, PlayerState> {
     this._repository, {
     required this.feedbackCubit,
     required this.deletePlayer,
-  }) : super(const InitialPlayersState());
-
-  @override
-  Stream<PlayerState> mapEventToState(PlayerEvent event) async* {
-    if (event is LoadPlayers) {
-      yield* _loadPlayers();
-    } else if (event is AddOrUpdatePlayer) {
-      yield* _addOrUpdatePlayer(event);
-    } else if (event is DeletePlayerEvent) {
-      yield* _deletePlayer(event);
-    }
+  }) : super(const InitialPlayersState()) {
+    on<LoadPlayers>(_loadPlayers);
+    on<AddOrUpdatePlayer>(_addOrUpdatePlayer);
+    on<DeletePlayerEvent>(_deletePlayer);
   }
 
-  Stream<PlayerState> _loadPlayers() async* {
-    yield const PlayersLoading();
-    yield (await _repository.getPlayers()).fold((failure) {
-      //TODO PlayersError
-      return state;
-    }, (players) => PlayersLoaded(players));
+  Future<void> _loadPlayers(LoadPlayers event, Emitter<PlayerState> emit) async {
+    emit(const PlayersLoading());
+    (await _repository.getPlayers()).fold(
+      (failure) => emit(state), //TODO PlayersError
+      (players) => emit(PlayersLoaded(players)),
+    );
   }
 
-  Stream<PlayerState> _addOrUpdatePlayer(AddOrUpdatePlayer event) async* {
+  Future<void> _addOrUpdatePlayer(AddOrUpdatePlayer event, Emitter<PlayerState> emit) async {
     final PlayerState s = state;
     if (s is PlayersLoaded) {
       var player = Player(
@@ -55,26 +48,24 @@ class PlayersBloc extends Bloc<PlayerEvent, PlayerState> {
       );
 
       if (event.isEdit) {
-        yield (await _repository.editPlayer(player)).fold(
+        (await _repository.editPlayer(player)).fold(
           (l) {
             feedbackCubit.snackbar(l.message);
-            return s;
           },
           (r) {
             feedbackCubit.snackbar("Player '$player' successfully edited");
-            return PlayerEdited(List.from(s.players)..remove(event.toEdit), editedPlayer: player);
+            emit(PlayerEdited(List.from(s.players)..remove(event.toEdit), editedPlayer: player));
           },
         );
       } else {
         //TODO use return values
-        yield (await _repository.addPlayer(player)).fold(
+        (await _repository.addPlayer(player)).fold(
           (l) {
             feedbackCubit.snackbar(l.message);
-            return s;
           },
           (r) {
             feedbackCubit.snackbar("Player '$player' successfully added");
-            return s.copyWith(newPlayer: player);
+            emit(s.copyWith(newPlayer: player));
           },
         );
       }
@@ -83,21 +74,20 @@ class PlayersBloc extends Bloc<PlayerEvent, PlayerState> {
     }
   }
 
-  Stream<PlayerState> _deletePlayer(DeletePlayerEvent event) async* {
+  Future<void> _deletePlayer(DeletePlayerEvent event, Emitter<PlayerState> emit) async {
     final PlayerState s = state;
     if (s is PlayersLoaded) {
-      yield (await deletePlayer.call(event.player)).fold(
+      (await deletePlayer.call(event.player)).fold(
         (failure) {
           if (failure is PlayerHasGamesFailure) {
             feedbackCubit.dialog(failure.message, title: "Cannot delete player");
           } else {
             feedbackCubit.snackbar(failure.message);
           }
-          return s;
         },
         (_) {
           feedbackCubit.snackbar("Player '${event.player}' successfully deleted");
-          return PlayersLoaded(List.from(s.players)..remove(event.player));
+          emit(PlayersLoaded(List.from(s.players)..remove(event.player)));
         },
       );
     } else {
