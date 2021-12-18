@@ -75,7 +75,7 @@ class GameMapper {
     if (expStrings != null) {
       for (String exp in expStrings) {
         final expansion = EnumUtils.fromStringOrNull(CatanExpansion.values, exp);
-        if (expansion != null) {
+        if (expansion != null && !expansions.contains(expansion)) {
           expansions.add(expansion);
         }
         if (exp == describeEnum(CatanScenario.legendOfTheConquerers)) {
@@ -88,7 +88,7 @@ class GameMapper {
     if (sceStrings != null) {
       for (String sce in sceStrings) {
         final scenario = EnumUtils.fromStringOrNull(CatanScenario.values, sce);
-        if (scenario != null) {
+        if (scenario != null && !scenarios.contains(scenario)) {
           scenarios.add(scenario);
         }
       }
