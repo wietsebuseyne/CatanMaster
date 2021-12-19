@@ -2,6 +2,9 @@ import 'package:catan_master/core/color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polygon/flutter_polygon.dart';
 
+const kLongToSmallRatio = 0.8660254;
+const kSmallToLongRatio = 1 / 0.8660254;
+
 /// TODO fix width / height / rotation to tightly match
 class Hexagon extends StatelessWidget {
   final Color? color;
@@ -10,12 +13,14 @@ class Hexagon extends StatelessWidget {
   final double rotate;
   final Widget? child;
   final List<BoxShadow> shadows;
+  final BorderSide side;
 
   const Hexagon({
     this.color,
-    this.width = 32,
+    this.width = 32 * kLongToSmallRatio,
     this.height = 32,
     this.rotate = 0,
+    this.side = BorderSide.none,
     this.shadows = const [],
     this.child,
   });
@@ -26,7 +31,7 @@ class Hexagon extends StatelessWidget {
       width: width,
       height: height,
       decoration: ShapeDecoration(
-        shape: PolygonBorder(sides: 6, rotate: rotate),
+        shape: PolygonBorder(sides: 6, side: side, rotate: rotate),
         shadows: shadows,
         color: color ?? IconTheme.of(context).color,
       ),

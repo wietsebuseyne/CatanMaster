@@ -5,6 +5,7 @@ import 'package:catan_master/feature/home/presentation/route/catan_page_route_bu
 import 'package:catan_master/feature/player/domain/player.dart';
 import 'package:catan_master/feature/player/presentation/screens/add_edit_player_screen.dart';
 import 'package:catan_master/feature/player/presentation/screens/player_detail_screen.dart';
+import 'package:catan_master/feature/stats/presentation/screen/stats_screen.dart';
 import 'package:flutter/material.dart';
 
 class CatanRouteGenerator {
@@ -50,6 +51,8 @@ class CatanRouteGenerator {
         }
         return GameDetailScreen(game.date);
       });
+    } else if (settings.name == '/stats') {
+      return CatanPageRouteBuilder(page: StatsScreen());
     }
     return MaterialPageRoute(
       builder: (context) => const Text("unknown route"),

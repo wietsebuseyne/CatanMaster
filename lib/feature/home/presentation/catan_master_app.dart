@@ -31,6 +31,7 @@ class CatanMasterApp extends StatelessWidget {
             dividerTheme: const DividerThemeData(indent: 32.0, endIndent: 32.0, thickness: 1.0),
             bottomNavigationBarTheme: BottomNavigationBarThemeData(
               selectedItemColor: light ? mc?.shade900 ?? Colors.black : c,
+              type: BottomNavigationBarType.fixed,
             ),
             colorScheme: ColorScheme.fromSwatch(
               primarySwatch: mc ?? Colors.blue,
@@ -49,6 +50,7 @@ class CatanMasterApp extends StatelessWidget {
             dividerTheme: const DividerThemeData(indent: 32.0, endIndent: 32.0, thickness: 1.0),
             bottomNavigationBarTheme: BottomNavigationBarThemeData(
               selectedItemColor: light ? c : mc?.shade200 ?? Colors.white,
+              type: BottomNavigationBarType.fixed,
             ),
             colorScheme: ColorScheme.fromSwatch(
               brightness: Brightness.dark,

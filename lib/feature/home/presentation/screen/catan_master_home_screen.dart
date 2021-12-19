@@ -34,6 +34,13 @@ class _CatanMasterHomeScreenState extends State<CatanMasterHomeScreen> {
       appBar: AppBar(
         title: const Text("Catan Master"),
         actions: [
+          if (tab == HomeScreenTab.games)
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed("/stats");
+              },
+              icon: const Icon(Icons.insert_chart_outlined),
+            ),
           PopupMenuButton<String>(
             onSelected: (selection) {
               switch (selection) {
