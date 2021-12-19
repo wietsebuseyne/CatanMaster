@@ -1,4 +1,5 @@
 import 'package:catan_master/core/failures.dart';
+import 'package:catan_master/core/mapping.dart';
 import 'package:catan_master/feature/player/data/dto/player_dtos.dart';
 import 'package:catan_master/feature/player/data/player_datasource.dart';
 import 'package:catan_master/feature/player/domain/player.dart';
@@ -7,14 +8,15 @@ import 'package:dartz/dartz.dart';
 
 class LocalPlayerRepository extends PlayerRepository {
   final PlayerDatasource localDatasource;
+  final MapperRegistry mappers;
 
-  LocalPlayerRepository(this.localDatasource);
+  LocalPlayerRepository(this.localDatasource) : mappers = MapperRegistry.instance;
 
   @override
   Future<Either<Failure, List<Player>>> getPlayers() async {
     try {
       var dtos = await localDatasource.getPlayers();
-      return Right(dtos.map((p) => p.toDomain()).toList());
+      return Right(await mappers.mapIterableWithoutFailures(dtos));
     } on Exception catch (e) {
       return Left(Failure(e.toString()));
     } on Error catch (error) {
@@ -23,13 +25,17 @@ class LocalPlayerRepository extends PlayerRepository {
   }
 
   @override
+  Future<Map<String, Either<Failure, Player>>> getPlayersMap() async {
+    var dtos = await localDatasource.getPlayers();
+    return <String, Either<Failure, Player>>{
+      for (var dto in dtos) dto.username ?? '': await mappers.map<PlayerDto, Player>(dto)
+    };
+  }
+
+  @override
   Stream<Either<Failure, List<Player>>> watchPlayers({bool seeded = true}) async* {
-    yield* localDatasource.watchPlayers(seeded: seeded).map((dtos) {
-      try {
-        return Right(dtos.map((p) => p.toDomain()).toList());
-      } catch (e) {
-        return Left(Failure(e.toString()));
-      }
+    yield* localDatasource.watchPlayers(seeded: seeded).asyncMap((dtos) async {
+      return Right(await mappers.mapIterableWithoutFailures(dtos));
     });
   }
 

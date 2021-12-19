@@ -1,5 +1,8 @@
 import 'dart:core';
 
+import 'package:catan_master/core/core.dart';
+import 'package:catan_master/core/mapping.dart';
+
 class CacheException implements Exception {
   String? message;
 
@@ -15,12 +18,13 @@ class NotFoundException implements Exception {}
 
 ///Thrown when something does not comply with the domain logic or constraints,
 ///e.g. constructing a domain obect with invalid data
-class DomainException implements Exception {
-  final String? part;
-  final String? message;
-
-  const DomainException([this.message, this.part]);
+class DomainValidationException extends MapException {
+  const DomainValidationException(String part, String message) : super(part: part, message: message);
 
   @override
-  String toString() => "${part == null ? "" : "$part: "}$message";
+  String toString() => "DomainException: Could not map [$part]: $message";
+}
+
+mixin ToFailure {
+  Failure toFailure({StackTrace? stackTrace});
 }

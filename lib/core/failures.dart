@@ -3,15 +3,12 @@ import 'package:meta/meta.dart';
 @immutable
 class Failure {
   final String message;
+  final StackTrace? stackTrace;
 
-  const Failure(this.message);
+  const Failure(this.message, [this.stackTrace]);
 
   @override
   String toString() => message;
-}
-
-class MapFailure extends Failure {
-  const MapFailure(String message) : super(message);
 }
 
 class DataValidationFailure extends Failure {
@@ -19,6 +16,7 @@ class DataValidationFailure extends Failure {
 
   const DataValidationFailure({
     required String message,
+    StackTrace? stackTrace,
     this.part,
-  }) : super(message);
+  }) : super(message, stackTrace);
 }

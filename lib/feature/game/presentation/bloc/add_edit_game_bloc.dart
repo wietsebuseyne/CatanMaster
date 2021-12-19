@@ -52,8 +52,8 @@ class AddEditGameBloc extends CatanBloc<AddEditGameEvent, AddEditGameState> {
           (r) => emit(AddEditGameSuccess()),
         );
       }
-    } on DomainException catch (e) {
-      failureFeedback(DataValidationFailure(message: e.message ?? '?', part: e.part));
+    } on DomainValidationException catch (e) {
+      failureFeedback(DataValidationFailure(message: e.message, part: e.part));
     }
   }
 }

@@ -23,7 +23,7 @@ class EnumUtils {
     return describeEnum(enumItem);
   }
 
-  /// Given a string, find and return its matching enum value
+  /// Given a string, find and return its matching enum value. Ignores '_' characters and casing.
   ///
   /// You need to pass in the values of the enum object. So TestEnum.values
   /// in the first argument. The matching value is the second argument.

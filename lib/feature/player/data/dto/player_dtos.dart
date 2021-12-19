@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:catan_master/core/core.dart';
 import 'package:catan_master/feature/player/domain/player.dart';
 import 'package:hive/hive.dart';
@@ -46,12 +44,6 @@ class PlayerDto extends HiveObject {
         this.name = player.name,
         this.gender = EnumUtils.convertToString(player.gender),
         this.color = player.color.value;
-
-  Player toDomain() => Player(
-      username: username!,
-      name: name!,
-      gender: EnumUtils.fromString(Gender.values, gender)!,
-      color: Color(color!).withAlpha(255));
 
   factory PlayerDto.fromJson(Map<String, dynamic> json) => _$PlayerDtoFromJson(json);
 

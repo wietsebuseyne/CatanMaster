@@ -43,11 +43,11 @@ class CatanMasterLocalRepositoryProvider extends StatelessWidget {
                 return LocalPlayerRepository(context.read<PlayerDatasource>());
               },
             ),
-            ProxyProvider<PlayerRepository, GameRepository>(
-              update: (context, playerRepo, gameRepo) {
+            Provider<GameRepository>(
+              create: (context) {
                 return LocalGameRepository(
                   gameDatasource: context.read<GameDatasource>(),
-                  playerRepository: playerRepo,
+                  playerDatasource: context.read<PlayerDatasource>(),
                 );
               },
             ),

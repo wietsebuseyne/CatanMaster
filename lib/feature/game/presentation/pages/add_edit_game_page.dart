@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:catan_master/core/color.dart';
 import 'package:catan_master/core/widgets/catan_input_decorator.dart';
 import 'package:catan_master/feature/game/domain/game.dart';
 import 'package:catan_master/feature/game/presentation/pages/players_with_scores_input.dart';
@@ -136,8 +135,6 @@ class AddEditGamePage extends StatelessWidget {
                 PlayersFormState formState = state.value ?? PlayersFormState();
 
                 Map<Player, int> scores = formState.scores;
-                var color = formState.winner?.color ?? Colors.blue;
-                var light = isLight(color);
                 return Column(
                   children: [
                     Center(

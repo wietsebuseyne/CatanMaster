@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:catan_master/core/core.dart';
+import 'package:catan_master/core/validation.dart';
 import 'package:catan_master/feature/game/domain/game.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -22,6 +23,20 @@ class Player extends Equatable {
         assert(name.isNotEmpty),
         assert(color.alpha == 255),
         this.color = Color(color.value);
+
+  factory Player.orThrow({
+    required String? username,
+    required String? name,
+    required Gender? gender,
+    required Color? color,
+  }) {
+    return Player(
+      username: validateNotNull('username', username),
+      name: validateNotNull('name', name),
+      gender: validateNotNull('gender', gender),
+      color: validateNotNull('color', color),
+    );
+  }
 
   @override
   String toString() => name;

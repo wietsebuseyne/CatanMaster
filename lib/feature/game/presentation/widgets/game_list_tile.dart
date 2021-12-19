@@ -3,7 +3,6 @@ import 'package:catan_master/core/widgets/hexagon.dart';
 import 'package:catan_master/feature/game/domain/game.dart';
 import 'package:catan_master/feature/game/presentation/widgets/game_hexagon.dart';
 import 'package:catan_master/feature/player/domain/player.dart';
-import 'package:catan_master/feature/player/presentation/player_presentation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -74,7 +73,7 @@ class GameListTilePlayer extends StatelessWidget {
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         if (winner)
-          Icon(CatanIcons.trophySolid, color: player.foregroundColor, size: 12)
+          Icon(CatanIcons.trophySolid, color: player.color, size: 12)
         else
           Hexagon(color: player.color, width: 8, height: 12),
         const SizedBox(width: 4.0),

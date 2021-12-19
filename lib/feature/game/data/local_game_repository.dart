@@ -1,21 +1,23 @@
 import 'dart:collection';
 
 import 'package:catan_master/core/failures.dart';
+import 'package:catan_master/core/mapping.dart';
 import 'package:catan_master/feature/game/data/dto/game_dtos.dart';
 import 'package:catan_master/feature/game/data/game_datasource.dart';
 import 'package:catan_master/feature/game/domain/game.dart';
 import 'package:catan_master/feature/game/domain/game_repository.dart';
-import 'package:catan_master/feature/player/domain/player.dart';
-import 'package:catan_master/feature/player/domain/player_repository.dart';
+import 'package:catan_master/feature/player/data/player_datasource.dart';
 import 'package:dartz/dartz.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 class LocalGameRepository extends GameRepository {
   final GameDatasource gameDatasource;
-  final PlayerRepository playerRepository;
+  final PlayerDatasource playerDatasource;
   final ListQueue<Game> deletedGames = ListQueue();
+  final MapperRegistry mappers;
 
-  LocalGameRepository({required this.gameDatasource, required this.playerRepository});
+  LocalGameRepository({required this.gameDatasource, required this.playerDatasource})
+      : this.mappers = MapperRegistry.instance;
 
   @override
   Future<Either<Failure, List<Game>>> getGamesForPlayer(String username) async {
@@ -80,78 +82,25 @@ class LocalGameRepository extends GameRepository {
 
   @override
   Future<Either<Failure, List<Game>>> getGames() async {
-    return (await playerRepository.getPlayers()).fold(
-      (l) async => Left(l),
-      (r) async => await _getGamesInternal(r),
-    );
+    return _getGamesInternal(await gameDatasource.getGames());
   }
 
   @override
   Stream<Either<Failure, List<Game>>> watchGames({bool seeded = true}) async* {
-    yield* playerRepository.watchPlayers(seeded: true).combineLatest<List<GameDto>, Either<Failure, List<Game>>>(
+    // update when player or game has an update
+    yield* playerDatasource.watchPlayers(seeded: true).combineLatest<List<GameDto>, Either<Failure, List<Game>>>(
       gameDatasource.watchGames(seeded: seeded),
       (players, games) {
-        //TODO no getOrElse but use datasource!
-        return _mapGames(players.getOrElse(() => []), games);
+        return _getGamesInternal(games);
       },
     );
   }
 
-  Future<Either<Failure, List<Game>>> _getGamesInternal(List<Player> players) async {
+  Future<Either<Failure, List<Game>>> _getGamesInternal(List<GameDto> dtos) async {
     try {
-      return _mapGames(players, await gameDatasource.getGames());
+      return Right(await mappers.mapIterableWithoutFailures(dtos));
     } on Exception catch (e) {
       return Left(Failure(e.toString()));
     }
   }
-
-  Either<Failure, List<Game>> _mapGames(List<Player> players, List<GameDto> gameDtos) {
-    try {
-      Map<String?, Player?> playerMap = {for (var p in players) p.username: p};
-      GameMapper mapper = GameMapper(playerMap);
-      return Right(gameDtos.map(mapper.map).toList().fold(
-        <Game>[],
-        (List<Game> list, failureOrGame) {
-          return failureOrGame.fold((l) {
-            //TODO save this error to another repository
-            // This repository can then alert the user of these mapping errors
-            // and provide solutions (for example: add Player with name ...)
-            return list;
-          }, (r) => list..add(r));
-        },
-      ));
-    } on Exception catch (e) {
-      return Left(Failure(e.toString()));
-    }
-  }
-
-/*
-  @override
-  Future<Either<Failure, void>> addPlayer(Player player) async {
-    try {
-      return Right(localDatasource.createOrUpdatePlayer(PlayerDto.fromDomain(player)));
-    } on Exception catch (e) {
-      return Left(Failure(e.toString()));
-    }
-  }
-
-  @override
-  Future<Either<Failure, void>> deletePlayer(Player player) async {
-    try {
-      await localDatasource.deletePlayer(PlayerDto.fromDomain(player));
-      return const Right(null);
-    } on Exception catch (e) {
-      return Left(Failure(e.toString()));
-    }
-  }
-
-  @override
-  Future<Either<Failure, List<Player>>> getPlayers() async {
-    try {
-      return Right((await localDatasource.getPlayers()).map((p) => p.toDomain()).toList());
-    } on Exception catch (e) {
-      return Left(Failure(e.toString()));
-    }
-  }*/
-
 }

@@ -6,13 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class CatanMasterApp extends StatelessWidget {
+  const CatanMasterApp();
+
   @override
   Widget build(BuildContext context) {
     return GamesPage(
       childBuilder: (context, gamesState) {
         //TODO keep list of possible colors and which are too light for primaryswatch
         Color c = gamesState.games.getCatanMaster()?.color ?? Colors.blue;
-        MaterialColor mc = colorToMaterialColor(c) ?? Colors.blue;
+        MaterialColor? mc = colorToMaterialColor(c);
         var light = isLight(c);
         var overlayStyle = light ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light;
         return MaterialApp(
@@ -28,10 +30,10 @@ class CatanMasterApp extends StatelessWidget {
             ),
             dividerTheme: const DividerThemeData(indent: 32.0, endIndent: 32.0, thickness: 1.0),
             bottomNavigationBarTheme: BottomNavigationBarThemeData(
-              selectedItemColor: light ? mc.shade900 : mc,
+              selectedItemColor: light ? mc?.shade900 ?? Colors.black : c,
             ),
             colorScheme: ColorScheme.fromSwatch(
-              primarySwatch: mc,
+              primarySwatch: mc ?? Colors.blue,
               accentColor: c,
             ),
           ),
@@ -46,11 +48,11 @@ class CatanMasterApp extends StatelessWidget {
             ),
             dividerTheme: const DividerThemeData(indent: 32.0, endIndent: 32.0, thickness: 1.0),
             bottomNavigationBarTheme: BottomNavigationBarThemeData(
-              selectedItemColor: !light ? mc.shade200 : mc,
+              selectedItemColor: light ? c : mc?.shade200 ?? Colors.white,
             ),
             colorScheme: ColorScheme.fromSwatch(
               brightness: Brightness.dark,
-              primarySwatch: mc,
+              primarySwatch: mc ?? Colors.blue,
               accentColor: c,
             ),
           ),

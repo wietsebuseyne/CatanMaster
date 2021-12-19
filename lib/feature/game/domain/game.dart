@@ -1,4 +1,5 @@
 import 'package:catan_master/core/core.dart';
+import 'package:catan_master/core/validation.dart';
 import 'package:catan_master/feature/player/domain/player.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -37,26 +38,15 @@ class Game extends Equatable {
     required List<CatanExpansion> expansions,
     required List<CatanScenario> scenarios,
   }) {
-    if (date == null) {
-      throw const DomainException("Date must not be null", "date");
-    }
-    if (winner == null) {
-      throw const DomainException("Winner must not be empty", "winner");
-    }
-    if (players == null) {
-      throw const DomainException("Players cannot be null", "players");
-    }
-    if (players.isEmpty) {
-      throw const DomainException("Players cannot be empty", "players");
-    }
-    if (!players.any((p) => p == winner)) {
-      throw const DomainException("Winner must be one of the players", "winner");
+    final ps = validateLength('players', players, min: 2);
+    if (!ps.contains(winner)) {
+      throw const DomainValidationException('winner', 'Winner must be one of the players');
     }
 
     return Game._(
-      date: date,
-      winner: winner,
-      players: players,
+      date: validateNotNull('date', date),
+      winner: validateNotNull('winner', winner),
+      players: ps,
       expansions: expansions,
       scenarios: scenarios,
     );
@@ -65,22 +55,15 @@ class Game extends Equatable {
   factory Game.withScores({
     required DateTime? date,
     required Map<Player, int> scores,
-    required List<CatanExpansion>? expansions,
-    required List<CatanScenario>? scenarios,
+    required List<CatanExpansion> expansions,
+    required List<CatanScenario> scenarios,
   }) {
-    if (date == null) {
-      throw const DomainException("Date must not be null", "date");
-    }
-    if (expansions == null) {
-      throw const DomainException("expansions cannot be null", "expansions");
-    }
-    if (scenarios == null) {
-      throw const DomainException("scenarios cannot be null", "expansions");
-    }
+    date = validateNotNull('date', date);
     List<Player> players = scores.keys.toList();
+
     if (players.any((p) => !_isValidScore(scores[p]))) {
       var player = players.firstWhere((p) => !_isValidScore(scores[p]));
-      throw DomainException("Invalid score '${scores[player]}' provided for player '$player'", "scores");
+      throw DomainValidationException("Invalid score '${scores[player]}' provided for player '$player'", "scores");
     }
     Player? winner;
     bool multiple = false;
@@ -95,14 +78,14 @@ class Game extends Equatable {
       }
     }
     if (multiple) {
-      throw const DomainException("Only one player can have the highest score", "scores");
+      throw const DomainValidationException('Only one player can have the highest score', 'scores');
     }
 
     return Game._(
-      date: date,
-      scores: Map.unmodifiable(scores),
-      players: players,
-      winner: winner!,
+      date: date!,
+      winner: validateNotNull('winner', winner),
+      scores: scores,
+      players: validateLength('players', scores.keys.toList(), min: 2),
       expansions: expansions,
       scenarios: scenarios,
     );
