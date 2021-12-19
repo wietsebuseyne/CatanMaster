@@ -153,9 +153,6 @@ class AddEditGamePage extends StatelessWidget {
                           )
                         ],
                         constraints: const BoxConstraints(minHeight: 32),
-                        selectedBorderColor: color == Colors.white ? Colors.black : color,
-                        selectedColor: light ? Colors.black : color,
-                        fillColor: color.withOpacity(0.1),
                         isSelected: [!formState.withScores, formState.withScores],
                         borderRadius: const BorderRadius.all(Radius.circular(10)),
                         onPressed: (i) {

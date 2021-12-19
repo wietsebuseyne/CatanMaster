@@ -52,75 +52,88 @@ class _AddEditGameScreenState extends State<_AddEditGameScreen> {
     final color = formData.winner?.color ?? Colors.blue;
     final light = isLight(color);
     final brightness = light ? Brightness.light : Brightness.dark;
+    final theme = Theme.of(context);
+    final sameBrightness = theme.brightness == brightness;
     var overlayStyle = light ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light;
-    return BlocListener<AddEditGameBloc, AddEditGameState>(
-      listener: (context, state) {
-        Navigator.of(context).pop();
-        //TODO refactor: for now we pop twice to also exit the detail screen (which does not work if the date was edited)
-        if (widget.edit) Navigator.of(context).pop();
-      },
-      listenWhen: (s1, s2) => s2 is AddEditGameSuccess,
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: color,
-          title: Text(
-            widget.edit ? "Edit Game" : "Add Game",
-            style: ThemeData(brightness: brightness).textTheme.headline6,
-          ),
-          systemOverlayStyle: overlayStyle,
-          iconTheme: ThemeData(brightness: brightness).iconTheme,
-          actions: [
-            TextButton.icon(
-              icon: const Icon(Icons.save),
-              label: const Text("Save"),
-              style: TextButton.styleFrom(
-                primary: light ? Colors.black : Colors.white,
-                textStyle: const TextStyle(fontSize: 16),
-                shape: const CircleBorder(side: BorderSide(color: Colors.transparent)),
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              ),
-              onPressed: () {
-                FormState? formState = _formKey.currentState;
-                if (formState != null && formState.validate()) {
-                  formState.save();
+    return Theme(
+      data: Theme.of(context).copyWith(
+          primaryColor: color,
+          toggleButtonsTheme: ToggleButtonsThemeData(
+            // color: sameBrightness ? (light ? Colors.black : Colors.white) : color,
+            selectedColor: sameBrightness ? theme.colorScheme.onSurface : theme.colorScheme.surface,
+            selectedBorderColor: sameBrightness ? theme.colorScheme.onSurface : color,
+            // borderColor: color,
+            fillColor: color,
+          )),
+      child: BlocListener<AddEditGameBloc, AddEditGameState>(
+        listener: (context, state) {
+          Navigator.of(context).pop();
+          //TODO refactor: for now we pop twice to also exit the detail screen (which does not work if the date was edited)
+          if (widget.edit) Navigator.of(context).pop();
+        },
+        listenWhen: (s1, s2) => s2 is AddEditGameSuccess,
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: color,
+            title: Text(
+              widget.edit ? "Edit Game" : "Add Game",
+              style: ThemeData(brightness: brightness).textTheme.headline6,
+            ),
+            systemOverlayStyle: overlayStyle,
+            iconTheme: ThemeData(brightness: brightness).iconTheme,
+            actions: [
+              TextButton.icon(
+                icon: const Icon(Icons.save),
+                label: const Text("Save"),
+                style: TextButton.styleFrom(
+                  primary: light ? Colors.black : Colors.white,
+                  textStyle: const TextStyle(fontSize: 16),
+                  shape: const CircleBorder(side: BorderSide(color: Colors.transparent)),
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                ),
+                onPressed: () {
+                  FormState? formState = _formKey.currentState;
+                  if (formState != null && formState.validate()) {
+                    formState.save();
 
-                  bool withScores = formData.withScores;
-                  List<CatanExpansion> expansions = formData.expansions;
-                  List<CatanScenario> scenarios = formData.scenarios;
-                  Map<Player, int>? scores = formData.scores;
-                  DateTime? date = formData.date;
-                  List<Player> players = formData.players;
-                  Player? winner = formData.winner;
+                    bool withScores = formData.withScores;
+                    List<CatanExpansion> expansions = formData.expansions;
+                    List<CatanScenario> scenarios = formData.scenarios;
+                    Map<Player, int>? scores = formData.scores;
+                    DateTime? date = formData.date;
+                    List<Player> players = formData.players;
+                    Player? winner = formData.winner;
 
-                  if (withScores) {
-                    BlocProvider.of<AddEditGameBloc>(context).add(AddEditGameEvent.withScores(
-                      time: date!,
-                      scores: scores!,
-                      expansions: expansions,
-                      scenarios: scenarios,
-                    ));
-                  } else {
-                    BlocProvider.of<AddEditGameBloc>(context).add(AddEditGameEvent.noScores(
-                      time: date!,
-                      players: players,
-                      winner: winner,
-                      expansions: expansions,
-                      scenarios: scenarios,
-                    ));
+                    if (withScores) {
+                      BlocProvider.of<AddEditGameBloc>(context).add(AddEditGameEvent.withScores(
+                        time: date!,
+                        scores: scores!,
+                        expansions: expansions,
+                        scenarios: scenarios,
+                      ));
+                    } else {
+                      BlocProvider.of<AddEditGameBloc>(context).add(AddEditGameEvent.noScores(
+                        time: date!,
+                        players: players,
+                        winner: winner,
+                        expansions: expansions,
+                        scenarios: scenarios,
+                      ));
+                    }
                   }
-                }
+                },
+              )
+            ],
+          ),
+          body: UserFeedback(
+            child: AddEditGamePage(
+              _formKey,
+              formData: formData,
+              onFormChanged: () {
+                _formKey.currentState?.save();
+                setState(() {});
               },
-            )
-          ],
-        ),
-        body: UserFeedback(
-          child: AddEditGamePage(
-            _formKey,
-            formData: formData,
-            onFormChanged: () {
-              _formKey.currentState?.save();
-              setState(() {});
-            },
+            ),
           ),
         ),
       ),
