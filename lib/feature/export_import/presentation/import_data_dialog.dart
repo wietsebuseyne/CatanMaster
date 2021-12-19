@@ -53,11 +53,36 @@ class _ImportDataDialogState extends State<ImportDataDialog> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      if (state.result.nbErrors > 0)
+                        Text(
+                          '${state.result.nbErrors} errors encountered while importing',
+                          style: TextStyle(color: Theme.of(context).colorScheme.error),
+                        ),
                       Text('${state.result.nbPlayersImported} players successfully imported'),
                       Text('${state.result.nbGamesImported} games successfully imported'),
                       const SizedBox(height: 8.0),
                       const Text('Logs', style: TextStyle(fontWeight: FontWeight.bold)),
-                      Text(state.result.logs),
+                      RichText(
+                        text: TextSpan(
+                          children: state.result.logs.split('\n').map((log) {
+                            Color color = Theme.of(context).textTheme.bodyText1?.color ?? Colors.black;
+                            if (log.isNotEmpty) {
+                              switch (log.substring(0, 2)) {
+                                case 'W/':
+                                  color = Colors.orange;
+                                  break;
+                                case 'E/':
+                                  color = Theme.of(context).colorScheme.error;
+                                  break;
+                              }
+                            }
+                            return TextSpan(
+                              text: '$log\n',
+                              style: TextStyle(color: color, fontSize: 14.0, letterSpacing: 0.5),
+                            );
+                          }).toList(),
+                        ),
+                      ),
                     ],
                   ),
                 ),
